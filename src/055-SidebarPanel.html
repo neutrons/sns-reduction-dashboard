@@ -1,0 +1,16 @@
+<script type="text/html" id="SidebarPanel">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <slot name="title"></slot>
+        </div>
+        <div class="panel-body">
+            <slot name="body"></slot>
+        </div>
+    </div>
+</script>
+<script>
+var SidebarPanel = {
+    name: 'SidebarPanel',
+    template: '#SidebarPanel',
+};
+</script>

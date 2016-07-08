@@ -1,0 +1,18 @@
+<script type="text/html" id="Error404Route">
+    <div class="col-xs-6 col-xs-offset-3">
+        <div class="panel panel-default">
+            <div class="panel-heading" >
+                <h3 class="panel-title">Error: 404</h3>
+            </div>
+            <div class="panel-body" >
+                <p>Page {{ '/' + ($route.params.source || $route.source) }} could not be found.</p>
+            </div>
+        </div>
+    </div>
+</script>
+<script>
+var Error404Route = {
+    name: 'Error404Route',
+    template: '#Error404Route',
+};
+</script>

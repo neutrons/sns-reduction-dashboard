@@ -1,0 +1,16 @@
+<script type="text/html" id="NavItem">
+    <li v-link-active>
+        <a v-link="{ name: name, activeClass: 'active' }">
+            <slot></slot>
+        </a>
+    </li>
+</script>
+<script>
+var NavItem = {
+    name: 'NavItem',
+    template: '#NavItem',
+    props: {
+        name: String,
+    },
+};
+</script>

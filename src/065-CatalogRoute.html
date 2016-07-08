@@ -1,0 +1,94 @@
+<script type="text/html" id="CatalogRoute">
+    <div class="col-xs-9">
+        <div class="box">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Creation time</th>
+                        <th>Auto-reduced</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="#">IPTS-14730</a></td>
+                        <td>79746 Er2Ge2O7 1.7633 K Ch. 2 25.0 meV 300 Hz T0 60 Hz</td>
+                        <td>Aug. 4, 2015, 8:01 a.m.</td>
+                        <td>
+                            <a target="_blank" title="Click to download autoreduced files" href="#">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">IPTS-14730</a></td>
+                        <td>79746 Er2Ge2O7 1.7633 K Ch. 2 25.0 meV 300 Hz T0 60 Hz</td>
+                        <td>Aug. 4, 2015, 8:01 a.m.</td>
+                        <td>
+                            <a target="_blank" title="Click to download autoreduced files" href="#">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">IPTS-14730</a></td>
+                        <td>79746 Er2Ge2O7 1.7633 K Ch. 2 25.0 meV 300 Hz T0 60 Hz</td>
+                        <td>Aug. 4, 2015, 8:01 a.m.</td>
+                        <td>
+                            <a target="_blank" title="Click to download autoreduced files" href="#">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">IPTS-14730</a></td>
+                        <td>79746 Er2Ge2O7 1.7633 K Ch. 2 25.0 meV 300 Hz T0 60 Hz</td>
+                        <td>Aug. 4, 2015, 8:01 a.m.</td>
+                        <td>
+                            <a target="_blank" title="Click to download autoreduced files" href="#">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- pagination -->
+            <div class="text-center">
+                <ul class="pagination">
+                    <li class="disabled">
+                        <span>&laquo;</span>
+                    </li>
+                    <li class="active">
+                        <span>1</span>
+                    </li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li><a href="#">&raquo;</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-3">
+        <sidebar-panel>
+            <span slot="title">Catalog</span>
+            <div slot="body" class="list-group">
+                <a href="#" class="list-group-item ">see experiments</a>
+                <a href="#" class="list-group-item active">see IPTS-11255</a>
+                <a href="#" class="list-group-item">runs</a>
+                <a href="#" class="list-group-item disabled">this is disabled</a>
+            </div>
+        </sidebar-panel>
+    </div>
+</script>
+<script>
+var CatalogRoute = {
+    name: 'CatalogRoute',
+    template: '#CatalogRoute',
+    components: {
+        SidebarPanel,
+    },
+};
+</script>
