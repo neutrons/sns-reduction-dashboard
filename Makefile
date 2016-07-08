@@ -7,13 +7,34 @@ SHELL := bash
 
 # Environment Variables
 
+ifndef PYTHON
+PYTHON := $(firstword $(shell which python2.7 python2 python 2>/dev/null))
+endif
+export PYTHON
+
 ifndef SERVER_PORT
 SERVER_PORT := 8888
 endif
+export SERVER_PORT
 
 ifndef SERVER
-SERVER := python -m SimpleHTTPServer $(SERVER_PORT)
+ifneq ($(SERVER_PORT),)
+ifneq ($(PYTHON),)
+SERVER := $(PYTHON) -m SimpleHTTPServer $(SERVER_PORT)
 endif
+endif
+endif
+export SERVER
+
+ifndef ENTR
+ENTR := $(firstword $(shell which entr scripts/entr.bash 2>/dev/null))
+endif
+export ENTR
+
+ifndef JSHINT
+JSHINT := $(shell which jshint)
+endif
+export JSHINT
 
 # Local Variables
 
@@ -27,11 +48,23 @@ all:
 
 .PHONY: check
 check: $(source_files)
-	jshint --extract=auto $^
+ifneq ($(JSHINT),)
+	$(JSHINT) --extract=auto $^
+endif
 
 .PHONY: check-new
 check-new: $(source_files)
-	jshint --extract=auto $?
+ifneq ($(JSHINT),)
+	$(JSHINT) --extract=auto $?
+endif
+
+.PHONY: check-self
+check-self:
+	@[[ "$(PYTHON)" ]] || echo "PYTHON: Empty variable"
+	@[[ "$(SERVER_PORT)" ]] || echo "SERVER_PORT: Empty variable"
+	@[[ "$(JSHINT)" ]] || echo "JSHINT: Empty variable, no tests will run."
+	@[[ "$(ENTR)" ]] || echo "ENTR: Empty variable, watcher will not work"
+	@[[ "$(SERVER)" ]] || echo "SERVER: Empty variable, server will not work"
 
 .PHONY: clean
 clean:
@@ -46,7 +79,7 @@ server: index.html
 .PHONY: watcher
 watcher:
 	trap exit INT TERM; \
-	while true; do ls -d src/*.html | entr -d -r make check index.html; done
+	while true; do ls -d src/*.html | $(ENTR) -d $(MAKE) check index.html; done
 	rm index.html
 	false
 
