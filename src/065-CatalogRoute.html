@@ -1,6 +1,7 @@
 <script type="text/html" id="CatalogRoute">
     <div class="col-xs-9">
-        <div class="box">
+        <panel>
+            <span slot="title">Title</span>
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -69,7 +70,7 @@
                     <li><a href="#">&raquo;</a></li>
                 </ul>
             </div>
-        </div>
+        </panel>
     </div>
     <div class="col-xs-3">
         <sidebar-panel>
@@ -89,6 +90,7 @@ var CatalogRoute = {
     template: '#CatalogRoute',
     components: {
         SidebarPanel,
+        Panel,
     },
 };
 </script>

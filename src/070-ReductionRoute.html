@@ -1,8 +1,9 @@
 <script type="text/html" id="ReductionRoute">
     <div>
         <div class="col-xs-9">
-            <!-- tabs -->
-            <div class="row">
+            <panel>
+                <span slot="title">Reductions</span>
+                <!-- tabs -->
                 <div class="container-fluid">
 
                     <ul class="nav nav-tabs nav-justified">
@@ -87,7 +88,7 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            </panel>
         </div>
     </div>
     <div class="col-xs-3">
@@ -110,6 +111,7 @@ var ReductionRoute = {
     template: '#ReductionRoute',
     components: {
         SidebarPanel,
+        Panel,
     },
 };
 </script>
