@@ -48,6 +48,11 @@ body {
     margin-top: 0;
 }
 
+.dropdown-hover:hover > .dropdown-menu {
+    display: block;
+    margin-top: 0;
+}
+
 </style>
 
 <!-- ################################################################ -->
@@ -58,6 +63,24 @@ body {
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="http://vuejs.org/js/vue.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/0.7.13/vue-router.js"></script>
+
+<!-- ################################################################ -->
+<script type="text/html" id="NavItem">
+    <li v-link-active>
+        <a v-link="{ name: name, activeClass: 'active' }">
+            <slot></slot>
+        </a>
+    </li>
+</script>
+<script>
+var NavItem = {
+    name: 'NavItem',
+    template: '#NavItem',
+    props: {
+        name: String,
+    },
+};
+</script>
 
 <!-- ################################################################ -->
 <script type="text/html" id="Navbar">
@@ -74,38 +97,19 @@ body {
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li v-link-active>
-                        <a v-link="{ name: 'catalog', activeClass: 'active' }">
-                            Catalog
-                        </a>
+                    <nav-item name="catalog">Catalog</nav-item>
+                    <nav-item name="reductions">Reductions</nav-item>
+                    <nav-item name="configurations">Configurations</nav-item>
+                    <nav-item name="jobs">Jobs</nav-item>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown dropdown-hover" >
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"  role="button" >Dev</a>
+                        <ul class="dropdown-menu" >
+                            <nav-item name="404">404</nav-item>
+                            <nav-item name="login">Login</nav-item>
+                        </ul>
                     </li>
-                    <li v-link-active>
-                        <a v-link="{ name: 'reductions', activeClass: 'active' }">
-                            Reduction
-                        </a>
-                    </li>
-                    <li v-link-active>
-                        <a v-link="{ name: 'configurations', activeClass: 'active' }">
-                            Configuration
-                        </a>
-                    </li>
-                    <li v-link-active>
-                        <a v-link="{ name: 'jobs', activeClass: 'active' }">
-                            Jobs
-                        </a>
-                    </li>
-                    <!--
-                         <li class="dropdown" >
-                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"  role="button" >Settings</a>
-                         <ul class="dropdown-menu" >
-                         <li><a href="#">Action</a></li>
-                         <li><a href="#">Another action</a></li>
-                         <li><a href="#">Something else here</a></li>
-                         <li role="separator" class="divider"></li>
-                         <li><a href="#">Separated link</a></li>
-                         </ul>
-                         </li>
-                       -->
                 </ul>
             </div>
         </div>
@@ -115,6 +119,9 @@ body {
 var Navbar = {
     name: 'Navbar',
     template: '#Navbar',
+    components: {
+        NavItem,
+    },
 };
 </script>
 
@@ -385,6 +392,47 @@ var ConfigurationRoute = {
 </script>
 
 <!-- ################################################################ -->
+<script type="text/html" id="Error404Route">
+    <p>Page could not be found</p>
+</script>
+<script>
+var Error404Route = {
+    name: 'Error404Route',
+    template: '#Error404Route',
+};
+</script>
+
+<!-- ################################################################ -->
+<script type="text/html" id="LoginRoute">
+    <div class="col-xs-6 col-xs-offset-3">
+        <div class="panel panel-default">
+            <div class="panel-heading" >
+                <h3 class="panel-title">Login</h3>
+            </div>
+            <div class="panel-body" >
+                <form>
+                    <div class="form-group" >
+                        <label for="loginUsername" >Username</label>
+                        <input type="text" class="form-control" id="loginUsername"  placeholder="Username">
+                    </div>
+                    <div class="form-group" >
+                        <label for="loginPassword" >Password</label>
+                        <input type="password" class="form-control" id="loginPassword"  placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-default" @click.stop.prevent="">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</script>
+<script>
+var LoginRoute = {
+    name: 'LoginRoute',
+    template: '#LoginRoute',
+};
+</script>
+
+<!-- ################################################################ -->
 <script type="text/html" id="JobsRoute">
     <div class="col-xs-9">
         <div class="progress">
@@ -480,6 +528,14 @@ router.map({
         name: 'default',
         component: DefaultRoute,
     },
+    '/login': {
+        name: 'login',
+        component: LoginRoute,
+    },
+    '/404': {
+        name: '404',
+        component: Error404Route,
+    },
     '/catalog': {
         name: 'catalog',
         component: CatalogRoute,
@@ -496,6 +552,10 @@ router.map({
         name: 'jobs',
         component: JobsRoute,
     },
+});
+
+router.redirect({
+    '*': '/404',
 });
 
 router.start(App, '#vue-attach');
