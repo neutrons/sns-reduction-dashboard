@@ -2,7 +2,6 @@
 bootstrap
 *.zip
 .bootstrap.unzipped
-index.html
 .DS_Store
 node_modules/
 dist/
