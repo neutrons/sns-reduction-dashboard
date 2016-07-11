@@ -107,3 +107,8 @@ index.html: $(source_files) .bootstrap.unzipped
 .bootstrap.unzipped: bootstrap.zip
 	unzip -o -d bootstrap/ $<
 	touch $@
+
+# Testing
+
+out.png:
+	./node_modules/.bin/phantomjs scripts/load-page.js 'http://localhost:8080/#!/catalog' $@ -w 1280 -h 900

@@ -10,3 +10,5 @@ var router = new VueRouter();
 router.map(routes);
 
 router.start(App, '#app');
+
+export default router;

@@ -6,7 +6,7 @@ module.exports = {
   entry: [
     'expose?$!expose?jQuery!jquery',
     'bootstrap-webpack!./bootstrap.config.js',
-    './src/main.js',
+    'expose?main!./src/main.js',
   ],
   output: {
     path: path.resolve(__dirname, './dist'),
