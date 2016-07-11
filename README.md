@@ -3,29 +3,18 @@
 A demo of the design of a dashboard for managing reductions, configurations, and
 jobs from SNS.
 
-# Running
+# Installing
 
-First we need to generate the bootstrap that we'll use. To do this, go to
-[Bootstrap 3's "Customize" page](http://getbootstrap.com/customize/). We then
-need to upload the [`config.json` file](./config.json).
-
-Once all of our settings are added, then we need to download the zip file at the
-end of the page, which will give us a `bootstrap.zip` file that we can put in
-the root of this directory.
-
-Now we can run a command to extract everything from the zip file and start a
-server:
+We need to install the NPM dependencies, so use the command:
 
 ```bash
-$ make
+$ npm install
 ```
 
-This will start a server at [http://localhost:8888](http://localhost:8888)
+# Running
 
-# Cleaning up
-
-Run
+To run, we currently use the `webpack-dev-server`, which we can run with:
 
 ```bash
-$ make clean
+$ npm run dev
 ```
