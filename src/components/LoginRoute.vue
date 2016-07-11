@@ -1,4 +1,4 @@
-<script type="text/html" id="LoginRoute">
+<template>
     <div class="col-xs-6 col-xs-offset-3">
         <panel>
             <span slot="title">Login</span>
@@ -16,11 +16,13 @@
             </form>
         </panel>
     </div>
-</script>
+</template>
+
 <script>
-var LoginRoute = {
+import Panel from './Panel.vue';
+
+export default {
     name: 'LoginRoute',
-    template: '#LoginRoute',
     components: {
         Panel,
     },

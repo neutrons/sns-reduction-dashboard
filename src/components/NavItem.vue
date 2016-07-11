@@ -1,14 +1,14 @@
-<script type="text/html" id="NavItem">
+<template>
     <li v-link-active>
         <a v-link="{ name: name, activeClass: 'active' }">
             <slot></slot>
         </a>
     </li>
-</script>
+</template>
+
 <script>
-var NavItem = {
+export default {
     name: 'NavItem',
-    template: '#NavItem',
     props: {
         name: String,
     },

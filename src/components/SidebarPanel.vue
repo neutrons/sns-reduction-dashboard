@@ -1,4 +1,4 @@
-<script type="text/html" id="SidebarPanel">
+<template>
     <div class="panel panel-default">
         <div class="panel-heading">
             <slot name="title"></slot>
@@ -7,10 +7,10 @@
             <slot name="body"></slot>
         </div>
     </div>
-</script>
+</template>
+
 <script>
-var SidebarPanel = {
+export default {
     name: 'SidebarPanel',
-    template: '#SidebarPanel',
 };
 </script>

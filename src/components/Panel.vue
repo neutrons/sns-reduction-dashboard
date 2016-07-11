@@ -1,4 +1,4 @@
-<script type="text/html" id="Panel">
+<template>
     <div class="panel panel-default">
         <label class="panel-heading" style="width:100%" v-show="hasHeading">
             <div class="clearfix">
@@ -21,11 +21,11 @@
             <slot name="footer"></slot>
         </div>
     </div>
-</script>
+</template>
+
 <script>
-var Panel = {
+export default {
     name: 'Panel',
-    template: '#Panel',
     computed: {
         hasHeading() {
             return typeof this._slotContents.title !== 'undefined';

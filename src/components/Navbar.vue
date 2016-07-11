@@ -1,4 +1,4 @@
-<script type="text/html" id="Navbar">
+<template>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -29,11 +29,13 @@
             </div>
         </div>
     </nav>
-</script>
+</template>
+
 <script>
-var Navbar = {
+import NavItem from './NavItem.vue';
+
+export default {
     name: 'Navbar',
-    template: '#Navbar',
     components: {
         NavItem,
     },

@@ -1,4 +1,4 @@
-<script type="text/html" id="ReductionRoute">
+<template>
     <div>
         <div class="col-xs-9">
             <panel>
@@ -90,25 +90,28 @@
                 </div>
             </panel>
         </div>
+        <div class="col-xs-3">
+            <sidebar-panel>
+                <span slot="title">Reduction</span>
+                <div slot="body" class="list-group">
+                    <a href="#" class="list-group-item ">reduction home</a>
+                    <a href="#" class="list-group-item ">new configuration</a>
+                    <a href="#" class="list-group-item ">new reduction</a>
+                    <a href="#" class="list-group-item disabled">see script</a>
+                    <a href="#" class="list-group-item ">download python</a>
+                    <a href="#" class="list-group-item ">download xml</a>
+                </div>
+            </sidebar-panel>
+        </div>
     </div>
-    <div class="col-xs-3">
-        <sidebar-panel>
-            <span slot="title">Reduction</span>
-            <div slot="body" class="list-group">
-                <a href="#" class="list-group-item ">reduction home</a>
-                <a href="#" class="list-group-item ">new configuration</a>
-                <a href="#" class="list-group-item ">new reduction</a>
-                <a href="#" class="list-group-item disabled">see script</a>
-                <a href="#" class="list-group-item ">download python</a>
-                <a href="#" class="list-group-item ">download xml</a>
-            </div>
-        </sidebar-panel>
-    </div>
-</script>
+</template>
+
 <script>
-var ReductionRoute = {
+import Panel from './Panel.vue';
+import SidebarPanel from './SidebarPanel.vue';
+
+export default {
     name: 'ReductionRoute',
-    template: '#ReductionRoute',
     components: {
         SidebarPanel,
         Panel,

@@ -1,13 +1,13 @@
-<script type="text/html" id="MainPage">
+<template>
     <div class="container">
         <div class="row main">
             <router-view></router-view>
         </div>
     </div>
-</script>
+</template>
+
 <script>
-var MainPage = {
+export default {
     name: 'MainPage',
-    template: '#MainPage',
 };
 </script>

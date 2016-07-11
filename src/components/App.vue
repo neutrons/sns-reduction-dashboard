@@ -70,3 +70,23 @@ body {
 }
 
 </style>
+
+<template>
+    <div>
+        <navbar></navbar>
+        <main-page></main-page>
+    </div>
+</template>
+
+<script>
+import Navbar from './Navbar.vue';
+import MainPage from './MainPage.vue';
+
+export default {
+    name: 'App',
+    components: {
+        Navbar,
+        MainPage,
+    },
+};
+</script>
