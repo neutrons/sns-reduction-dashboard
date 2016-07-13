@@ -25,6 +25,10 @@
                             <nav-item name="login">Login</nav-item>
                         </ul>
                     </li>
+
+                    <nav-item name="profile">
+                        <span class="glyphicon glyphicon-user"></span>
+                    </nav-item>
                 </ul>
             </div>
         </div>

@@ -5,6 +5,7 @@ import CatalogRoute from './components/CatalogRoute.vue';
 import ReductionRoute from './components/ReductionRoute.vue';
 import ConfigurationRoute from './components/ConfigurationRoute.vue';
 import JobsRoute from './components/JobsRoute.vue';
+import ProfileRoute from './components/ProfileRoute.vue';
 
 export default {
     '/': {
@@ -39,5 +40,9 @@ export default {
     '/jobs': {
         name: 'jobs',
         component: JobsRoute,
+    },
+    '/profile': {
+        name: 'profile',
+        component: ProfileRoute,
     },
 };
