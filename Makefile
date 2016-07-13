@@ -36,6 +36,10 @@ source_files := $(wildcard src/*.html)
 all:
 	$(MAKE) -j 2 watcher server
 
+.PHONY: no-watch
+no-watch:
+	$(MAKE) -j 2 watcher-no-watch server-no-watch
+
 .PHONY: depend
 depend: depend-npm depend-python
 
@@ -77,18 +81,26 @@ clean:
 
 # Helper targets
 
+.PHONY: server-no-watch
+server-no-watch:
+	$(PYTHON) server.py $(SERVER_FLAGS)
+
 .PHONY: server
 server:
 	trap exit INT TERM; \
 	while true; do \
 		ls server.py | \
-		$(ENTR) -r $(PYTHON) server.py $(SERVER_FLAGS); \
+		$(ENTR) -r make server-no-watch; \
 	done
+
+.PHONY: watcher-no-watch
+watcher-no-watch:
+	node server.js
 
 .PHONY: watcher
 watcher:
 	trap exit INT TERM; \
 	while true; do \
 		ls server.js | \
-		$(ENTR) -r node server.js; \
+		$(ENTR) -r make watcher-no-watch; \
 	done

@@ -25,3 +25,9 @@ $ make
 ```
 
 You can kill both with Ctrl-C.
+
+To run without watching `server.py` and `server.js` for changes, instead run:
+
+```bash
+$ make no-watch
+```
