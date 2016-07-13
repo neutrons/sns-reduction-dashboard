@@ -63,7 +63,7 @@ function main() {
     modtimes=( )
     for ((i=0; i<${#files[@]}; ++i)); do
         local file=${files[$i]}
-        local modtime=$(stat -f "%Sm" -t "%s" "$file")
+        local modtime=$(/usr/bin/stat -f "%Sm" -t "%s" "$file")
         modtimes+=( "$modtime" )
     done
 
@@ -91,7 +91,7 @@ function main() {
             sleep 0.5
             for ((i=0; i<${#files[@]}; ++i)); do
                 local file=${files[$i]}
-                local modtime=$(stat -f "%Sm" -t "%s" "$file")
+                local modtime=$(/usr/bin/stat -f "%Sm" -t "%s" "$file")
                 if [[ $modtime != ${modtimes[$i]} ]]; then
                     changed+=( "$file" )
                     modtimes[$i]=$modtime
