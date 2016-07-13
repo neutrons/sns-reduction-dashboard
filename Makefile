@@ -36,6 +36,21 @@ source_files := $(wildcard src/*.html)
 all:
 	$(MAKE) -j 2 watcher server
 
+.PHONY: depend
+depend: depend-npm depend-python
+
+.PHONY: depend-npm
+depend-npm:
+	npm install
+
+.PHONY: depend-python
+depend-python:
+ifeq ($(VIRTUAL_ENV),)
+	@echo 'No virtual environment detected.'
+	@read -p 'Are you sure you wish to continue? (yes/No) ' && [ "$$REPLY" = "yes" ]
+endif
+	$(PYTHON) -m pip install -r requirements.txt
+
 .PHONY: check
 check: $(source_files)
 ifneq ($(JSHINT),)

@@ -5,16 +5,23 @@ jobs from SNS.
 
 # Installing
 
-We need to install the NPM dependencies, so use the command:
+We need to install the JavaScript and Python dependencies, so use the command:
 
 ```bash
-$ npm install
+$ make depend
 ```
+
+Note: Make sure that you have a virtual environment set up and activated! The
+script will check.
 
 # Running
 
-To run, we currently use the `webpack-dev-server`, which we can run with:
+To run, we need to start both the Python Tornado server and the Webpack dev
+server. We need the latter to do hot reloading in the browser. To start them,
+run:
 
 ```bash
-$ npm run dev
+$ make
 ```
+
+You can kill both with Ctrl-C.
