@@ -1,14 +1,10 @@
 import Vue from 'expose?Vue!vue';
-import VueRouter from 'vue-router';
-import routes from './routes';
+import router from './router';
+import store from './vuex/store';
+import { sync } from 'vuex-router-sync';
+import resource from './resource';
 import App from './components/App.vue';
 
-Vue.use(VueRouter);
-
-var router = new VueRouter();
-
-router.map(routes);
+sync(store, router);
 
 router.start(App, '#app');
-
-export default router;

@@ -12,7 +12,7 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <nav-item name="catalog">Catalog</nav-item>
+                    <nav-item :params="{page:1}" name="catalog">Catalog</nav-item>
                     <nav-item name="reductions">Reductions</nav-item>
                     <nav-item name="configurations">Configurations</nav-item>
                     <nav-item name="jobs">Jobs</nav-item>

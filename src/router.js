@@ -1,3 +1,6 @@
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+
 import DefaultRoute from './components/DefaultRoute.vue';
 import LoginRoute from './components/LoginRoute.vue';
 import Error404Route from './components/Error404Route.vue';
@@ -7,7 +10,11 @@ import ConfigurationRoute from './components/ConfigurationRoute.vue';
 import JobsRoute from './components/JobsRoute.vue';
 import ProfileRoute from './components/ProfileRoute.vue';
 
-export default {
+Vue.use(VueRouter);
+
+const router = new VueRouter();
+
+router.map({
     '/': {
         name: 'default',
         component: DefaultRoute,
@@ -25,7 +32,7 @@ export default {
         component: Error404Route,
         source: '404',
     },
-    '/catalog': {
+    '/catalog/:page': {
         name: 'catalog',
         component: CatalogRoute,
     },
@@ -45,4 +52,11 @@ export default {
         name: 'profile',
         component: ProfileRoute,
     },
-};
+});
+
+
+router.redirect({
+    '/catalog': '/catalog/1',
+});
+
+export default router;

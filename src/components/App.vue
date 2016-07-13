@@ -81,6 +81,7 @@ body {
 <script>
 import Navbar from './Navbar.vue';
 import MainPage from './MainPage.vue';
+import store from '../vuex/store';
 
 export default {
     name: 'App',
@@ -88,5 +89,6 @@ export default {
         Navbar,
         MainPage,
     },
+    store,
 };
 </script>
