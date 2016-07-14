@@ -93,11 +93,16 @@ def make_app():
 
 if __name__ == "__main__":
     def parse_webpack_assets(filename):
+        got_it = True
         while True:
             try:
                 with open(filename, 'r') as f:
+                    if not got_it:
+                        print("Successfully loaded file")
+
                     return json.load(f)
             except FileNotFoundError:
+                got_it = False
                 print("Waiting for file '{}'".format(filename))
                 time.sleep(0.5)
 
