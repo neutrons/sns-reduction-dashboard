@@ -22,7 +22,7 @@ function main() {
     done
 
     if [[ $RELOAD != 0 ]]; then
-        trap 'kill $pid; wait; exit' INT TERM EXIT
+        trap '[ -n "$pid" ] && kill $pid; wait; exit' INT TERM EXIT
     fi
 
     if [[ $# == 0 ]]; then
