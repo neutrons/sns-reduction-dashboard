@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-import tornado.options
 import tornado.escape
+import tornado.httpclient
 import tornado.ioloop
+import tornado.options
 import tornado.queues
 import tornado.web
 
@@ -83,12 +84,55 @@ class CatalogPageHandler(tornado.web.RequestHandler):
             ),
         ))
 
+class CatalogBaseHandler(tornado.web.RequestHandler):
+    def get_format_string(self):
+        raise NotImplementedError("CatalogBaseHandler.get_format_string")
+
+    @tornado.gen.coroutine
+    def get(self, facility=None, instrument=None, experiment=None, run=None):
+        http = tornado.httpclient.AsyncHTTPClient()
+        fmt = self.get_format_string()
+        prefix = 'http://icat.sns.gov:2080/icat-rest-ws/'
+
+        response = yield http.fetch(
+            prefix + fmt.format(
+                facility=facility,
+                instrument=instrument,
+                experiment=experiment,
+                run=run,
+            ),
+            headers={
+                "Accept": "application/json",
+            },
+        )
+
+        self.write(response.body)
+
+class CatalogFacilityHandler(CatalogBaseHandler):
+    def get_format_string(self):
+        return "experiment/{facility}"
+
+class CatalogInstrumentHandler(CatalogBaseHandler):
+    def get_format_string(self):
+        return "experiment/{facility}/{instrument}/meta"
+
+class CatalogExperimentHandler(CatalogBaseHandler):
+    def get_format_string(self):
+        return "experiment/{facility}/{instrument}/{experiment}/all"
+
+class CatalogRunHandler(CatalogBaseHandler):
+    def get_format_string(self):
+        return "dataset/{facility}/{instrument}/{run}/lite"
 
 def make_app():
     return tornado.web.Application([
         (r'/', IndexHandler),
         (r'/dist/(.*)', tornado.web.StaticFileHandler, dict(path="dist")),
         (r'/catalog/([0-9]+)', CatalogPageHandler),
+        (r'/catalog/(SNS)', CatalogFacilityHandler),
+        (r'/catalog/(SNS)/([A-Z]+)', CatalogInstrumentHandler),
+        (r'/catalog/(SNS)/([A-Z]+)/(IPTS-[0-9]+)', CatalogExperimentHandler),
+        (r'/catalog/(SNS)/([A-Z]+)/(IPTS-[0-9]+)/([0-9]+)', CatalogRunHandler),
     ])
 
 if __name__ == "__main__":
