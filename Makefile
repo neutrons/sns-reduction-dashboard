@@ -77,7 +77,7 @@ check-self:
 
 .PHONY: clean
 clean:
-	rm -rf -- bootstrap/ .bootstrap.unzipped
+	rm -rf -- dist webpack-assets.json webpack-stats.json
 
 # Helper targets
 

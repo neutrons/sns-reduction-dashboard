@@ -12,6 +12,7 @@ import glob
 import json
 import re
 import datetime
+import time
 
 CATALOG_NUM_PAGES = 10
 
@@ -92,8 +93,13 @@ def make_app():
 
 if __name__ == "__main__":
     def parse_webpack_assets(filename):
-        with open(filename, 'r') as f:
-            return json.load(f)
+        while True:
+            try:
+                with open(filename, 'r') as f:
+                    return json.load(f)
+            except FileNotFoundError:
+                print("Waiting for file '{}'".format(filename))
+                time.sleep(0.5)
 
     print("[{}] Reloading...".format(datetime.datetime.now()))
 
