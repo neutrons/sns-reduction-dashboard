@@ -6,7 +6,7 @@ function main() {
     local CLEAR=0
     local POSTPONE=0
     local error=0
-    local i command files changed modtimes
+    local i command files changed modtimes pid
     while [[ $1 =~ ^- ]]; do
         for ((i=1; i<${#1}; ++i)); do
             local opt=${1:$i:1}
@@ -21,6 +21,10 @@ function main() {
         shift
     done
 
+    if [[ $RELOAD != 0 ]]; then
+        trap 'kill $pid; wait; exit' INT TERM EXIT
+    fi
+
     if [[ $# == 0 ]]; then
         echo "No command given" >&2
         error=2
@@ -29,11 +33,6 @@ function main() {
     if [[ $CLEAR != 0 ]]; then
         echo "Not implemented: clear" >&2
         error=3
-    fi
-
-    if [[ $RELOAD != 0 ]]; then
-        echo "Not implemented: reload" >&2
-        error=4
     fi
 
     if [[ $error != 0 ]]; then
@@ -67,6 +66,7 @@ function main() {
         modtimes+=( "$modtime" )
     done
 
+    pid=""
     changed=( "${files[@]}" )
     while true; do
         # Execute command
@@ -81,8 +81,18 @@ function main() {
                 fi
             done
 
-            if ! "${command[@]}"; then
-                exit $?
+            if [[ $RELOAD != 0 ]]; then
+                if [[ $pid != "" ]]; then
+                    kill $pid
+                    wait
+                fi
+
+                "${command[@]}" &
+                pid=$!
+            else
+                if ! "${command[@]}"; then
+                    exit $?
+                fi
             fi
         fi
 
