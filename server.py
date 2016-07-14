@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
+import asyncio
+
 import tornado.escape
 import tornado.httpclient
 import tornado.ioloop
 import tornado.options
+import tornado.platform.asyncio
 import tornado.queues
 import tornado.web
 
@@ -158,6 +161,9 @@ if __name__ == "__main__":
 
     tornado.options.parse_command_line()
 
+    tornado.platform.asyncio.AsyncIOMainLoop().install()
+
     app = make_app()
     app.listen(tornado.options.options["port"])
-    tornado.ioloop.IOLoop.instance().start()
+
+    asyncio.get_event_loop().run_forever()
