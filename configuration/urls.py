@@ -1,10 +1,11 @@
-from django.conf.urls import url
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.conf.urls import url, include
+from rest_framework import routers
 from . import views
 
-urlpatterns = [
-    url(r'^$', views.FacilityList.as_view()),
-    url(r'^(?P<pk>[0-9]+)$', views.FacilityDetail.as_view()),
-]
+router = routers.DefaultRouter(schema_title='Configuration API')
+router.register(r'facilities', views.FacilityViewSet)
+router.register(r'instruments', views.InstrumentViewSet)
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+urlpatterns = [
+    url(r'^', include(router.urls)),
+]

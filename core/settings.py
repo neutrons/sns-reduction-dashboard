@@ -126,3 +126,7 @@ STATIC_URL = '/static/'
 # Application specific settings
 
 ASSETS_FILE = 'webpack-assets.json'
+
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 10,
+}

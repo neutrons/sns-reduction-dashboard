@@ -1,11 +1,11 @@
 from . import models
 from . import serializers
-from rest_framework import generics
+from rest_framework import viewsets
 
-class FacilityList(generics.ListCreateAPIView):
+class FacilityViewSet(viewsets.ModelViewSet):
     queryset = models.Facility.objects.all()
     serializer_class = serializers.FacilitySerializer
 
-class FacilityDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = models.Facility.objects.all()
-    serializer_class = serializers.FacilitySerializer
+class InstrumentViewSet(viewsets.ModelViewSet):
+    queryset = models.Instrument.objects.all()
+    serializer_class = serializers.InstrumentSerializer
