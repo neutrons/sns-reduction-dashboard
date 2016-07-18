@@ -1,6 +1,22 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-function main() {
+getmodtime() {
+    local file regex
+    file=$1
+    regex='^[0-9]+$'
+    for command in "stat -f %Sm -t %s" "date +%s -r"; do
+        result=$($command "$file" 2>/dev/null)
+        if [[ $result =~ $regex ]]; then
+            echo "$result"
+            return 0
+        fi
+    done
+
+    echo "No suitable command" >&2
+    exit 5
+}
+
+main() {
     local RELOAD=0
     local DIRECTORY=0
     local CLEAR=0
@@ -62,7 +78,7 @@ function main() {
     modtimes=( )
     for ((i=0; i<${#files[@]}; ++i)); do
         local file=${files[$i]}
-        local modtime=$(/usr/bin/stat -f "%Sm" -t "%s" "$file")
+        local modtime=$(getmodtime "$file")
         modtimes+=( "$modtime" )
     done
 
@@ -101,7 +117,7 @@ function main() {
             sleep 0.5
             for ((i=0; i<${#files[@]}; ++i)); do
                 local file=${files[$i]}
-                local modtime=$(/usr/bin/stat -f "%Sm" -t "%s" "$file")
+                local modtime=$(getmodtime "$file")
                 if [[ $modtime != ${modtimes[$i]} ]]; then
                     changed+=( "$file" )
                     modtimes[$i]=$modtime
