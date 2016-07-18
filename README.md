@@ -1,18 +1,34 @@
 # dashboard-config-demo
 
-> A Vue.js project
+> Demo of how we could set up the database and models for editing configurations
+> genericly on the front end, using a combination of Django,
+> DjangoRestFramework, VueJS, and Webpack.
 
-## Build Setup
+# Installing
 
-``` bash
-# install dependencies
-npm install
+Make a virtual environment:
 
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
+```bash
+$ python3 -m virtualenv venv
+$ source venv/bin/activate
 ```
 
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+Install NPM and Python dependencies:
+
+```bash
+$ make depend
+```
+
+Apply migrations to database
+
+```bash
+$ make migrate
+```
+
+# Running
+
+Start both the JavaScript webpack-dev-server and Django servers:
+
+```bash
+$ make
+```
