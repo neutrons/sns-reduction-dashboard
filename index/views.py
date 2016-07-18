@@ -16,7 +16,7 @@ def json_load_file_until_success(filename):
             time.sleep(0.5)
 
 class IndexView(generic.TemplateView):
-    template_name = 'configuration/index.html'
+    template_name = 'index/index.html'
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
