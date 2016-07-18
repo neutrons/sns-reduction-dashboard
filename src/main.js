@@ -1,7 +1,10 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'expose?Vue!vue';
+import router from './router';
+import store from './vuex/store';
+import { sync } from 'vuex-router-sync';
+import resource from './resource';
+import App from './components/App.vue'
 
-new Vue({
-  el: '#app',
-  render: h => h(App)
-})
+sync(store, router);
+
+router.start(App, '#app');
