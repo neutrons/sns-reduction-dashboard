@@ -1,7 +1,9 @@
 <template>
-  <div>
+  <div class="App">
     <nav-bar></nav-bar>
-    <main-page></main-page>
+    <div class="App__main-page">
+      <main-page></main-page>
+    </div>
   </div>
 </template>
 
@@ -19,3 +21,10 @@ export default {
   store,
 };
 </script>
+
+<style>
+.App__main-page {
+  margin-top: 50px;
+  padding: 20px;
+}
+</style>

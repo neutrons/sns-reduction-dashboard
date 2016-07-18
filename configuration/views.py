@@ -1,6 +1,7 @@
 from . import models
 from . import serializers
 from rest_framework import viewsets
+from rest_framework.decorators import detail_route
 
 class FacilityViewSet(viewsets.ModelViewSet):
     queryset = models.Facility.objects.all()

@@ -1,32 +1,16 @@
 from rest_framework import serializers
 from . import models
 
-class FacilitySerializer(serializers.HyperlinkedModelSerializer):
-    instruments = serializers.HyperlinkedIdentityField(
-        many=True,
-        view_name='instrument-detail',
-        read_only=True,
-    )
-
-    class Meta:
-        model = models.Facility
-        fields = ('url', 'pk', 'name', 'instruments')
-
-class InstrumentSerializer(serializers.HyperlinkedModelSerializer):
-    facility = serializers.HyperlinkedRelatedField(
-        view_name='facility-detail',
-        read_only=False,
-        queryset=models.Facility.objects.all(),
-    )
-    configurations = serializers.HyperlinkedIdentityField(
-        many=True,
+class EntrySerializer(serializers.HyperlinkedModelSerializer):
+    configuration = serializers.HyperlinkedRelatedField(
         view_name='configuration-detail',
-        read_only=True,
+        queryset=models.Configuration.objects.all(),
     )
 
     class Meta:
-        model = models.Instrument
-        fields = ('url', 'pk', 'name', 'facility', 'configurations')
+        model = models.Entry
+        fields = ('url', 'pk', 'name', 'key', 'value', 'advanced', 'configuration')
+        depth = 1
 
 class ConfigurationSerializer(serializers.HyperlinkedModelSerializer):
     instrument = serializers.HyperlinkedRelatedField(
@@ -42,6 +26,7 @@ class ConfigurationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Configuration
         fields = ('url', 'pk', 'name', 'instrument', 'entries')
+        depth = 1
 
     def create(self, validated_data):
         lookup = {
@@ -79,12 +64,32 @@ class ConfigurationSerializer(serializers.HyperlinkedModelSerializer):
 
         return configuration
 
-class EntrySerializer(serializers.HyperlinkedModelSerializer):
-    configuration = serializers.HyperlinkedRelatedField(
+class InstrumentSerializer(serializers.HyperlinkedModelSerializer):
+    facility = serializers.HyperlinkedRelatedField(
+        view_name='facility-detail',
+        read_only=False,
+        queryset=models.Facility.objects.all(),
+    )
+    configurations = serializers.HyperlinkedIdentityField(
+        many=True,
         view_name='configuration-detail',
-        queryset=models.Configuration.objects.all(),
+        read_only=True,
     )
 
     class Meta:
-        model = models.Entry
-        fields = ('url', 'pk', 'name', 'key', 'value', 'advanced', 'configuration')
+        model = models.Instrument
+        fields = ('url', 'pk', 'name', 'facility', 'configurations')
+        depth = 1
+
+
+class FacilitySerializer(serializers.HyperlinkedModelSerializer):
+    instruments = serializers.HyperlinkedIdentityField(
+        many=True,
+        view_name='instrument-detail',
+        read_only=True,
+    )
+
+    class Meta:
+        model = models.Facility
+        fields = ('url', 'pk', 'name', 'instruments')
+        depth = 1
