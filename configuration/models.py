@@ -10,7 +10,8 @@ class Facility(models.Model):
 
 class Instrument(models.Model):
     name = models.CharField(max_length=32)
-    facility = models.ForeignKey(Facility, on_delete=models.CASCADE, related_name='instruments')
+    facility = models.ForeignKey(Facility, on_delete=models.CASCADE,
+                                 related_name='instruments')
 
     def __str__(self):
         return "Instrument(name={self.name}, facility={self.facility})".format(
@@ -19,7 +20,8 @@ class Instrument(models.Model):
 
 class Configuration(models.Model):
     name = models.CharField(max_length=32)
-    instrument = models.ForeignKey(Instrument, on_delete=models.CASCADE)
+    instrument = models.ForeignKey(Instrument, on_delete=models.CASCADE,
+                                   related_name='configurations')
 
     def __str__(self):
         return "Configuration(name={self.name}, instrument={self.instrument})".format(
@@ -31,8 +33,10 @@ class Entry(models.Model):
     key = models.CharField(max_length=32)
     value = models.CharField(max_length=32)
     advanced = models.BooleanField()
+    configuration = models.ForeignKey(Configuration, on_delete=models.CASCADE,
+                                      related_name='entries')
 
     def __str__(self):
-        return "Entry(name={self.name}, key={self.key}, value={self.value}, advanced={self.advanced})".format(
+        return "Entry(name={self.name}, key={self.key}, value={self.value}, advanced={self.advanced}, configuration={self.configuration})".format(
             self=self,
         )
