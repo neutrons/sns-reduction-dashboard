@@ -6,7 +6,6 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
         view_name='configuration-detail',
         queryset=models.Configuration.objects.all(),
     )
-
     class Meta:
         model = models.Entry
         fields = ('url', 'pk', 'name', 'key', 'value', 'advanced', 'configuration')
@@ -64,6 +63,12 @@ class ConfigurationSerializer(serializers.HyperlinkedModelSerializer):
 
         return configuration
 
+class NestedConfigurationSerializer(ConfigurationSerializer):
+    entries = EntrySerializer(many=True)
+
+    class Meta(ConfigurationSerializer.Meta):
+        pass
+
 class InstrumentSerializer(serializers.HyperlinkedModelSerializer):
     facility = serializers.HyperlinkedRelatedField(
         view_name='facility-detail',
@@ -81,6 +86,11 @@ class InstrumentSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'pk', 'name', 'facility', 'configurations')
         depth = 1
 
+class NestedInstrumentSerializer(InstrumentSerializer):
+    configurations = ConfigurationSerializer(many=True)
+
+    class Meta(InstrumentSerializer.Meta):
+        pass
 
 class FacilitySerializer(serializers.HyperlinkedModelSerializer):
     instruments = serializers.HyperlinkedIdentityField(
@@ -93,3 +103,9 @@ class FacilitySerializer(serializers.HyperlinkedModelSerializer):
         model = models.Facility
         fields = ('url', 'pk', 'name', 'instruments')
         depth = 1
+
+class NestedFacilitySerializer(FacilitySerializer):
+    instruments = InstrumentSerializer(many=True)
+
+    class Meta(FacilitySerializer.Meta):
+        pass
