@@ -1,39 +1,71 @@
 <template>
-  <div v-show="!$loadingRouteData">
-    <p>Count: {{ count }}</p>
-    <p>Next: <a :href="next">{{ next }}</a></p>
-    <p>Previous: <a :href="previous">{{ previous }}</a></p>
-    <p>Results:</p>
-    <table border="1">
-      <thead>
-        <th>url</th>
-        <th>pk</th>
-        <th>name</th>
-        <th>instruments</th>
-      </thead>
-      <tbody>
-        <tr v-for="result in results">
-          <td><a :href="result.url">{{result.url}}</a></td>
-          <td>{{result.pk}}</td>
-          <td>{{result.name}}</td>
-          <td>
-            <ul>
-              <li v-for="inst in result.instruments"><a :href="inst">{{inst}}</a></li>
-            </ul>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-9">
+        <panel :expanded="!selectedFacility" @change="selectFacility(null)">
+          <span slot="title">Select a Facility {{ selectedFacility ? '(' + selectedFacility.name + ')' : '' }}</span>
+          <div v-show="!$loadingRouteData">
+            <table class="table table-hover">
+              <thead>
+                <th>Name</th>
+                <th>Description</th>
+              </thead>
+              <tbody>
+                <tr v-for="facility in results" @click.stop.prevent="selectFacility(facility)">
+                  <td>{{ facility.name }}</td>
+                  <td>{{ facility.desc }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </panel>
+
+        <panel :expanded="!selectedInstrument" @change="selectInstrument(null)">
+          <span slot="title">Select an Instrument {{ selectedInstrument ? '(' + selectedInstrument.name + ')' : '' }}</span>
+          <div>
+            <table class="table table-hover">
+              <thead>
+                <th>Name</th>
+                <th>Description</th>
+              </thead>
+              <tbody>
+                <tr v-for="instrument in results">
+                  <td>{{ instrument.name }}</td>
+                  <td>{{ instrument.desc }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </panel>
+      </div>
+      <div class="col-xs-3">
+        <panel>
+          <span slot="title">Breadcrumbs</span>
+        </panel>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { facility } from '../resource';
+import Panel from './Panel.vue';
 
 export default {
   name: 'FacilityRoute',
   data() {
-    return { count: null, next: null, previous: null, results: null };
+    return {
+      count: null,
+      next: null,
+      previous: null,
+      results: null,
+      selectedFacility: null,
+    };
+  },
+  methods: {
+    selectFacility(facility) {
+      this.selectedFacility = facility;
+    },
   },
   route: {
     data({ next }) {
@@ -41,6 +73,9 @@ export default {
         next(response.json());
       });
     },
+  },
+  components: {
+    Panel,
   },
 };
 </script>

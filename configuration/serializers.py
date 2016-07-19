@@ -24,7 +24,7 @@ class ConfigurationSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.Configuration
-        fields = ('url', 'pk', 'name', 'instrument', 'entries')
+        fields = ('url', 'pk', 'name', 'desc', 'instrument', 'entries')
         depth = 1
 
     def create(self, validated_data):
@@ -83,7 +83,7 @@ class InstrumentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.Instrument
-        fields = ('url', 'pk', 'name', 'facility', 'configurations')
+        fields = ('url', 'pk', 'name', 'desc', 'facility', 'configurations')
         depth = 1
 
 class NestedInstrumentSerializer(InstrumentSerializer):
@@ -101,7 +101,7 @@ class FacilitySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.Facility
-        fields = ('url', 'pk', 'name', 'instruments')
+        fields = ('url', 'pk', 'name', 'desc', 'instruments')
         depth = 1
 
 class NestedFacilitySerializer(FacilitySerializer):
