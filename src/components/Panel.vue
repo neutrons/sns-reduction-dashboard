@@ -27,7 +27,10 @@
 export default {
   name: 'Panel',
   props: {
-    expanded: Boolean,
+    expanded: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     hasHeading() {

@@ -28,37 +28,44 @@ class ConfigurationSerializer(serializers.HyperlinkedModelSerializer):
         depth = 1
 
     def create(self, validated_data):
-        lookup = {
-            ('HFIR', 'BioSANS'): [
-                {
-                    'name': 'FooName',
-                    'key': 'foo',
-                    'value': '32',
-                    'advanced': False,
-                },
-                {
-                    'name': 'BarName',
-                    'key': 'bar',
-                    'value': 'baz',
-                    'advanced': True,
-                }
-            ],
-            ('SNS', 'EQSANS'): [
-                {
-                    'name': 'BingName',
-                    'key': 'bing',
-                    'value': 'true',
-                    'advanced': False,
-                },
-            ],
-        }
+        lookup = {}
+        lookup['default'] = [
+            {
+                'name': 'General Parameter 1',
+                'key': 'gp1',
+                'value': '42',
+                'advanced': False,
+            },
+            {
+                'name': 'General Parameter 2',
+                'key': 'gp2',
+                'value': 'Bar',
+                'advanced': False,
+            },
+            {
+                'name': 'General Parameter 3',
+                'key': 'gp3',
+                'value': 'Wow',
+                'advanced': True,
+            },
+        ]
+
+        lookup[('SNS', 'EQSANS')] = lookup['default'] + [
+            {
+                'name': 'EQSANS Parameter',
+                'key': 'foo',
+                'value': '1.234',
+                'advanced': True,
+            },
+        ]
 
         instrument = validated_data['instrument']
         facility = instrument.facility
         configuration = models.Configuration.objects.create(**validated_data)
 
         entries = []
-        for data in lookup[(facility.name, instrument.name)]:
+        key = (facility.name, instrument.name)
+        for data in lookup.get(key, lookup['default']):
             entry = models.Entry.objects.create(configuration=configuration, **data)
 
         return configuration

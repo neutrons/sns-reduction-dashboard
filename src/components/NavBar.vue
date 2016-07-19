@@ -12,10 +12,7 @@
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <nav-item name="facility">Facility</nav-item>
-          <nav-item name="instrument">Instrument</nav-item>
-          <nav-item name="configuration">Configuration</nav-item>
-          <nav-item name="entry">Entry</nav-item>
+          <nav-item name="catalog">Catalog</nav-item>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown dropdown-hover" >
