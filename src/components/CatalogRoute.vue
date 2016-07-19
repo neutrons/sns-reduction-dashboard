@@ -51,6 +51,21 @@
                   <td>{{ configuration.name }}</td>
                   <td>{{ configuration.desc }}</td>
                 </tr>
+                <tr>
+                  <td>
+                    <input class="form-control" type="text">
+                  </td>
+                  <td>
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <div class="input-group">
+                          <input name="" type="text" value="" class="form-control"/>
+                          <span class="input-group-btn"><button class="btn btn-default" type="button">Create</button></span>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -69,7 +84,8 @@
               <div class="form-group">
                 <div class="col-xs-offset-3 col-xs-9">
                   <div class="checkbox">
-                    <label><input type="checkbox" v-model="advanced">Enable Advanced Options</input></label>
+                    <label>
+                      <input type="checkbox" v-model="advanced">Enable Advanced Options</input></label>
                   </div>
                 </div>
               </div>
