@@ -1,9 +1,9 @@
 <template>
-  <div>Configuration</div>
+  <div>Entry</div>
 </template>
 
 <script>
 export default {
-  name: 'ConfigurationRoute',
+  name: 'EntryRoute',
 };
 </script>

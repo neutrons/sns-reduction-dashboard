@@ -5,48 +5,36 @@ SHELL := bash
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
-# Environment Variables
+# Environment variables
 
 ifndef PYTHON
-PYTHON := $(firstword $(shell which python3.5 python3 python 2>/dev/null))
-endif
-export PYTHON
-
-ifndef SERVER_FLAGS
-SERVER_FLAGS := --assets=webpack-assets.json --port=8888 --status=webpack-stats.json
+PYTHON := python3
 endif
 
-ifndef ENTR
-ENTR := $(firstword $(shell which entr scripts/entr.bash 2>/dev/null))
+ifndef MANAGEPY
+MANAGEPY := $(PYTHON) manage.py
 endif
-export ENTR
-
-ifndef JSHINT
-JSHINT := $(shell which jshint)
-endif
-export JSHINT
 
 ifndef NODE
 NODE := $(firstword $(shell which node nodejs 2>/dev/null))
 endif
-export NODE
 
-# Local Variables
+# Local variables
 
-source_files := $(wildcard src/*.html)
-
-# Standard Targets
+# Standard targets
 
 .PHONY: all
 all:
-	+$(MAKE) -j 2 watcher server
-
-.PHONY: no-watch
-no-watch:
-	+$(MAKE) -j 2 watcher-no-watch server-no-watch
+	+$(MAKE) -j 2 server-webpack server-django
 
 .PHONY: depend
 depend: depend-npm depend-python
+
+.PHONY: clean
+clean:
+	rm -f -- webpack-assets.json webpack-stats.json
+
+# Application specific targets
 
 .PHONY: depend-npm
 depend-npm:
@@ -56,56 +44,21 @@ depend-npm:
 depend-python:
 ifeq ($(VIRTUAL_ENV),)
 	@echo 'No virtual environment detected.'
-	@read -p 'Are you sure you wish to continue? (yes/No) ' && [ "$$REPLY" = "yes" ]
+	@read -p 'Are you sure you wish to continue? (yes/No)' && [ "$$REPLY" = yes ]
 endif
 	$(PYTHON) -m pip install -r requirements.txt
 
-.PHONY: check
-check: $(source_files)
-ifneq ($(JSHINT),)
-	$(JSHINT) --extract=auto $^
-endif
+.PHONY: migrate
+migrate:
+	$(MANAGEPY) makemigrations
+	$(MANAGEPY) migrate
 
-.PHONY: check-new
-check-new: $(source_files)
-ifneq ($(JSHINT),)
-	$(JSHINT) --extract=auto $?
-endif
-
-.PHONY: check-self
-check-self:
-	@[[ "$(PYTHON)" ]] || echo "PYTHON: Empty variable"
-	@[[ "$(SERVER_PORT)" ]] || echo "SERVER_PORT: Empty variable"
-	@[[ "$(JSHINT)" ]] || echo "JSHINT: Empty variable, no tests will run."
-	@[[ "$(ENTR)" ]] || echo "ENTR: Empty variable, watcher will not work"
-	@[[ "$(SERVER)" ]] || echo "SERVER: Empty variable, server will not work"
-
-.PHONY: clean
-clean:
-	rm -rf -- dist webpack-assets.json webpack-stats.json
-
-# Helper targets
-
-.PHONY: server-no-watch
-server-no-watch:
-	$(PYTHON) server.py $(SERVER_FLAGS)
-
-.PHONY: server
-server:
-	trap exit INT TERM; \
-	while true; do \
-		ls server.py | \
-		$(ENTR) -r $(MAKE) server-no-watch; \
-	done
-
-.PHONY: watcher-no-watch
-watcher-no-watch:
+.PHONY: server-webpack
+server-webpack:
 	$(NODE) server.js
 
-.PHONY: watcher
-watcher:
-	trap exit INT TERM; \
-	while true; do \
-		ls server.js | \
-		$(ENTR) -r $(MAKE) watcher-no-watch; \
-	done
+.PHONY: server-django
+server-django:
+	$(MANAGEPY) runserver 8888
+
+# Source transformations

@@ -1,9 +1,9 @@
 <template>
-    <div>Default</div>
+  <div>Default</div>
 </template>
 
 <script>
 export default{
-    name: 'DefaultRoute',
+  name: 'DefaultRoute',
 };
 </script>

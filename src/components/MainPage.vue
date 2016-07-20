@@ -1,11 +1,13 @@
 <template>
-    <div class="container">
-        <router-view></router-view>
+  <div class="container">
+    <div class="row main">
+      <router-view></router-view>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'MainPage',
+  name: 'MainPage',
 };
 </script>

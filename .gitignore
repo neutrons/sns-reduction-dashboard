@@ -1,11 +1,10 @@
-*~
-bootstrap
-*.zip
-.bootstrap.unzipped
 .DS_Store
 node_modules/
 dist/
 npm-debug.log
+__pycache__
+*~
+venv
 webpack-assets.json
 webpack-stats.json
-venv
+db.sqlite3
