@@ -13,11 +13,14 @@
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <nav-item name="catalog">Catalog</nav-item>
+          <nav-item name="reduction">Reduction</nav-item>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown dropdown-hover" >
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"  role="button" >Dev</a>
             <ul class="dropdown-menu" >
+              <nav-item name="login">Login</nav-item>
+              <nav-item name="profile"><span class="glyphicon glyphicon-user"></span></nav-item>
             </ul>
           </li>
         </ul>

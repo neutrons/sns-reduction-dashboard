@@ -3,6 +3,10 @@ import VueRouter from 'vue-router';
 
 import DefaultRoute from './components/DefaultRoute.vue';
 import CatalogRoute from './components/CatalogRoute.vue';
+import LoginRoute from './components/LoginRoute.vue';
+import ProfileRoute from './components/ProfileRoute.vue';
+import ReductionRoute from './components/ReductionRoute.vue';
+import ReductionTabRoute from './components/ReductionTabRoute.vue';
 
 Vue.use(VueRouter);
 
@@ -16,6 +20,18 @@ router.map({
   '/catalog': {
     name: 'catalog',
     component: CatalogRoute,
+  },
+  '/login': {
+    name: 'login',
+    component: LoginRoute,
+  },
+  '/profile': {
+    name: 'profile',
+    component: ProfileRoute,
+  },
+  '/reduction': {
+    name: 'reduction',
+    component: ReductionRoute,
   },
 });
 
