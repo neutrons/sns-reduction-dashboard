@@ -26,6 +26,11 @@ JSHINT := $(shell which jshint)
 endif
 export JSHINT
 
+ifndef NODE
+NODE := $(firstword $(shell which node nodejs 2>/dev/null))
+endif
+export NODE
+
 # Local Variables
 
 source_files := $(wildcard src/*.html)
@@ -34,11 +39,11 @@ source_files := $(wildcard src/*.html)
 
 .PHONY: all
 all:
-	$(MAKE) -j 2 watcher server
+	+$(MAKE) -j 2 watcher server
 
 .PHONY: no-watch
 no-watch:
-	$(MAKE) -j 2 watcher-no-watch server-no-watch
+	+$(MAKE) -j 2 watcher-no-watch server-no-watch
 
 .PHONY: depend
 depend: depend-npm depend-python
@@ -90,17 +95,17 @@ server:
 	trap exit INT TERM; \
 	while true; do \
 		ls server.py | \
-		$(ENTR) -r make server-no-watch; \
+		$(ENTR) -r $(MAKE) server-no-watch; \
 	done
 
 .PHONY: watcher-no-watch
 watcher-no-watch:
-	node server.js
+	$(NODE) server.js
 
 .PHONY: watcher
 watcher:
 	trap exit INT TERM; \
 	while true; do \
 		ls server.js | \
-		$(ENTR) -r make watcher-no-watch; \
+		$(ENTR) -r $(MAKE) watcher-no-watch; \
 	done
