@@ -1,9 +1,9 @@
 <template>
-  <div>Configuration</div>
+  <div>Instrument</div>
 </template>
 
 <script>
 export default {
-  name: 'ConfigurationRoute',
+  name: 'InstrumentRoute',
 };
 </script>

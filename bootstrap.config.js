@@ -2,7 +2,7 @@ module.exports = {
 
   // Default for the style loading
   styleLoader: 'style-loader!css-loader!less-loader',
-    
+
   scripts: {
     'transition': true,
     'alert': true,
@@ -62,4 +62,3 @@ module.exports = {
     "responsive-utilities": true
   }
 };
-

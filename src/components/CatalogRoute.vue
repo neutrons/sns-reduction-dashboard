@@ -1,107 +1,181 @@
 <template>
-    <div>
-        <div class="col-xs-9">
-            <panel>
-                <span slot="title">Title</span>
-                <div v-loading="$loadingRouteData">
-                    <table class="table table-hover" v-if="status==='success'">
-                        <thead>
-                            <tr>
-                                <th>Run</th>
-                                <th>Title</th>
-                                <th>Start</th>
-                                <th>End</th>
-                                <th>Duration</th>
-                                <th>Proton</th>
-                                <th>Total</th>
-                                <th>Reduce</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="entry in data.entries">
-                                <td>{{ entry.run }}</td>
-                                <td>{{ entry.title }}</td>
-                                <td v-time-ago="entry.start_time"></td>
-                                <td v-time-ago="entry.end_time"></td>
-                                <td v-time-diff="entry.duration"></td>
-                                <td>{{ entry.proton_charge }}</td>
-                                <td>{{ entry.total_counts }}</td>
-                                <td>
-                                    <a href="#!">
-                                        <span class="glyphicon glyphicon-download-alt"></span>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- pagination -->
-                    <div class="text-center">
-                        <ul class="pagination">
-                            <li class="disabled">
-                                <span>&laquo;</span>
-                            </li>
-                            <li class="active">
-                                <span>1</span>
-                            </li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a href="#">&raquo;</a></li>
-                        </ul>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-9">
+        <panel :expanded="!selectedFacility" @change="selectFacility(null)">
+          <span slot="title">Select a Facility {{ selectedFacility ? '(' + selectedFacility.name + ')' : '' }}</span>
+          <div v-show="!$loadingRouteData">
+            <table class="table table-hover">
+              <thead>
+                <th>Name</th>
+                <th>Description</th>
+              </thead>
+              <tbody>
+                <tr v-for="facility in results" @click.stop.prevent="selectFacility(facility)">
+                  <td>{{ facility.name }}</td>
+                  <td>{{ facility.desc }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </panel>
+
+        <panel v-if="selectedFacility" :expanded="!selectedInstrument" @change="selectInstrument(null)">
+          <span slot="title">Select an Instrument {{ selectedInstrument ? '(' + selectedInstrument.name + ')' : '' }}</span>
+          <div>
+            <table class="table table-hover">
+              <thead>
+                <th>Name</th>
+                <th>Description</th>
+              </thead>
+              <tbody>
+                <tr v-for="instrument in selectedFacility.instruments" @click="selectInstrument(instrument)">
+                  <td>{{ instrument.name }}</td>
+                  <td>{{ instrument.desc }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </panel>
+
+        <panel v-if="selectedInstrument" :expanded="!selectedConfiguration" @change="selectConfiguration(null)">
+          <span slot="title">Select a Configuration {{ selectedConfiguration ? '(' + selectedConfiguration.name + ')' : '' }}</span>
+          <div>
+            <table class="table table-hover">
+              <thead>
+                <th>Name</th>
+                <th>Description</th>
+              </thead>
+              <tbody>
+                <tr v-for="configuration in selectedInstrument.configurations" @click="selectConfiguration(configuration)">
+                  <td>{{ configuration.name }}</td>
+                  <td>{{ configuration.desc }}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <input class="form-control" type="text">
+                  </td>
+                  <td>
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <div class="input-group">
+                          <input name="" type="text" value="" class="form-control"/>
+                          <span class="input-group-btn"><button class="btn btn-default" type="button">Create</button></span>
+                        </div>
+                      </div>
                     </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </panel>
+
+        <panel v-if="selectedConfiguration">
+          <span slot="title">Modify the Configuration</span>
+          <div>
+            <form class="form-horizontal" action="">
+              <div class="form-group" v-for="entry in sortedEntries">
+                <label class="col-xs-3 control-label" :for="'entry' + $index">{{ entry.name }}</label>
+                <div class="col-xs-9">
+                  <input :id="'entry' + $index" class="form-control" type="text" :value="entry.value" :readonly="!advanced && entry.advanced" />
                 </div>
-            </panel>
-        </div>
-        <div class="col-xs-3">
-            <sidebar-panel>
-                <span slot="title">Catalog</span>
-                <div slot="body" class="list-group">
-                    <a href="#" class="list-group-item ">see experiments</a>
-                    <a href="#" class="list-group-item active">see IPTS-11255</a>
-                    <a href="#" class="list-group-item">runs</a>
-                    <a href="#" class="list-group-item disabled">this is disabled</a>
+              </div>
+              <div class="form-group">
+                <div class="col-xs-offset-3 col-xs-9">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" v-model="advanced">Enable Advanced Options</input></label>
+                  </div>
                 </div>
-            </sidebar-panel>
-        </div>
+              </div>
+            </form>
+          </div>
+        </panel>
+
+      </div>
+      <div class="col-xs-3">
+        <panel>
+          <span slot="title">Breadcrumbs</span>
+        </panel>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
+import { facility } from '../resource';
 import Panel from './Panel.vue';
-import SidebarPanel from './SidebarPanel.vue';
-import TimeAgo from '../directives/time-ago';
-import TimeDiff from '../directives/time-diff';
-import loading from 'vue-loading';
-
-import { catalog } from '../resource';
-import { route } from '../vuex/getters';
 
 export default {
-    name: 'CatalogRoute',
-    components: {
-        SidebarPanel,
-        Panel,
+  name: 'FacilityRoute',
+  data() {
+    return {
+      count: null,
+      next: null,
+      previous: null,
+      results: null,
+      selectedFacility: null,
+      selectedInstrument: null,
+      selectedConfiguration: null,
+      advanced: false,
+    };
+  },
+  computed: {
+    sortedEntries() {
+      var entries = this.selectedConfiguration.entries.slice();
+      entries.sort((a, b) => !!a.advanced - !!b.advanced);
+      return entries;
     },
-    directives: {
-        TimeAgo,
-        TimeDiff,
-        loading,
+  },
+  methods: {
+    selectFacility(facility) {
+      this.selectInstrument(null);
+
+      if (!facility) {
+        this.selectedFacility = null;
+        return;
+      }
+
+      this.$http.get(facility.url).then(response => {
+        this.selectedFacility = response.json();
+      });
     },
-    data() {
-        return { status: 'pending', data: null, message: null };
+
+    selectInstrument(instrument) {
+      this.selectConfiguration(null);
+
+      if (!instrument) {
+        this.selectedInstrument = null;
+        return;
+      }
+
+      this.$http.get(instrument.url).then(response => {
+        this.selectedInstrument = response.json();
+      });
     },
-    vuex: {
-        getters: {
-            route,
-        },
+
+    selectConfiguration(configuration) {
+      if (!configuration) {
+        this.selectedConfiguration = null;
+        return;
+      }
+
+      this.$http.get(configuration.url).then(response => {
+        this.selectedConfiguration = response.json();
+      });
     },
-    route: {
-        data({ next }) {
-            catalog.get({page: this.route.params.page}).then(response => {
-                next(response.json());
-            });
-        },
+
+  },
+  route: {
+    data({ next }) {
+      facility.get().then(response => {
+        next(response.json());
+      });
     },
+  },
+  components: {
+    Panel,
+  },
 };
 </script>

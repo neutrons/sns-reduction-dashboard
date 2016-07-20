@@ -1,33 +1,34 @@
-# SNS Catalog Dashboard
+# dashboard-config-demo
 
-A demo of the design of a dashboard for managing reductions, configurations, and
-jobs from SNS.
+> Demo of how we could set up the database and models for editing configurations
+> genericly on the front end, using a combination of Django,
+> DjangoRestFramework, VueJS, and Webpack.
 
 # Installing
 
-We need to install the JavaScript and Python dependencies, so use the command:
+Make a virtual environment:
+
+```bash
+$ python3 -m virtualenv venv
+$ source venv/bin/activate
+```
+
+Install NPM and Python dependencies:
 
 ```bash
 $ make depend
 ```
 
-Note: Make sure that you have a virtual environment set up and activated! The
-script will check.
+Apply migrations to database
+
+```bash
+$ make migrate
+```
 
 # Running
 
-To run, we need to start both the Python Tornado server and the Webpack dev
-server. We need the latter to do hot reloading in the browser. To start them,
-run:
+Start both the JavaScript webpack-dev-server and Django servers:
 
 ```bash
 $ make
-```
-
-You can kill both with Ctrl-C.
-
-To run without watching `server.py` and `server.js` for changes, instead run:
-
-```bash
-$ make no-watch
 ```

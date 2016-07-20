@@ -1,3 +1,3 @@
 export function route({ route }) {
-    return route;
+  return route;
 }

@@ -12,13 +12,30 @@ import tornado.web
 
 import faker
 
+import contextlib
+import datetime
 import glob
 import json
 import re
-import datetime
+import sqlite3
 import time
 
 CATALOG_NUM_PAGES = 10
+DATABASE = None
+
+
+@contextlib.contextmanager
+def database():
+    global DATABASE
+
+    if DATABASE is None:
+        DATABASE = sqlite3.connect(':memory:')
+        DATABASE.execute(('CREATE TABLE catalog ('
+                          '  facility, instrument, experiment, run, data '
+                          ')'))
+        DATABASE.commit()
+
+    yield DATABASE
 
 class IndexHandler(tornado.web.RequestHandler):
     def initialize(self):
@@ -93,6 +110,21 @@ class CatalogBaseHandler(tornado.web.RequestHandler):
 
     @tornado.gen.coroutine
     def get(self, facility=None, instrument=None, experiment=None, run=None):
+        with database() as db:
+            cur = db.execute(('SELECT '
+                              '  data '
+                              'FROM catalog '
+                              'WHERE facility IS ? '
+                              'AND instrument IS ? '
+                              'AND experiment IS ? '
+                              'AND run IS ? '),
+                             (facility, instrument, experiment, run))
+
+            row = cur.fetchone()
+            if row is not None:
+                self.write(row[0])
+                return
+
         http = tornado.httpclient.AsyncHTTPClient()
         fmt = self.get_format_string()
         prefix = 'http://icat.sns.gov:2080/icat-rest-ws/'
@@ -108,6 +140,14 @@ class CatalogBaseHandler(tornado.web.RequestHandler):
                 "Accept": "application/json",
             },
         )
+
+        data = response.body
+        with database() as db:
+            db.execute(('insert into catalog ( '
+                        '  facility, instrument, experiment, run, data '
+                        ') values (?, ?, ?, ?, ?)'),
+                       [facility, instrument, experiment, run, data])
+            db.commit()
 
         self.write(response.body)
 
