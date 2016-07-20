@@ -48,6 +48,10 @@ ifeq ($(VIRTUAL_ENV),)
 endif
 	$(PYTHON) -m pip install -r requirements.txt
 
+.PHONY: delete-migrations
+delete-migrations:
+	find . -not -path "./venv/*" -type d -name 'migrations' -exec rm -r {} \;
+
 .PHONY: migrate
 migrate:
 	$(MANAGEPY) makemigrations
