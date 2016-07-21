@@ -50,7 +50,12 @@ endif
 
 .PHONY: delete-migrations
 delete-migrations:
-	find . -not -path "./venv/*" -type d -name 'migrations' -exec rm -r {} \;
+	for f in job catalog core reduction; do \
+		rm -rf ./$$f/migrations/* && \
+		mkdir -p ./$$f/migrations && \
+		touch ./$$f/migrations/__init__.py || \
+		exit 1; \
+	done
 
 .PHONY: migrate
 migrate:
@@ -59,10 +64,10 @@ migrate:
 
 .PHONY: server-webpack
 server-webpack:
-	$(NODE) server.js
+	$(NODE) server.js || echo 'Error: Node'
 
 .PHONY: server-django
 server-django:
-	$(MANAGEPY) runserver 8888
+	$(MANAGEPY) runserver 8888 || echo 'Error: Django'
 
 # Source transformations

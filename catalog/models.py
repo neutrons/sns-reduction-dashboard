@@ -18,7 +18,7 @@ class AutoRepr(object):
         primary_key = next(
             field
             for field in self._meta.get_fields()
-            if field.primary_key
+            if hasattr(field, 'primary_key') and field.primary_key
         )
 
         return "{}({}={!r})".format(
@@ -96,4 +96,5 @@ class Instrument(AutoRepr, models.Model):
         verbose_name='instrument\'s facility',
         help_text='The facility the instrument is at (e.g. "SNS")',
         on_delete=models.CASCADE,
+        related_name='instruments',
     )
