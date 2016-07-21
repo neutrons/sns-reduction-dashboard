@@ -19,6 +19,10 @@ ifndef NODE
 NODE := $(firstword $(shell which node nodejs 2>/dev/null))
 endif
 
+ifndef JSHINT
+JSHINT := $(firstword $(shell which jshint node_modules/.bin/jshint 2>/dev/null))
+endif
+
 # Local variables
 
 # Standard targets
@@ -28,10 +32,10 @@ all:
 	+$(MAKE) -j 2 server-webpack server-django
 
 .PHONY: depend
-depend: depend-npm depend-python
+depend: depend-javascript depend-python
 
 .PHONY: check
-check: check-python
+check: check-python check-javascript
 
 .PHONY: clean
 clean:
@@ -39,8 +43,8 @@ clean:
 
 # Application specific targets
 
-.PHONY: depend-npm
-depend-npm:
+.PHONY: depend-javascript
+depend-javascript:
 	npm install
 
 .PHONY: depend-python
@@ -68,6 +72,10 @@ migrate:
 .PHONY: check-python
 check-python:
 	$(MANAGEPY) test
+
+.PHONY: check-javascript
+check-javascript:
+	$(JSHINT) src
 
 .PHONY: server-webpack
 server-webpack:
