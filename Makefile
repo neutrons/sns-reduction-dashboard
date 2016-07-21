@@ -7,6 +7,10 @@ SHELL := bash
 
 # Environment variables
 
+ifndef ENV
+ENV :=
+endif
+
 ifndef PYTHON
 PYTHON := python3
 endif
@@ -23,9 +27,47 @@ ifndef JSHINT
 JSHINT := $(firstword $(shell which jshint node_modules/.bin/jshint 2>/dev/null))
 endif
 
-# Local variables
+# Sanity checks and local variables
 
+valid_env := local dev stage prod
+ifeq ($(filter $(ENV),$(valid_env)),)
+$(error $$ENV ('$(ENV)') should be one of $(valid_env))
+endif
+
+settings_file := config/settings/$(ENV).py
+ifeq ($(wildcard $(settings_file)),)
+$(error $(settings_file) does not exist)
+endif
+
+settings_module := $(subst /,.,$(settings_file:.py=))
+ifneq ($(shell $(PYTHON) -c 'import $(settings_module)' &>/dev/null; echo $$?),0)
+$(info $(settings_module) could not be imported)
+endif
+
+wsgi_file := config/wsgi/$(ENV).py
+ifeq ($(wildcard $(wsgi_file)),)
+$(error $(wsgi_file) does not exist)
+endif
+
+wsgi_module := $(subst /,.,$(wsgi_file:.py=))
+ifneq ($(shell $(PYTHON) -c 'import $(wsgi_module)' &>/dev/null; echo $$?),0)
+$(info $(wsgi_module) could not be imported)
+endif
+
+requirements_file := config/requirements/$(ENV).txt
+ifeq ($(wildcard $(requirements_file)),)
+$(error $(requirements_file) does not exist)
+endif
+
+# Exported variables
+
+export DJANGO_SETTINGS_MODULE := $(settings_module)
+export DJANGO_WSGI_APPLICATION := $(wsgi_module)
 # Standard targets
+
+.PHONY: foo
+foo:
+	@echo $(ENV)
 
 .PHONY: all
 all:
@@ -53,14 +95,14 @@ ifeq ($(VIRTUAL_ENV),)
 	@echo 'No virtual environment detected.'
 	@read -p 'Are you sure you wish to continue? (yes/No)' && [ "$$REPLY" = yes ]
 endif
-	$(PYTHON) -m pip install -r requirements.txt
+	$(PYTHON) -m pip install -r $(requirements_file)
 
 .PHONY: delete-migrations
 delete-migrations:
 	for f in job catalog core reduction; do \
-		rm -rf ./$$f/migrations/* && \
-		mkdir -p ./$$f/migrations && \
-		touch ./$$f/migrations/__init__.py || \
+		rm -rf ./sns_dashboard/$$f/migrations/* && \
+		mkdir -p ./sns_dashboard/$$f/migrations && \
+		touch ./sns_dashboard/$$f/migrations/__init__.py || \
 		exit 1; \
 	done
 
@@ -79,10 +121,10 @@ check-javascript:
 
 .PHONY: server-webpack
 server-webpack:
-	$(NODE) server.js || echo 'Error: Node'
+	$(NODE) scripts/server.js
 
 .PHONY: server-django
 server-django:
-	$(MANAGEPY) runserver 8888 || echo 'Error: Django'
+	$(MANAGEPY) runserver 8888
 
 # Source transformations

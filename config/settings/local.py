@@ -39,10 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'configuration',
-    'index',
-    'catalog',
-    'reduction',
+    'sns_dashboard.configuration',
+    'sns_dashboard.index',
+    'sns_dashboard.catalog',
+    'sns_dashboard.reduction',
     'rest_framework',
 ]
 
@@ -57,7 +57,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'core.urls'
+ROOT_URLCONF = 'sns_dashboard.urls'
 
 TEMPLATES = [
     {
@@ -75,7 +75,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.application'
+#WSGI_APPLICATION = os.environ.setdefault('DJANGO_WSGI_APPLICATION',
+#                                         'core.wsgi.application')
 
 
 # Database

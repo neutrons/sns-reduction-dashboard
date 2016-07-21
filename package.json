@@ -1,12 +1,8 @@
 {
-  "name": "dashboard-config-demo",
-  "description": "A Vue.js project",
+  "name": "sns_dashboard",
+  "description": "A dashboard for SNS",
   "author": "Tanner Hobson <thobson125@gmail.com>",
   "private": true,
-  "scripts": {
-    "dev": "webpack-dev-server --inline --hot",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
-  },
   "dependencies": {
     "vue": "^1.0.26"
   },

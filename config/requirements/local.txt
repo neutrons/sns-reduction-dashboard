@@ -1,0 +1,14 @@
+# Core django framework
+Django
+
+# Authenticate users with LDAP
+django_auth_ldap
+
+# Rest framework add on to Django
+djangorestframework
+
+# Provide a machine readable API output for DjangoRestFramework
+coreapi
+
+# PostgreSQL Bindings
+psycopg2

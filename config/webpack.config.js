@@ -10,7 +10,7 @@ module.exports = {
     'webpack/hot/only-dev-server',
     'expose?$!expose?jQuery!jquery',
     'bootstrap-webpack!./bootstrap.config.js',
-    'expose?main!./src/main.js'
+    'expose?main!../src/main.js'
   ],
   output: {
     path: path.resolve(__dirname, './dist'),
