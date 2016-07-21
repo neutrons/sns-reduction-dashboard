@@ -41,6 +41,12 @@ class Facility(AutoRepr, models.Model):
         max_length=1024,
     )
 
+    active = models.BooleanField(
+        'facility is active',
+        help_text='Whether the facility is active and working in the dashboard',
+        default=False,
+    )
+
 class Instrument(AutoRepr, models.Model):
     name = models.CharField(
         'instrument name',
@@ -88,6 +94,12 @@ class Instrument(AutoRepr, models.Model):
     reduction_available = models.BooleanField(
         'instrument can do reductions',
         help_text='Whether the instrument can do reductions',
+        default=False,
+    )
+
+    active = models.BooleanField(
+        'instrument is active',
+        help_text='Whether the instrument is active and working in the dashboard',
         default=False,
     )
 

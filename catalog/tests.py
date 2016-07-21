@@ -15,6 +15,7 @@ class FacilityAPITestCase(APITestCase):
         self.sns = Facility.objects.create(
             name='SNS',
             description='Spallation Neutron Source',
+            active=True,
         )
         self.eqsans = Instrument.objects.create(
             name='EQSANS',
@@ -25,6 +26,7 @@ class FacilityAPITestCase(APITestCase):
             ldap_name='eqsans',
             drive_name='EQSANS',
             facility=self.sns,
+            active=True,
         )
 
         self.superuser = User.objects.create_superuser(
@@ -50,6 +52,7 @@ class FacilityAPITestCase(APITestCase):
                         "http://testserver/catalog/instruments/EQSANS/",
                     ],
                     "description": "Spallation Neutron Source",
+                    "active": True,
                 }
             ],
             "next": None,
@@ -73,10 +76,12 @@ class FacilityAPITestCase(APITestCase):
                     "beamline": "BL-6",
                     "type": "SANS",
                     "reduction_available": False,
-                    "facility": "http://testserver/catalog/facilities/SNS/"
-                }
+                    "facility": "http://testserver/catalog/facilities/SNS/",
+                    "active": True,
+                },
             ],
-            "description": "Spallation Neutron Source"
+            "description": "Spallation Neutron Source",
+            "active": True,
         }
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -97,7 +102,8 @@ class FacilityAPITestCase(APITestCase):
                     "beamline": "BL-6",
                     "type": "SANS",
                     "reduction_available": False,
-                    "facility": "http://testserver/catalog/facilities/SNS/"
+                    "facility": "http://testserver/catalog/facilities/SNS/",
+                    "active": True,
                 }
             ]
         }
@@ -115,7 +121,8 @@ class FacilityAPITestCase(APITestCase):
             "beamline": "BL-6",
             "type": "SANS",
             "reduction_available": False,
-            "facility": "http://testserver/catalog/facilities/SNS/"
+            "facility": "http://testserver/catalog/facilities/SNS/",
+            "active": True,
         }
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
