@@ -35,7 +35,6 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    'sns_dashboard.configuration',
     'sns_dashboard.index',
     'sns_dashboard.catalog',
     'sns_dashboard.reduction',
