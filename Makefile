@@ -35,6 +35,7 @@ $(error $$ENV ('$(ENV)') should be one of $(valid_env))
 endif
 
 env_file := config/env/$(ENV).env
+$(shell test -e $(env_file) || cp $(env_file:=.base) $(env_file))
 ifeq ($(wildcard $(env_file)),)
 $(warn $(env_file) does not exist)
 endif
