@@ -40,9 +40,6 @@ $(error $(settings_file) does not exist)
 endif
 
 settings_module := $(subst /,.,$(settings_file:.py=))
-ifneq ($(shell $(PYTHON) -c 'import $(settings_module)' &>/dev/null; echo $$?),0)
-$(info $(settings_module) could not be imported)
-endif
 
 wsgi_file := config/wsgi/$(ENV).py
 ifeq ($(wildcard $(wsgi_file)),)
@@ -50,9 +47,6 @@ $(error $(wsgi_file) does not exist)
 endif
 
 wsgi_module := $(subst /,.,$(wsgi_file:.py=))
-ifneq ($(shell $(PYTHON) -c 'import $(wsgi_module)' &>/dev/null; echo $$?),0)
-$(info $(wsgi_module) could not be imported)
-endif
 
 requirements_file := config/requirements/$(ENV).txt
 ifeq ($(wildcard $(requirements_file)),)
@@ -63,11 +57,8 @@ endif
 
 export DJANGO_SETTINGS_MODULE := $(settings_module)
 export DJANGO_WSGI_APPLICATION := $(wsgi_module)
-# Standard targets
 
-.PHONY: foo
-foo:
-	@echo $(ENV)
+# Standard targets
 
 .PHONY: all
 all:
@@ -117,7 +108,7 @@ check-python:
 
 .PHONY: check-javascript
 check-javascript:
-	$(JSHINT) src
+	$(JSHINT) --config config/jshint.json src
 
 .PHONY: server-webpack
 server-webpack:
