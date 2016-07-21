@@ -96,7 +96,7 @@ endif
 
 .PHONY: delete-migrations
 delete-migrations:
-	for f in job catalog core reduction; do \
+	for f in catalog job reduction; do \
 		rm -rf ./sns_dashboard/$$f/migrations/* && \
 		mkdir -p ./sns_dashboard/$$f/migrations && \
 		touch ./sns_dashboard/$$f/migrations/__init__.py || \
