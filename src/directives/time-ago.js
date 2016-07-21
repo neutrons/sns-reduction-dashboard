@@ -17,7 +17,7 @@ export default {
 
         this.$timeAgoTimeout = setTimeout(() => {
             this.$timeAgoTimeout = null;
-            this.update(newValue)
+            this.update(newValue);
         }, 60*1000);
     },
     unbind() {
