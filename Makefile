@@ -30,6 +30,9 @@ all:
 .PHONY: depend
 depend: depend-npm depend-python
 
+.PHONY: check
+check: check-python
+
 .PHONY: clean
 clean:
 	rm -f -- webpack-assets.json webpack-stats.json
@@ -61,6 +64,10 @@ delete-migrations:
 migrate:
 	$(MANAGEPY) makemigrations
 	$(MANAGEPY) migrate
+
+.PHONY: check-python
+check-python:
+	$(MANAGEPY) test
 
 .PHONY: server-webpack
 server-webpack:
