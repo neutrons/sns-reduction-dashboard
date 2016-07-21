@@ -31,7 +31,17 @@ $ source venv/bin/activate
 Install NPM and Python dependencies:
 
 ```bash
-$ make depend
+$ make depend     # or: make ENV=local depend
+```
+
+Modify your environment variables, in `config/env/local.env` (similarly,
+`prod.env` for production, and so on). This file gets automatically copied from
+`config/env/local.env.base` when you run a make command (if it doesn't already
+exist), so you can edit it from here. The base file has all the variables you
+need to set in it already.
+
+```bash
+$ vi config/env/local.env
 ```
 
 Apply migrations to database
@@ -42,7 +52,7 @@ $ make migrate
 
 # Running
 
-Start both the JavaScript webpack-dev-server and Django servers:
+Start the server(s) with:
 
 ```bash
 $ make
