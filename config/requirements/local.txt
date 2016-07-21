@@ -4,6 +4,9 @@ Django
 # Authenticate users with LDAP
 django_auth_ldap
 
+# Load Django variables from environment
+django-environ
+
 # Rest framework add on to Django
 djangorestframework
 

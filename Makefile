@@ -34,6 +34,11 @@ ifeq ($(filter $(ENV),$(valid_env)),)
 $(error $$ENV ('$(ENV)') should be one of $(valid_env))
 endif
 
+env_file := config/env/$(ENV).env
+ifeq ($(wildcard $(env_file)),)
+$(warn $(env_file) does not exist)
+endif
+
 settings_file := config/settings/$(ENV).py
 ifeq ($(wildcard $(settings_file)),)
 $(error $(settings_file) does not exist)
@@ -57,6 +62,7 @@ endif
 
 export DJANGO_SETTINGS_MODULE := $(settings_module)
 export DJANGO_WSGI_APPLICATION := $(wsgi_module)
+export ENV_FILE := $(env_file)
 
 # Standard targets
 

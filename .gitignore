@@ -8,3 +8,5 @@ venv
 webpack-assets.json
 webpack-stats.json
 db.sqlite3
+config/env/*.env
+.env
