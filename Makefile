@@ -119,7 +119,7 @@ all:
 	+$(MAKE) -j 4 server-webpack server-django server-redis server-postgres
 
 .PHONY: depend
-depend: depend-javascript depend-python depend-redis
+depend: depend-javascript depend-python depend-redis depend-postgres
 
 .PHONY: check
 check: check-python check-javascript
