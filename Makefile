@@ -85,18 +85,38 @@ endif
 
 managepy := $(PYTHON) manage.py
 
+# .env variables
+define newline
+
+
+endef
+
+# Somewhat hacky code to load the variables from the current .env file into our
+# makefile so that we can use them
+$(eval \
+  $(subst @@@,$(newline),\
+    $(shell \
+while true; do \
+  read line || break; \
+  var=$${line%%=*}; \
+  value=$${line#*=}; \
+  echo "define $$var@@@$$value@@@endef@@@export $$var@@@"; \
+  done <$(env_file) \
+)))
+
 # Exported variables
 
 export DJANGO_SETTINGS_MODULE := $(settings_module)
 export DJANGO_WSGI_APPLICATION := $(wsgi_module)
 export ENV_FILE := $(env_file)
 export REDIS_TAG := 'dashboard/redis:1.0'
+export POSTGRES_TAG := 'dashboard/postgres:1.0'
 
 # Standard targets
 
 .PHONY: all
 all:
-	+$(MAKE) -j 3 server-webpack server-django server-redis
+	+$(MAKE) -j 4 server-webpack server-django server-redis server-postgres
 
 .PHONY: depend
 depend: depend-javascript depend-python depend-redis
@@ -125,6 +145,9 @@ endif
 depend-redis:
 	$(DOCKER) build -t $(REDIS_TAG) config/redis
 
+depend-postgres:
+	$(DOCKER) build -t $(POSTGRES_TAG) config/postgres
+
 .PHONY: delete-migrations
 delete-migrations:
 	for f in catalog job reduction; do \
@@ -152,11 +175,19 @@ server-webpack:
 	$(NODE) scripts/server.js
 
 .PHONY: server-django
-server-django:
+server-django: migrate
 	$(managepy) runserver 8888
 
 .PHONY: server-redis
 server-redis:
 	$(DOCKER) run -p '6379:6379' $(REDIS_TAG) | tail -n +19
+
+server-postgres:
+	@mkdir -p pgdata
+	$(DOCKER) run -p '5434:5432' -e POSTGRES_PASSWORD -e DATABASE_URL -v "$$(pwd)/pgdata:/var/lib/postgresql/data" $(POSTGRES_TAG)
+
+.PHONY: foo
+foo:
+	@echo $(DEBUG)
 
 # Source transformations
