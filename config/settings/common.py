@@ -92,8 +92,19 @@ USE_TZ = True
 STATIC_URL = '/static/'
 WEBPACK_URL = STATIC_URL
 
-# Application specific settings
+# DjangoRestFramework
 
 REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
+}
+
+# django-redis
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': env('REDIS_URL'),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
 }

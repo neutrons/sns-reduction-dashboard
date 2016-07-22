@@ -27,6 +27,10 @@ ifndef JSHINT
 JSHINT := $(firstword $(shell which jshint node_modules/.bin/jshint 2>/dev/null))
 endif
 
+ifndef DOCKER
+DOCKER := $(shell which docker)
+endif
+
 # Sanity checks and local variables
 
 valid_env := local dev stage prod
@@ -65,28 +69,15 @@ export DJANGO_SETTINGS_MODULE := $(settings_module)
 export DJANGO_WSGI_APPLICATION := $(wsgi_module)
 export ENV_FILE := $(env_file)
 export REDIS_TAG := 'dashboard/redis:1.0'
-export DJANGO_TAG := 'dashboard/django:1.0'
 
 # Standard targets
 
-depend-redis:
-	docker build -t $(REDIS_TAG) config/redis
-
-build-django:
-	docker build -f config/django/Dockerfile -t $(DJANGO_TAG) --build-arg ENV .
-
-server-docker:
-	docker run $(DJANGO_TAG)
-
-server-redis:
-	docker run $(REDIS_TAG)
-
 .PHONY: all
 all:
-	+$(MAKE) -j 2 server-webpack server-django
+	+$(MAKE) -j 3 server-webpack server-django server-redis
 
 .PHONY: depend
-depend: depend-javascript depend-python
+depend: depend-javascript depend-python depend-redis
 
 .PHONY: check
 check: check-python check-javascript
@@ -105,9 +96,12 @@ depend-javascript:
 depend-python:
 ifeq ($(VIRTUAL_ENV),)
 	@echo 'No virtual environment detected.'
-	@read -p 'Are you sure you wish to continue? (yes/No)' && [ "$$REPLY" = yes ]
+	@read -p 'continue? (yes/No)' && [ "$$REPLY" = yes ]
 endif
 	$(PYTHON) -m pip install -r $(requirements_file)
+
+depend-redis:
+	$(DOCKER) build -t $(REDIS_TAG) config/redis
 
 .PHONY: delete-migrations
 delete-migrations:
@@ -138,5 +132,9 @@ server-webpack:
 .PHONY: server-django
 server-django:
 	$(MANAGEPY) runserver 8888
+
+.PHONY: server-redis
+server-redis:
+	$(DOCKER) run -p '6379:6379' $(REDIS_TAG) | tail -n +19
 
 # Source transformations

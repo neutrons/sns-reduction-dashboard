@@ -10,6 +10,9 @@ django-environ
 # Rest framework add on to Django
 djangorestframework
 
+# Use Redis as a caching backend
+django-redis
+
 # Provide a machine readable API output for DjangoRestFramework
 coreapi
 
