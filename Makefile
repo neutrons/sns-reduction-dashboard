@@ -64,8 +64,22 @@ endif
 export DJANGO_SETTINGS_MODULE := $(settings_module)
 export DJANGO_WSGI_APPLICATION := $(wsgi_module)
 export ENV_FILE := $(env_file)
+export REDIS_TAG := 'dashboard/redis:1.0'
+export DJANGO_TAG := 'dashboard/django:1.0'
 
 # Standard targets
+
+depend-redis:
+	docker build -t $(REDIS_TAG) config/redis
+
+build-django:
+	docker build -f config/django/Dockerfile -t $(DJANGO_TAG) --build-arg ENV .
+
+server-docker:
+	docker run $(DJANGO_TAG)
+
+server-redis:
+	docker run $(REDIS_TAG)
 
 .PHONY: all
 all:
