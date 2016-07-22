@@ -12,7 +12,7 @@ ENV :=
 endif
 
 ifndef PYTHON
-PYTHON := python3
+PYTHON := $(shell which python3 2>/dev/null)
 endif
 
 ifndef MANAGEPY
@@ -23,15 +23,35 @@ ifndef NODE
 NODE := $(firstword $(shell which node nodejs 2>/dev/null))
 endif
 
+ifndef NPM
+NPM := $(shell which npm 2>/dev/null)
+endif
+
 ifndef JSHINT
 JSHINT := $(firstword $(shell which jshint node_modules/.bin/jshint 2>/dev/null))
 endif
 
 ifndef DOCKER
-DOCKER := $(shell which docker)
+DOCKER := $(shell which docker 2>/dev/null)
 endif
 
 # Sanity checks and local variables
+
+ifeq ($(PYTHON),)
+$(error Python executable not found)
+endif
+
+ifeq ($(NODE),)
+$(error Node executable not found)
+endif
+
+ifeq ($(NPM),)
+$(error NPM executable not found)
+endif
+
+ifeq ($(DOCKER),)
+$(error Docker executable not found)
+endif
 
 valid_env := local dev stage prod
 ifeq ($(filter $(ENV),$(valid_env)),)
@@ -63,6 +83,8 @@ ifeq ($(wildcard $(requirements_file)),)
 $(error $(requirements_file) does not exist)
 endif
 
+managepy := $(PYTHON) manage.py
+
 # Exported variables
 
 export DJANGO_SETTINGS_MODULE := $(settings_module)
@@ -90,7 +112,7 @@ clean:
 
 .PHONY: depend-javascript
 depend-javascript:
-	npm install
+	$(NPM) install
 
 .PHONY: depend-python
 depend-python:
@@ -114,12 +136,12 @@ delete-migrations:
 
 .PHONY: migrate
 migrate:
-	$(MANAGEPY) makemigrations
-	$(MANAGEPY) migrate
+	$(managepy) makemigrations
+	$(managepy) migrate
 
 .PHONY: check-python
 check-python:
-	$(MANAGEPY) test
+	$(managepy) test
 
 .PHONY: check-javascript
 check-javascript:
@@ -131,7 +153,7 @@ server-webpack:
 
 .PHONY: server-django
 server-django:
-	$(MANAGEPY) runserver 8888
+	$(managepy) runserver 8888
 
 .PHONY: server-redis
 server-redis:
