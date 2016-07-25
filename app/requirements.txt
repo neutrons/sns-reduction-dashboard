@@ -1,0 +1,23 @@
+# Core django framework
+Django
+
+# Authenticate users with LDAP
+django_auth_ldap
+
+# Load Django variables from environment
+django-environ
+
+# Rest framework add on to Django
+djangorestframework
+
+# Use Redis as a caching backend
+django-redis
+
+# Provide a machine readable API output for DjangoRestFramework
+coreapi
+
+# PostgreSQL Bindings
+psycopg2
+
+# uWSGI to hook into nginx
+uwsgi

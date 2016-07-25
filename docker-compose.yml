@@ -1,0 +1,15 @@
+app:
+  build: app
+  links:
+    - redis
+
+nginx:
+  build: nginx
+  ports:
+    - "1337:80"
+  env_file: config/env/local.env
+  links:
+    - app
+
+redis:
+  build: redis

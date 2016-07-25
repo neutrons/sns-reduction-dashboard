@@ -111,8 +111,17 @@ export DJANGO_WSGI_APPLICATION := $(wsgi_module)
 export ENV_FILE := $(env_file)
 export REDIS_TAG := 'dashboard/redis:1.0'
 export POSTGRES_TAG := 'dashboard/postgres:1.0'
+export APP_TAG := 'dashboard/app:1.0'
 
 # Standard targets
+
+.PHONY: build
+build:
+	docker-compose build
+
+.PHONY: up
+up:
+	docker-compose up
 
 .PHONY: all
 all:
@@ -185,9 +194,5 @@ server-redis:
 server-postgres:
 	@mkdir -p pgdata
 	$(DOCKER) run -p '5434:5432' -e POSTGRES_PASSWORD -e DATABASE_URL -v "$$(pwd)/pgdata:/var/lib/postgresql/data" $(POSTGRES_TAG)
-
-.PHONY: foo
-foo:
-	@echo $(DEBUG)
 
 # Source transformations
