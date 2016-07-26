@@ -42,6 +42,7 @@ LOCAL_APPS = [
 
 ALLOWED_HOSTS = [
     'app',
+    'localhost',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -74,7 +75,14 @@ TEMPLATES = [
 ]
 
 DATABASES = {
-    'default': env.db(),
+    'default': {
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASS'),
+        'ENGINE': env('DB_ENGINE'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
+    },
 }
 
 LANGUAGE_CODE = 'en-us'

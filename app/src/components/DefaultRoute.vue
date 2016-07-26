@@ -1,5 +1,5 @@
 <template>
-  <div>Default</div>
+  <div>DefaultRoute</div>
 </template>
 
 <script>

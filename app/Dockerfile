@@ -32,6 +32,7 @@ COPY entrypoint.sh /bin/
 COPY webpack.config.js /
 COPY bootstrap.config.js /
 COPY bootstrap.config.less /
+COPY server.js /
 
 COPY manage.py /
 

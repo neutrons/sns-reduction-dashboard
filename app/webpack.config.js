@@ -6,7 +6,7 @@ var BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
   entry: [
-    'webpack-dev-server/client?http://localhost:3000',
+    'webpack-dev-server/client?/webpack/sockjs-node',
     'webpack/hot/only-dev-server',
     'expose?$!expose?jQuery!jquery',
     'bootstrap-webpack!./bootstrap.config.js',
@@ -14,7 +14,7 @@ module.exports = {
   ],
   output: {
     path: path.resolve(__dirname, 'static/dist/'),
-    publicPath: '/static/dist/',
+    publicPath: '/webpack/dist/',
     filename: 'build.js'
   },
   resolveLoader: {

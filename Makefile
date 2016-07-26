@@ -109,9 +109,6 @@ while true; do \
 export DJANGO_SETTINGS_MODULE := $(settings_module)
 export DJANGO_WSGI_APPLICATION := $(wsgi_module)
 export ENV_FILE := $(env_file)
-export REDIS_TAG := 'dashboard/redis:1.0'
-export POSTGRES_TAG := 'dashboard/postgres:1.0'
-export APP_TAG := 'dashboard/app:1.0'
 
 # Standard targets
 
@@ -121,7 +118,15 @@ build:
 
 .PHONY: up
 up:
-	docker-compose up
+	docker-compose up -d
+
+.PHONY: down
+down:
+	docker-compose down
+
+.PHONY: logs
+logs:
+	docker-compose logs --tail=10 -f
 
 .PHONY: all
 all:
