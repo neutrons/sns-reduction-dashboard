@@ -1,15 +1,29 @@
 app:
+  restart: always
   build: app
+  expose:
+    - 5000
+  volumes:
+    - staticdata:/static
+    - ./app/sns_dashboard:/app:ro
+    - ./app/src:/src:ro
+  env_file: config/env/local.env
   links:
     - redis
 
 nginx:
+  restart: always
   build: nginx
   ports:
-    - "1337:80"
+    - 1337:80
   env_file: config/env/local.env
+  volumes:
+    - staticdata:/static
   links:
     - app
 
 redis:
+  restart: always
   build: redis
+  expose:
+    - 6379

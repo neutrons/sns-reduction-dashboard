@@ -13,6 +13,7 @@ RUN true \
            uwsgi \
            uwsgi-python3 \
            libldap \
+           libpq \
     && apk add --no-cache --virtual build-dependencies \
            build-base \
            gcc \
@@ -27,14 +28,12 @@ RUN true \
     && apk del build-dependencies
 
 COPY uwsgi.ini /etc/
-COPY sns_dashboard /app
 COPY entrypoint.sh /bin/
+COPY webpack.config.js /
+COPY bootstrap.config.js /
+COPY bootstrap.config.less /
 
-ENV DEBUG off
-ENV SECRET_KEY secret-key
-ENV DATABASE_URL sqlite://db.sqlite3
-ENV POSTGRES_PASSWORD lolk
-ENV REDIS_URL redis://redis:6378/0
+COPY manage.py /
 
 ENTRYPOINT ["entrypoint.sh"]
-CMD ["uwsgi", "--ini", "/etc/uwsgi.ini"]
+CMD []
