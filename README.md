@@ -19,6 +19,15 @@ Alternatively, you can set it per `make` command, like so:
 $ make ENV=local <target>
 ```
 
+# TL;DR
+
+Run this to kill any existing version of the app, build a new one, start up the
+services, and then watch the logs:
+
+```bash
+$ make down build up logs
+```
+
 # Installing
 
 Run:
@@ -33,4 +42,20 @@ Start the server(s) with:
 
 ```bash
 $ make up
+```
+
+# Watching logs
+
+Run:
+
+```bash
+$ make logs
+```
+
+# Killing the application
+
+Run:
+
+```bash
+$ make down
 ```
