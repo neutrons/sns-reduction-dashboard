@@ -1,0 +1,55 @@
+version: '2'
+services:
+  app:
+    restart: on-failure:3
+    build: app
+    expose:
+      - 80
+      - 3000
+    volumes:
+      - staticdata:/static
+      - ./app/sns_dashboard:/app
+      - ./app/src:/src:ro
+    environment:
+      DEBUG: $APP_DEBUG
+      SECRET_KEY: $APP_SECRET_KEY
+      ADMIN_USER: $APP_ADMIN_USER
+      ADMIN_PASS: $APP_ADMIN_PASS
+      ADMIN_EMAIL: $APP_ADMIN_EMAIL
+      DB_NAME: $POSTGRES_NAME
+      DB_USER: $POSTGRES_USER
+      DB_PASS: $POSTGRES_PASS
+
+  nginx:
+    restart: on-failure:3
+    build: nginx
+    ports:
+      - 80:80
+    volumes:
+      - staticdata:/static
+
+  redis:
+    restart: on-failure:3
+    build: redis
+    expose:
+      - 6379
+
+  postgres:
+    restart: on-failure:3
+    image: sameersbn/postgresql:9.4-23
+    environment:
+      REPLICATION_MODE: master
+      DEBUG: $POSTGRES_DEBUG
+      REPLICATION_USER: $POSTGRES_REPL_USER
+      REPLICATION_PASS: $POSTGRES_REPL_PASS
+      DB_USER: $POSTGRES_USER
+      DB_PASS: $POSTGRES_PASS
+      DB_NAME: $POSTGRES_NAME
+    expose:
+      - 5432
+    volumes:
+      - dbdata:/var/lib/postgresql
+
+volumes:
+  dbdata:
+  staticdata:

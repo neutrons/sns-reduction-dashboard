@@ -5,86 +5,74 @@ SHELL := bash
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
+################
+# Utilities
+
+# $(call make-lazy FOO) will turn FOO into a variable that, when accessed, will
+# evaluate its definition once and then remember that value for the rest of the
+# makefile. For example:
+#
+#   FOO = $(shell date +%s)
+#   $(call make-lazy FOO)
+#   t0 := $(FOO)
+#   $(shell sleep 3)
+#   t1 := $(FOO)
+#
+# Without the make-lazy call, $(t0) and $(t1) will have different values, but
+# with it, they will have the same values.
+#
+# $(1) = name of variable to make lazy
+make-lazy = $(eval $1 = $​$(eval $1 := $(value $(1)))$​$($1))
+
+# Used for backups
+date := $(shell date +%Y%m%d%H%M%S)
+
+################
 # Environment variables
 
 ifndef ENV
 ENV :=
 endif
 
-ifndef PYTHON
-PYTHON := $(shell which python3 2>/dev/null)
-endif
-
-ifndef MANAGEPY
-MANAGEPY := $(PYTHON) manage.py
-endif
-
-ifndef NODE
-NODE := $(firstword $(shell which node nodejs 2>/dev/null))
-endif
-
-ifndef NPM
-NPM := $(shell which npm 2>/dev/null)
-endif
-
-ifndef JSHINT
-JSHINT := $(firstword $(shell which jshint node_modules/.bin/jshint 2>/dev/null))
-endif
-
 ifndef DOCKER
 DOCKER := $(shell which docker 2>/dev/null)
 endif
 
+ifndef DOCKER_COMPOSE
+DOCKER_COMPOSE := $(shell which docker-compose 2>/dev/null)
+endif
+
+################
 # Sanity checks and local variables
 
-ifeq ($(PYTHON),)
-$(error Python executable not found)
-endif
-
-ifeq ($(NODE),)
-$(error Node executable not found)
-endif
-
-ifeq ($(NPM),)
-$(error NPM executable not found)
-endif
-
 ifeq ($(DOCKER),)
-$(error Docker executable not found)
+$(error 'docker' executable not found)
 endif
 
-valid_env := local dev stage prod
+ifeq ($(DOCKER_COMPOSE),)
+$(error 'docker-compose' executable not found)
+endif
+
+valid_env := local dev stage prod backup
 ifeq ($(filter $(ENV),$(valid_env)),)
 $(error $$ENV ('$(ENV)') should be one of $(valid_env))
 endif
 
-env_file := config/env/$(ENV).env
+env_file := .env
 $(shell test -e $(env_file) || cp $(env_file:=.base) $(env_file))
 ifeq ($(wildcard $(env_file)),)
 $(warn $(env_file) does not exist)
 endif
 
-settings_file := config/settings/$(ENV).py
-ifeq ($(wildcard $(settings_file)),)
-$(error $(settings_file) does not exist)
+docker_compose_file := docker-compose.$(ENV).yml
+ifeq ($(wildcard $(docker_compose_file)),)
+$(error $(docker_compose_file) does not exist)
 endif
 
-settings_module := $(subst /,.,$(settings_file:.py=))
+docker_compose_command := \
+	$(DOCKER_COMPOSE) -f $(docker_compose_file)
 
-wsgi_file := config/wsgi/$(ENV).py
-ifeq ($(wildcard $(wsgi_file)),)
-$(error $(wsgi_file) does not exist)
-endif
-
-wsgi_module := $(subst /,.,$(wsgi_file:.py=))
-
-requirements_file := config/requirements/$(ENV).txt
-ifeq ($(wildcard $(requirements_file)),)
-$(error $(requirements_file) does not exist)
-endif
-
-managepy := $(PYTHON) manage.py
-
+################
 # .env variables
 define newline
 
@@ -98,106 +86,49 @@ $(eval \
     $(shell \
 while true; do \
   read line || break; \
+  [ "$${#line}" -eq 0 ] && continue; \
+  [ "$${line:0:1}" = "#" ] && continue; \
   var=$${line%%=*}; \
   value=$${line#*=}; \
   echo "define $$var@@@$$value@@@endef@@@export $$var@@@"; \
   done <$(env_file) \
 )))
 
+################
 # Exported variables
 
-export DJANGO_SETTINGS_MODULE := $(settings_module)
-export DJANGO_WSGI_APPLICATION := $(wsgi_module)
 export ENV_FILE := $(env_file)
+export DOCKER_COMPOSE_FILE := $(docker_compose_file)
+export DATE := $(date)
 
+################
 # Standard targets
 
-.PHONY: build
-build:
-	docker-compose build
-
-.PHONY: up
-up:
-	docker-compose up -d
-
-.PHONY: down
-down:
-	docker-compose down
-
-.PHONY: logs
-logs:
-	docker-compose logs --tail=10 -f
-
 .PHONY: all
-all:
-	+$(MAKE) -j 4 server-webpack server-django server-redis server-postgres
-
-.PHONY: depend
-depend: depend-javascript depend-python depend-redis depend-postgres
-
-.PHONY: check
-check: check-python check-javascript
+all: | down build up logs
 
 .PHONY: clean
 clean:
-	rm -f -- webpack-assets.json webpack-stats.json
+	find . -name '*~' -exec rm -v -- {} \+
 
+################
 # Application specific targets
 
-.PHONY: depend-javascript
-depend-javascript:
-	$(NPM) install
+.PHONY: build
+build:
+	$(docker_compose_command) build
 
-.PHONY: depend-python
-depend-python:
-ifeq ($(VIRTUAL_ENV),)
-	@echo 'No virtual environment detected.'
-	@read -p 'continue? (yes/No)' && [ "$$REPLY" = yes ]
-endif
-	$(PYTHON) -m pip install -r $(requirements_file)
+.PHONY: up
+up:
+	$(docker_compose_command) up -d
 
-depend-redis:
-	$(DOCKER) build -t $(REDIS_TAG) config/redis
+.PHONY: down
+down:
+	$(docker_compose_command) down
 
-depend-postgres:
-	$(DOCKER) build -t $(POSTGRES_TAG) config/postgres
+.PHONY: logs
+logs:
+	$(docker_compose_command) logs --tail=10 -f
 
-.PHONY: delete-migrations
-delete-migrations:
-	for f in catalog job reduction; do \
-		rm -rf ./sns_dashboard/$$f/migrations/* && \
-		mkdir -p ./sns_dashboard/$$f/migrations && \
-		touch ./sns_dashboard/$$f/migrations/__init__.py || \
-		exit 1; \
-	done
-
-.PHONY: migrate
-migrate:
-	$(managepy) makemigrations
-	$(managepy) migrate
-
-.PHONY: check-python
-check-python:
-	$(managepy) test
-
-.PHONY: check-javascript
-check-javascript:
-	$(JSHINT) --config config/jshint.json src
-
-.PHONY: server-webpack
-server-webpack:
-	$(NODE) scripts/server.js
-
-.PHONY: server-django
-server-django: migrate
-	$(managepy) runserver 8888
-
-.PHONY: server-redis
-server-redis:
-	$(DOCKER) run -p '6379:6379' $(REDIS_TAG) | tail -n +19
-
-server-postgres:
-	@mkdir -p pgdata
-	$(DOCKER) run -p '5434:5432' -e POSTGRES_PASSWORD -e DATABASE_URL -v "$$(pwd)/pgdata:/var/lib/postgresql/data" $(POSTGRES_TAG)
-
+################
 # Source transformations

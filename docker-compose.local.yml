@@ -1,0 +1,30 @@
+version: '2'
+services:
+  app:
+    extends:
+      file: docker-compose.common.yml
+      service: app
+    links:
+      - redis
+      - postgres
+
+  redis:
+    extends:
+      file: docker-compose.common.yml
+      service: redis
+
+  postgres:
+    extends:
+      file: docker-compose.common.yml
+      service: postgres
+
+  nginx:
+    extends:
+      file: docker-compose.common.yml
+      service: nginx
+    links:
+      - app
+
+volumes:
+  dbdata:
+  staticdata:
