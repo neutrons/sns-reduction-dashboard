@@ -36,7 +36,7 @@ services:
 
   postgres:
     restart: on-failure:3
-    image: sameersbn/postgresql:9.4-23
+    build: postgres
     environment:
       REPLICATION_MODE: master
       DEBUG: $POSTGRES_DEBUG

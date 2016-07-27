@@ -27,6 +27,10 @@ RUN true \
     && python3 -m pip install -r /requirements.txt \
     && apk del build-dependencies
 
+RUN true \
+    && apk add --no-cache \
+           netcat-openbsd
+
 COPY uwsgi.ini /etc/
 COPY entrypoint.sh /bin/
 COPY webpack.config.js /

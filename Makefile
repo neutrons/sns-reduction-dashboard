@@ -107,6 +107,10 @@ export DATE := $(date)
 .PHONY: all
 all: | down build up logs
 
+.PHONY: check
+check:
+	$(docker_compose_command) config -q
+
 .PHONY: clean
 clean:
 	find . -name '*~' -exec rm -v -- {} \+
