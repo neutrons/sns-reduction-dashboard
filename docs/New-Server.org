@@ -6,7 +6,6 @@ For the staging PC, I used a system with:
 uname -r
 #+END_SRC
 
-#+RESULTS:
-#+BEGIN_SRC sh
+#+BEGIN_EXAMPLE
 14.5.0
-#+END_SRC
+#+END_EXAMPLE
