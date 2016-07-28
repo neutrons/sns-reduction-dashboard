@@ -23,7 +23,7 @@ Install Docker Engine
 =====================
 
 Sources:
-* https://docs.docker.com/engine/installation/linux/centos/#/prerequisites
+* https://docs.docker.com/engine/installation/linux/centos/#/install-with-yum
 
 To install this, we need to first update yum's packages, add the docker repo,
 install docker-engine, and start the daemon:
@@ -42,16 +42,24 @@ gpgkey=https://yum.dockerproject.org/gpg
 EOF
 sudo yum -y install docker-engine
 sudo service docker start
+sudo groupadd docker
+sudo usermod -aG docker $USER
+# log out now
 ```
 
 Long:
 
 ``` console
+$ # Update yum packages
 $ sudo yum update
 Loaded plugins: langpacks, product-id, rhnplugin, search-disabled-repos,
               : subscription-manager
 This system is receiving updates from RHN Classic or Red Hat Satellite.
 No packages marked for update
+
+```
+
+``` console
 $ sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
 [dockerrepo]
 name=Docker Repository
@@ -123,4 +131,10 @@ Dependency Installed:
 Complete!
 $ sudo service docker start
 Redirecting to /bin/systemctl start  docker.service
+$ sudo groupadd docker
+$ sudo usermod -aG docker $USER
+$ # log out now
 ```
+
+Install Docker Compose
+======================
