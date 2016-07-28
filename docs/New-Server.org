@@ -2,9 +2,11 @@
 
 For the staging PC, I used a system with:
 
-#+BEGIN_SRC sh :tangle yes :results raw
+#+BEGIN_SRC sh :tangle yes :results code
 uname -r
 #+END_SRC
 
 #+RESULTS:
+#+BEGIN_SRC sh
 14.5.0
+#+END_SRC
