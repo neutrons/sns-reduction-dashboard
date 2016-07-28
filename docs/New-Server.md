@@ -25,12 +25,9 @@ Install Docker Engine
 Sources:
 * https://docs.docker.com/engine/installation/linux/centos/#/install-with-yum
 
-To install this, we need to first update yum's packages, add the docker repo,
-install docker-engine, and start the daemon:
-
 Short:
 
-```
+``` shell
 sudo yum update
 sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
 [dockerrepo]
@@ -44,6 +41,7 @@ sudo yum -y install docker-engine
 sudo service docker start
 sudo groupadd docker
 sudo usermod -aG docker $USER
+sudo chkconfig docker on
 # log out now
 ```
 
@@ -56,10 +54,10 @@ Loaded plugins: langpacks, product-id, rhnplugin, search-disabled-repos,
               : subscription-manager
 This system is receiving updates from RHN Classic or Red Hat Satellite.
 No packages marked for update
-
 ```
 
 ``` console
+$ # Add docker's repository
 $ sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
 [dockerrepo]
 name=Docker Repository
@@ -68,6 +66,16 @@ enabled=1
 gpgcheck=1
 gpgkey=https://yum.dockerproject.org/gpg
 EOF
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/7/
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+```
+
+``` console
+$ # Actually install docker-engine
 $ sudo yum -y install docker-engine
 Loaded plugins: langpacks, product-id, rhnplugin, search-disabled-repos,
               : subscription-manager
@@ -129,12 +137,178 @@ Dependency Installed:
   docker-engine-selinux.noarch 0:1.11.2-1.el7.centos
 
 Complete!
+```
+
+``` console
+$ # Start the docker daemon
 $ sudo service docker start
 Redirecting to /bin/systemctl start  docker.service
+
+```
+
+``` console
+$ # Create the docker group so we don't have to sudo all the time to use docker
 $ sudo groupadd docker
 $ sudo usermod -aG docker $USER
 $ # log out now
 ```
 
+``` console
+$ # Start Docker on boot
+$ sudo chkconfig docker on
+Note: Forwarding request to 'systemctl enable docker.service'.
+Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
+```
+
+```
+$ # Test that we can use it. You logged out, right?
+$ docker run hello-world
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker Hub account:
+ https://hub.docker.com
+
+For more examples and ideas, visit:
+ https://docs.docker.com/engine/userguide/
+```
+
 Install Docker Compose
 ======================
+
+Sources:
+* http://developers.redhat.com/products/softwarecollections/get-started-rhel7-python/
+* http://stackoverflow.com/questions/32618686/how-to-install-pip-in-centos-7
+
+``` shell
+sudo yum -y install python34
+curl https://bootstrap.pypa.io/get-pip.py | sudo python3.4
+python3 -m pip install -y docker-compose
+```
+
+```
+$ # Find and install Python 3
+$ yum search python | grep -I "Python 3000"
+python34.x86_64 : Version 3 of the Python programming language aka Python 3000
+$ sudo yum -y install python34
+Loaded plugins: langpacks, product-id, rhnplugin, search-disabled-repos,
+              : subscription-manager
+This system is receiving updates from RHN Classic or Red Hat Satellite.
+Resolving Dependencies
+--> Running transaction check
+---> Package python34.x86_64 0:3.4.3-4.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+=================================================================================
+ Package            Arch             Version                Repository      Size
+=================================================================================
+Installing:
+ python34           x86_64           3.4.3-4.el7            epel            49 k
+
+Transaction Summary
+=================================================================================
+Install  1 Package
+
+Total download size: 49 k
+Installed size: 36 k
+Downloading packages:
+python34-3.4.3-4.el7.x86_64.rpm                           |  49 kB  00:00:00
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : python34-3.4.3-4.el7.x86_64                                   1/1
+  Verifying  : python34-3.4.3-4.el7.x86_64                                   1/1
+
+Installed:
+  python34.x86_64 0:3.4.3-4.el7
+
+Complete!
+```
+
+``` console
+$ # Install pip3
+$ curl https://bootstrap.pypa.io/get-pip.py | sudo python3.4
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 1488k  100 1488k    0     0  3178k      0 --:--:-- --:--:-- --:--:-- 3188k
+Collecting pip
+  Using cached pip-8.1.2-py2.py3-none-any.whl
+Installing collected packages: pip
+Successfully installed pip-8.1.2
+```
+
+``` console
+$ # Install docker-compose
+$ python3 -m pip install -y docker-compose
+Collecting docker-compose
+Requirement already satisfied (use --upgrade to upgrade): requests<2.8,>=2.6.1 in /usr/lib/python3.4/site-packages (from docker-compose)
+Requirement already satisfied (use --upgrade to upgrade): jsonschema<3,>=2.5.1 in /usr/lib/python3.4/site-packages (from docker-compose)
+Requirement already satisfied (use --upgrade to upgrade): cached-property<2,>=1.2.0 in /usr/lib/python3.4/site-packages (from docker-compose)
+Requirement already satisfied (use --upgrade to upgrade): PyYAML<4,>=3.10 in /usr/lib64/python3.4/site-packages (from docker-compose)
+Requirement already satisfied (use --upgrade to upgrade): texttable<0.9,>=0.8.1 in /usr/lib/python3.4/site-packages (from docker-compose)
+Requirement already satisfied (use --upgrade to upgrade): docker-py<2.0,>=1.9.0 in /usr/lib/python3.4/site-packages (from docker-compose)
+Requirement already satisfied (use --upgrade to upgrade): docopt<0.7,>=0.6.1 in /usr/lib/python3.4/site-packages (from docker-compose)
+Requirement already satisfied (use --upgrade to upgrade): six<2,>=1.3.0 in /usr/lib/python3.4/site-packages (from docker-compose)
+Requirement already satisfied (use --upgrade to upgrade): websocket-client<1.0,>=0.32.0 in /usr/lib/python3.4/site-packages (from docker-compose)
+Requirement already satisfied (use --upgrade to upgrade): dockerpty<0.5,>=0.4.1 in /usr/lib/python3.4/site-packages (from docker-compose)
+Requirement already satisfied (use --upgrade to upgrade): backports.ssl-match-hostname>=3.5; python_version < "3.5" in /usr/lib/python3.4/site-packages (from docker-py<2.0,>=1.9.0->docker-compose)
+Installing collected packages: docker-compose
+Successfully installed docker-compose-1.8.0
+```
+
+``` console
+$ # Test docker-compose
+$ tee test.yml <<-'EOF'
+version: '2'
+services:
+  hello-world:
+    image: hello-world
+EOF
+version: '2'
+services:
+  hello-world:
+    image: hello-world
+$ docker-compose -f test.yml build up
+Creating snscatalogdashboard_hello-world_1
+Attaching to snscatalogdashboard_hello-world_1
+hello-world_1  |
+hello-world_1  | Hello from Docker!
+hello-world_1  | This message shows that your installation appears to be working correctly.
+hello-world_1  |
+hello-world_1  | To generate this message, Docker took the following steps:
+hello-world_1  |  1. The Docker client contacted the Docker daemon.
+hello-world_1  |  2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+hello-world_1  |  3. The Docker daemon created a new container from that image which runs the
+hello-world_1  |     executable that produces the output you are currently reading.
+hello-world_1  |  4. The Docker daemon streamed that output to the Docker client, which sent it
+hello-world_1  |     to your terminal.
+hello-world_1  |
+hello-world_1  | To try something more ambitious, you can run an Ubuntu container with:
+hello-world_1  |  $ docker run -it ubuntu bash
+hello-world_1  |
+hello-world_1  | Share images, automate workflows, and more with a free Docker Hub account:
+hello-world_1  |  https://hub.docker.com
+hello-world_1  |
+hello-world_1  | For more examples and ideas, visit:
+hello-world_1  |  https://docs.docker.com/engine/userguide/
+hello-world_1  |
+snscatalogdashboard_hello-world_1 exited with code 0
+```
+
+Run the Servers
+===============
