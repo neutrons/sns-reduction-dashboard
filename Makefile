@@ -115,6 +115,9 @@ check:
 clean:
 	find . -name '*~' -exec rm -v -- {} \+
 
+.PHONY: noop
+noop:
+
 ################
 # Application specific targets
 

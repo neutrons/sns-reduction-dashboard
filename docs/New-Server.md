@@ -192,11 +192,15 @@ Sources:
 * http://developers.redhat.com/products/softwarecollections/get-started-rhel7-python/
 * http://stackoverflow.com/questions/32618686/how-to-install-pip-in-centos-7
 
+Short:
+
 ``` shell
 sudo yum -y install python34
 curl https://bootstrap.pypa.io/get-pip.py | sudo python3.4
 python3 -m pip install -y docker-compose
 ```
+
+Long:
 
 ```
 $ # Find and install Python 3
@@ -308,7 +312,67 @@ hello-world_1  | For more examples and ideas, visit:
 hello-world_1  |  https://docs.docker.com/engine/userguide/
 hello-world_1  |
 snscatalogdashboard_hello-world_1 exited with code 0
+$ rm test.yml
 ```
 
 Run the Servers
 ===============
+
+Sources:
+* [README.md](/README.md)
+
+Short:
+
+``` shell
+git clone https://github.com/player1537/SNS-catalog-dashboard.git
+cd SNS-catalog-dashboard
+export ENV=local
+make noop
+vi .env
+make down build up logs
+# Ctrl-C when you're done
+```
+
+Long:
+
+``` console
+$ # Clone the repository
+$ git clone https://github.com/player1537/SNS-catalog-dashboard.git
+Cloning into 'SNS-catalog-dashboard'...
+remote: Counting objects: 704, done.
+remote: Compressing objects: 100% (128/128), done.
+remote: Total 704 (delta 53), reused 0 (delta 0), pack-reused 572
+Receiving objects: 100% (704/704), 143.41 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (353/353), done.
+$ # Change to that directory
+$ cd SNS-catalog-dashboard
+```
+
+``` console
+$ # Export the environment we want to use
+$ export ENV=local
+$ # Copy the base env file to the current one
+$ make noop
+$ # Edit the environment
+$ vi .env
+```
+
+``` console
+$ # Run everything (this will take some time)
+$ make down build up logs
+Lots of output...
+...
+...
+app_1       | your server socket listen backlog is limited to 100 connections
+app_1       | your mercy for graceful operations on workers is 60 seconds
+app_1       | mapped 145536 bytes (142 KB) for 1 cores
+app_1       | *** Operational MODE: single process ***
+app_1       | WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x564975476c40 pid: 1 (default app)
+app_1       | *** uWSGI is running in multiple interpreter mode ***
+app_1       | spawned uWSGI master process (pid: 1)
+app_1       | spawned uWSGI worker 1 (pid: 48, cores: 1)
+app_1       | >>> >>> ... ... ... ... Listening at 0.0.0.0:3000
+C-c
+$ # You can now stop it with
+$ make down
+```
