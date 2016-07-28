@@ -6,6 +6,14 @@ Sources:
 
 We're using an RHEL 7 server.
 
+Short:
+
+``` shell
+uname -r
+```
+
+Long:
+
 ```console
 $ uname -r
 3.10.0-327.22.2.el7.x86_64
@@ -19,6 +27,24 @@ Sources:
 
 To install this, we need to first update yum's packages, add the docker repo,
 install docker-engine, and start the daemon:
+
+Short:
+
+```
+sudo yum update
+sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/7/
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+EOF
+sudo yum -y install docker-engine
+sudo service docker start
+```
+
+Long:
 
 ``` console
 $ sudo yum update
@@ -34,7 +60,7 @@ enabled=1
 gpgcheck=1
 gpgkey=https://yum.dockerproject.org/gpg
 EOF
-$ sudo yum install docker-engine
+$ sudo yum -y install docker-engine
 Loaded plugins: langpacks, product-id, rhnplugin, search-disabled-repos,
               : subscription-manager
 This system is receiving updates from RHN Classic or Red Hat Satellite.
