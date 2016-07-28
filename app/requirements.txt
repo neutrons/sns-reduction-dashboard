@@ -17,7 +17,7 @@ django-redis
 coreapi
 
 # PostgreSQL Bindings
-psycopg2
+psycopg2>=2.5.4
 
 # uWSGI to hook into nginx
 uwsgi

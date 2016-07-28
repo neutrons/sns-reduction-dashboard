@@ -123,18 +123,30 @@ noop:
 
 .PHONY: build
 build:
+ifneq ($(CONFIGURED),true)
+	@echo "Configure the .env file"; false
+endif
 	$(docker_compose_command) build
 
 .PHONY: up
 up:
+ifneq ($(CONFIGURED),true)
+	@echo "Configure the .env file"; false
+endif
 	$(docker_compose_command) up -d
 
 .PHONY: down
 down:
+ifneq ($(CONFIGURED),true)
+	@echo "Configure the .env file"; false
+endif
 	$(docker_compose_command) down
 
 .PHONY: logs
 logs:
+ifneq ($(CONFIGURED),true)
+	@echo "Configure the .env file"; false
+endif
 	$(docker_compose_command) logs --tail=10 -f
 
 ################

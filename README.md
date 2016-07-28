@@ -24,7 +24,14 @@ $ make ENV=local <target>
 Run this to kill any existing version of the app, build a new one, start up the
 services, and then watch the logs:
 
-```bash
+```console
+$ # Copy .env.base to .env
+$ make noop
+$ # Create some passwords that you can use
+$ ./scripts/create_pass.sh 128
+$ # Edit the rest of the environment
+$ vi .env
+$ # Kill existing + build + start + watch the logs of the services
 $ make down build up logs
 ```
 
