@@ -1,0 +1,10 @@
+* Verify the system
+
+For the staging PC, I used a system with:
+
+#+BEGIN_SRC sh :tangle yes
+uname -r
+#+END_SRC
+
+#+RESULTS:
+: 14.5.0
