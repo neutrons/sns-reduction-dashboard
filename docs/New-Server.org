@@ -2,9 +2,9 @@
 
 For the staging PC, I used a system with:
 
-#+BEGIN_SRC sh :tangle yes
+#+BEGIN_SRC sh :tangle yes :results raw
 uname -r
 #+END_SRC
 
 #+RESULTS:
-: 14.5.0
+14.5.0
