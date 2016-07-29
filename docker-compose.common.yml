@@ -24,8 +24,12 @@ services:
   nginx:
     restart: on-failure:3
     build: nginx
+    environment:
+      PORT: $NGINX_PORT
+      SERVER_NAME: $NGINX_SERVER_NAME
+      USE_WEBPACK_DEV_SERVER: $APP_USE_WEBPACK_DEV_SERVER
     ports:
-      - 80:80
+      - $NGINX_PORT:$NGINX_PORT
     volumes:
       - staticdata:/static
 
