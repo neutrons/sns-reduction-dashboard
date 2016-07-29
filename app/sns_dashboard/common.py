@@ -43,8 +43,7 @@ LOCAL_APPS = [
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 ALLOWED_HOSTS = [
-    'app',
-    'localhost',
+    env('SERVER_NAME'),
 ]
 
 MIDDLEWARE_CLASSES = [

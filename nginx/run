@@ -31,6 +31,7 @@ $(if [ "$USE_WEBPACK_DEV_SERVER" = true ]; then cat <<EOF_WEBPACK; fi
 EOF_WEBPACK
 )
     location / {
+        error_log /dev/stdout info;
         proxy_pass http://app;
         proxy_set_header Host \$host$([ ! "$PORT" = 80 ] && echo ":$PORT");
         proxy_set_header X-Real-IP \$remote_addr;
@@ -45,6 +46,10 @@ upstream webpack {
 }
 EOF_WEBPACK
 )
+
+upstream app {
+    server app:80;
+}
 
 EOF
 

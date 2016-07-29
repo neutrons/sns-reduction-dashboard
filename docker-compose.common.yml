@@ -20,6 +20,7 @@ services:
       DB_NAME: $POSTGRES_NAME
       DB_USER: $POSTGRES_USER
       DB_PASS: $POSTGRES_PASS
+      SERVER_NAME: $NGINX_SERVER_NAME
 
   nginx:
     restart: on-failure:3
