@@ -16,15 +16,14 @@ if [ $# -eq 0 ]; then
     python3 manage.py collectstatic --noinput
     python3 manage.py makemigrations --noinput
     python3 manage.py migrate --noinput
-    python3 manage.py shell <<EOF
-from django.contrib.auth.models import User
-try:
-  admin = User.objects.get(username='$ADMIN_USER')
-except User.DoesNotExist:
-  User.objects.create_superuser('$ADMIN_USER', '$ADMIN_EMAIL', '$ADMIN_PASS')
-EOF
+    python3 manage.py make_my_superuser
 
-    NODE_PATH=/node_modules node /server.js &
+    if [ "$USE_WEBPACK_DEV_SERVER" = true ]; then
+        NODE_PATH=/node_modules node /server.js &
+    else
+        NODE_PATH=/node_modules node /node_modules/.bin/webpack
+    fi
+
     set -- uwsgi --ini /etc/uwsgi.ini
 fi
 

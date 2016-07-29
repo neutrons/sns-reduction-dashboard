@@ -12,7 +12,3 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 from .env import *
 from .common import *
-
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-
-WEBPACK_URL = '/webpack/'

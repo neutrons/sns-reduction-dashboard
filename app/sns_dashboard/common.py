@@ -40,6 +40,8 @@ LOCAL_APPS = [
     'app.reduction',
 ]
 
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
 ALLOWED_HOSTS = [
     'app',
     'localhost',
@@ -101,7 +103,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/static/'
-WEBPACK_URL = STATIC_URL
+
+USE_WEBPACK_DEV_SERVER = env.bool('USE_WEBPACK_DEV_SERVER')
+WEBPACK_URL = '/webpack/' if USE_WEBPACK_DEV_SERVER else STATIC_URL
 
 # DjangoRestFramework
 

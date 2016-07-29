@@ -6,15 +6,13 @@ var BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
   entry: [
-    'webpack-dev-server/client?/webpack/sockjs-node',
-    'webpack/hot/only-dev-server',
     'expose?$!expose?jQuery!jquery',
     'bootstrap-webpack!./bootstrap.config.js',
     'expose?main!./src/main.js'
   ],
   output: {
     path: path.resolve(__dirname, 'static/dist/'),
-    publicPath: '/webpack/dist/',
+    publicPath: '/static/dist/',
     filename: 'build.js'
   },
   resolveLoader: {
@@ -63,15 +61,35 @@ module.exports = {
   },
   plugins: [
     new ExtractTextPlugin('style.css'),
-    new webpack.HotModuleReplacementPlugin(),
-    new AssetsPlugin(),
-    new BundleTracker({filename: './webpack-stats.json'}),
   ],
   devServer: {
     historyApiFallback: true,
     noInfo: true
   },
-  devtool: '#eval-source-map'
+  devtool: '#source-map',
+}
+
+if (process.env.USE_WEBPACK_DEV_SERVER === 'true') {
+  module.exports.entry = Array.prototype.concat.apply(
+    [
+      'webpack-dev-server/client?/webpack/sockjs-node',
+      'webpack/hot/only-dev-server',
+    ],
+    module.exports.entry
+  );
+
+  module.exports.output.publicPath = '/webpack/dist/';
+
+  module.exports.plugins = Array.prototype.concat.apply(
+    module.exports.plugins,
+    [
+      new webpack.HotModuleReplacementPlugin(),
+      new AssetsPlugin(),
+      new BundleTracker({filename: './webpack-stats.json'}),
+    ]
+  );
+
+  module.exports.devtool = '#eval-source-map';
 }
 
 if (process.env.NODE_ENV === 'production') {
