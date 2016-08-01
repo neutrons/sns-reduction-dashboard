@@ -37,6 +37,10 @@ services:
   redis:
     restart: on-failure:3
     build: redis
+    volumes:
+      - ./redis/root/usr/local/bin/entrypoint.sh:/usr/local/bin/entrypoint.sh:ro
+      - ./redis/root/usr/local/etc/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - ./redis/root/usr/local/bin/entr.sh:/usr/local/bin/entr.sh:ro
     expose:
       - 6379
 

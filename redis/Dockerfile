@@ -1,5 +1,10 @@
 FROM redis:alpine
 
-COPY redis.conf /usr/local/etc/redis/redis.conf
+RUN true && \
+    apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
+        entr
 
-CMD ["redis-server", "/usr/local/etc/redis/redis.conf"]
+COPY root /
+
+ENTRYPOINT ["entrypoint.sh"]
+CMD ["docker-entrypoint.sh", "redis-server", "/usr/local/etc/redis/redis.conf"]
