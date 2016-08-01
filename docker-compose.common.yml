@@ -1,7 +1,7 @@
 version: '2'
 services:
   app:
-    restart: on-failure:3
+    restart: always
     build: app
     expose:
       - 80
