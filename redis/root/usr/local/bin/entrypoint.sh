@@ -1,13 +1,11 @@
 #!/bin/sh
-set -euxo pipefail
+set -euo pipefail
 
-if [ $# -gt 1 ]; then
-    if [ "$1" = 'docker-entrypoint.sh' -a "$2" = 'redis-server' ]; then
-        set -- sh -c "echo '/reload' | sh /usr/local/bin/entr.sh $*"
-    fi
+if [ "${1:-}" = 'docker-entrypoint.sh' -a "${2:-}" = 'redis-server' ]; then
+    set -- sh /usr/local/bin/entr.sh "$@"
 fi
 
-if [ "$1" = 'reload' ]; then
+if [ "${1:-}" = 'reload' ]; then
     set -- touch /reload
 fi
 

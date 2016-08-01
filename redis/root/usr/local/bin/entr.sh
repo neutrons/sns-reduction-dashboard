@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -euo pipefail
 
 getmodtime() {
@@ -6,7 +6,7 @@ getmodtime() {
 }
 
 main() {
-    read file || exit 1
+    file=/reload
     lasttime=0
     pid=
 
