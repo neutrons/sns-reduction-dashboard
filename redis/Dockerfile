@@ -7,4 +7,4 @@ RUN true && \
 COPY root /
 
 ENTRYPOINT ["entrypoint.sh"]
-CMD ["docker-entrypoint.sh", "redis-server", "/usr/local/etc/redis/redis.conf"]
+CMD ["watcher"]

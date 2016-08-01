@@ -149,5 +149,15 @@ ifneq ($(CONFIGURED),true)
 endif
 	$(docker_compose_command) logs --tail=10 -f
 
+.PHONY: reload
+reload: reload-nginx reload-redis
+
+.PHONY: reload-nginx
+reload-nginx reload-redis: reload-%:
+ifneq ($(CONFIGURED),true)
+	@echo "Configure the .env file"; false
+endif
+	$(docker_compose_command) exec $* entrypoint.sh reload
+
 ################
 # Source transformations
