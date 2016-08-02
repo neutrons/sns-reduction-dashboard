@@ -6,7 +6,7 @@ if [ "${1:-}" = "start" ]; then
 fi
 
 if [ "${1:-}" = watcher -a $# -eq 1 ]; then
-    set -- sh /usr/local/bin/entr.sh $0 start
+    set -- sh /usr/local/bin/watch.sh $0 start
 fi
 
 if [ "${1:-}" = 'reload' -a $# -eq 1 ]; then

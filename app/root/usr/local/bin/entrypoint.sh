@@ -40,7 +40,7 @@ if [ $# -eq 1 -a "${1:-}" = start-webpack ]; then
 fi
 
 if [ $# -eq 1 -a "${1:-}" = watcher ]; then
-    set -- sh -c "entr.sh $0 start-uwsgi & entr.sh $0 start-webpack"
+    set -- sh -c "watch.sh $0 start-uwsgi & entr.sh $0 start-webpack"
 fi
 
 if [ $# -eq 1 -a "${1:-}" = reload ]; then

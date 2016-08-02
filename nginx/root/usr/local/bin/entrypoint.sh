@@ -20,7 +20,7 @@ if [ "${1:-}" = start -a $# -eq 1 ]; then
 fi
 
 if [ "${1:-}" = watcher -a $# -eq 1 ]; then
-    set -- entr.sh $0 start
+    set -- watch.sh $0 start
 fi
 
 if [ "${1:-}" = reload -a $# -eq 1 ]; then
