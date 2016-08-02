@@ -1,7 +1,7 @@
 #!/bin/sh
-set -euxo pipefail
+set -euo pipefail
 
-if [ "${1:-}" = nginx -a $# -eq 1 ]; then
+if [ "${1:-}" = start -a $# -eq 1 ]; then
     if [ "$PORT" -eq 80 ]; then
         newport=
     else
@@ -20,7 +20,7 @@ if [ "${1:-}" = nginx -a $# -eq 1 ]; then
 fi
 
 if [ "${1:-}" = watcher -a $# -eq 1 ]; then
-    set -- entr.sh $0 nginx
+    set -- entr.sh $0 start
 fi
 
 if [ "${1:-}" = reload -a $# -eq 1 ]; then
