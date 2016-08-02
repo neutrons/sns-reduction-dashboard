@@ -8,8 +8,11 @@ services:
       - 3000
     volumes:
       - staticdata:/static
-      - ./app/sns_dashboard:/app
-      - ./app/src:/src:ro
+      - ./app/npm/:/root/.npm/:rw
+      - ./app/root/etc/uwsgi.ini:/etc/uwsgi.ini:ro
+      - ./app/root/usr/local/bin/entr.sh:/usr/local/bin/entr.sh:ro
+      - ./app/root/usr/local/bin/entrypoint.sh:/usr/local/bin/entrypoint.sh:ro
+      - ./app/root/usr/src:/usr/src:rw
     environment:
       DEBUG: $APP_DEBUG
       SECRET_KEY: $APP_SECRET_KEY

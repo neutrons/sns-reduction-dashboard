@@ -8,7 +8,7 @@ module.exports = {
   entry: [
     'expose?$!expose?jQuery!jquery',
     'bootstrap-webpack!./bootstrap.config.js',
-    'expose?main!./src/main.js'
+    'expose?main!./frontend/main.js'
   ],
   output: {
     path: path.resolve(__dirname, 'static/dist/'),

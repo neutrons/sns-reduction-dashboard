@@ -150,10 +150,10 @@ endif
 	$(docker_compose_command) logs --tail=10 -f
 
 .PHONY: reload
-reload: reload-nginx reload-redis
+reload: reload-nginx reload-redis reload-app
 
-.PHONY: reload-nginx
-reload-nginx reload-redis: reload-%:
+.PHONY: reload-nginx reload-redis reload-app
+reload-nginx reload-redis reload-app: reload-%:
 ifneq ($(CONFIGURED),true)
 	@echo "Configure the .env file"; false
 endif
