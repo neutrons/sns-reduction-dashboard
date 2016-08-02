@@ -7,11 +7,11 @@ var BundleTracker = require('webpack-bundle-tracker');
 module.exports = {
   entry: [
     'expose?$!expose?jQuery!jquery',
-    'bootstrap-webpack!./bootstrap.config.js',
+    'bootstrap-webpack!./frontend/bootstrap.config.js',
     'expose?main!./frontend/main.js'
   ],
   output: {
-    path: path.resolve(__dirname, 'static/dist/'),
+    path: '/static/dist/',
     publicPath: '/static/dist/',
     filename: 'build.js'
   },
@@ -84,8 +84,8 @@ if (process.env.USE_WEBPACK_DEV_SERVER === 'true') {
     module.exports.plugins,
     [
       new webpack.HotModuleReplacementPlugin(),
-      new AssetsPlugin(),
-      new BundleTracker({filename: './webpack-stats.json'}),
+      new AssetsPlugin({filename: '/tmp/webpack-assets.json'}),
+      new BundleTracker({filename: '/tmp/webpack-stats.json'}),
     ]
   );
 

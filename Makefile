@@ -72,6 +72,12 @@ endif
 docker_compose_command := \
 	$(DOCKER_COMPOSE) -f $(docker_compose_file)
 
+complain-if-not-configured :=
+
+ifeq ($(CONFIGURED),false)
+complain-if-not-configured := @echo "Configure the .env file"; false
+endif
+
 ################
 # .env variables
 define newline
@@ -105,7 +111,8 @@ export DATE := $(date)
 # Standard targets
 
 .PHONY: all
-all: | down build up logs
+all: | up
+	$(MAKE) -j 2 logs watch
 
 .PHONY: check
 check:
@@ -123,30 +130,32 @@ noop:
 
 .PHONY: build
 build:
-ifneq ($(CONFIGURED),true)
-	@echo "Configure the .env file"; false
-endif
+	$(complain-if-not-configured)
 	$(docker_compose_command) build
 
 .PHONY: up
 up:
-ifneq ($(CONFIGURED),true)
-	@echo "Configure the .env file"; false
-endif
+	$(complain-if-not-configured)
 	$(docker_compose_command) up -d
+
+.PHONY: watch
+watch: watch-app
+
+.PHONY: watch-app
+watch-app:
+	$(complain-if-not-configured)
+	{ find app/root/usr/src/app -type f; \
+	  find app/root/usr/src -maxdepth 1 -type f; } | \
+	entr -p make reload-app
 
 .PHONY: down
 down:
-ifneq ($(CONFIGURED),true)
-	@echo "Configure the .env file"; false
-endif
+	$(complain-if-not-configured)
 	$(docker_compose_command) down
 
 .PHONY: logs
 logs:
-ifneq ($(CONFIGURED),true)
-	@echo "Configure the .env file"; false
-endif
+	$(complain-if-not-configured)
 	$(docker_compose_command) logs --tail=10 -f
 
 .PHONY: reload
@@ -154,9 +163,7 @@ reload: reload-nginx reload-redis reload-app
 
 .PHONY: reload-nginx reload-redis reload-app
 reload-nginx reload-redis reload-app: reload-%:
-ifneq ($(CONFIGURED),true)
-	@echo "Configure the .env file"; false
-endif
+	$(complain-if-not-configured)
 	$(docker_compose_command) exec $* entrypoint.sh reload
 
 ################

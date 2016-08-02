@@ -30,6 +30,8 @@ fi
 
 if [ $# -eq 1 -a "${1:-}" = start-webpack ]; then
     export NODE_PATH=/node_modules
+
+    cd /usr/src
     if [ "$USE_WEBPACK_DEV_SERVER" = true ]; then
         set -- node webpack-server.js
     else
@@ -38,8 +40,7 @@ if [ $# -eq 1 -a "${1:-}" = start-webpack ]; then
 fi
 
 if [ $# -eq 1 -a "${1:-}" = watcher ]; then
-    $0 start-webpack &
-    set -- entr.sh $0 start-uwsgi
+    set -- sh -c "entr.sh $0 start-uwsgi & entr.sh $0 start-webpack"
 fi
 
 if [ $# -eq 1 -a "${1:-}" = reload ]; then
