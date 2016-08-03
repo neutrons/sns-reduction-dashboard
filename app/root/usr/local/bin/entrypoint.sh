@@ -13,18 +13,6 @@ if [ $# -eq 1 -a "${1:-}" = start-uwsgi ]; then
     waitfor postgres 5432
     waitfor redis 6379
 
-    cd /usr/src
-
-    export PYTHONPATH=$(pwd)
-
-    python3 manage.py collectstatic --noinput
-    python3 manage.py makemigrations --noinput
-    python3 manage.py migrate --noinput
-    python3 manage.py make_my_superuser
-
-    echo "path: ${PYTHONPATH:-}"
-    echo "home: ${PYTHONHOME:-}"
-
     set -- uwsgi --ini /etc/uwsgi.ini
 fi
 
@@ -40,7 +28,13 @@ if [ $# -eq 1 -a "${1:-}" = start-webpack ]; then
 fi
 
 if [ $# -eq 1 -a "${1:-}" = watcher ]; then
-    set -- sh -c "watch.sh $0 start-uwsgi & entr.sh $0 start-webpack"
+    set -x
+    python3 manage.py collectstatic --noinput 2>&1
+    python3 manage.py makemigrations --noinput 2>&1
+    python3 manage.py migrate --noinput 2>&1
+    python3 manage.py make_my_superuser 2>&1
+
+    set -- sh -c "watch.sh $0 start-uwsgi & watch.sh $0 start-webpack"
 fi
 
 if [ $# -eq 1 -a "${1:-}" = reload ]; then

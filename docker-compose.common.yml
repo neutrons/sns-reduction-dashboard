@@ -24,6 +24,7 @@ services:
       DB_USER: $POSTGRES_USER
       DB_PASS: $POSTGRES_PASS
       SERVER_NAME: $NGINX_SERVER_NAME
+      QUIET_LOGS: $APP_QUIET_LOGS
 
   nginx:
     restart: on-failure:3
@@ -32,6 +33,7 @@ services:
       PORT: $NGINX_PORT
       SERVER_NAME: $NGINX_SERVER_NAME
       USE_WEBPACK_DEV_SERVER: $APP_USE_WEBPACK_DEV_SERVER
+      VERBOSE: $NGINX_VERBOSE
     ports:
       - $NGINX_PORT:$NGINX_PORT
     volumes:

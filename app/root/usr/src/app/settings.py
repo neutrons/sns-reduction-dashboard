@@ -59,8 +59,6 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'app.urls'
 
-print("Templates: ", root('templates'))
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

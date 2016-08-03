@@ -8,13 +8,21 @@ if [ "${1:-}" = start -a $# -eq 1 ]; then
         newport=:$PORT
     fi
 
-    vars='$HOST,$PORT,$COLONPORT'
+    LOG_LOC=/dev/null
+    if [ "$VERBOSE" = true ]; then
+        LOG_LOC=/dev/stdout
+    fi
+
+    vars='$HOST,$PORT,$COLONPORT,$LOG_LOC,$LOG_LEVEL'
     conf=/etc/nginx/conf.d/default.conf
 
     COLONPORT=$newport \
+             LOG_LOC=$LOG_LOC \
              envsubst "$vars" \
              < $conf.template \
              > $conf
+
+    cat $conf
 
     set -- nginx -g "daemon off;"
 fi

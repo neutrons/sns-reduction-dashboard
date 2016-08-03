@@ -5,10 +5,10 @@ server {
   server_name $SERVER_NAME;
   charset utf-8;
 
-  error_log /dev/stdout;
-  rewrite_log on;
+  error_log $LOG_LOC;
 
   location /static {
+    access_log $LOG_LOC;
     alias /static;
   }
 
@@ -21,11 +21,13 @@ server {
     proxy_set_header Connection "upgrade";
     proxy_redirect off;
     proxy_pass http://webpack/;
-    access_log /dev/stdout upstreamlog;
+
+    access_log $LOG_LOC upstreamlog;
   }
 
   location / {
-    error_log /dev/stdout info;
+    access_log $LOG_LOC;
+
     proxy_pass http://app;
     proxy_set_header Host $host$COLONPORT;
     proxy_set_header X-Real-IP $remote_addr;

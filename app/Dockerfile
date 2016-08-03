@@ -33,5 +33,9 @@ RUN true \
 
 COPY root /
 
+WORKDIR /usr/src
+
+ENV PYTHONPATH=/usr/src
+
 ENTRYPOINT ["entrypoint.sh"]
 CMD ["watcher"]
