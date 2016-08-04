@@ -146,7 +146,7 @@ watch-app:
 	$(complain-if-not-configured)
 	{ find app/root/usr/src/app -type f; \
 	  find app/root/usr/src -maxdepth 1 -type f; } | \
-	entr -p make reload-app
+	entr -p make restart
 
 .PHONY: down
 down:
@@ -158,13 +158,15 @@ logs:
 	$(complain-if-not-configured)
 	$(docker_compose_command) logs --tail=10 -f
 
-.PHONY: reload
-reload: reload-nginx reload-redis reload-app
-
-.PHONY: reload-nginx reload-redis reload-app
-reload-nginx reload-redis reload-app: reload-%:
+.PHONY: restart
+restart:
 	$(complain-if-not-configured)
-	$(docker_compose_command) exec $* entrypoint.sh reload
+	$(docker_compose_command) restart
+
+.PHONY: restart-nginx restart-redis restart-app
+restart-nginx restart-redis restart-app: restart-%:
+	$(complain-if-not-configured)
+	$(docker_compose_command) restart $*
 
 ################
 # Source transformations

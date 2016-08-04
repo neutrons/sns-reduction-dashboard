@@ -32,6 +32,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 LOCAL_APPS = [
@@ -113,6 +114,10 @@ WEBPACK_URL = '/webpack/' if USE_WEBPACK_DEV_SERVER else STATIC_URL
 
 REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
 }
 
 # django-redis

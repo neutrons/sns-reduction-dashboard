@@ -11,6 +11,7 @@
 import NavBar from './NavBar.vue';
 import MainPage from './MainPage.vue';
 import store from '../vuex/store';
+import { authenticate } from '../vuex/actions';
 
 export default {
   name: 'App',
@@ -19,6 +20,14 @@ export default {
     MainPage,
   },
   store,
+  vuex: {
+    actions: {
+      authenticate,
+    },
+  },
+  ready() {
+    this.authenticate();
+  },
 };
 </script>
 
