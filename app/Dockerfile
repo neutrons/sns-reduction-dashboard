@@ -2,19 +2,12 @@ FROM alpine:edge
 
 RUN true \
     && apk add --no-cache \
-           nodejs \
            python3 \
            uwsgi \
            uwsgi-python3 \
            libldap \
            libpq \
            netcat-openbsd
-
-ENV HOME /root/
-COPY package.json /
-
-RUN mkdir -p /root/.npm \
-    && npm install --cache-min 999999
 
 COPY requirements.txt /
 RUN true \

@@ -7,8 +7,8 @@ var BundleTracker = require('webpack-bundle-tracker');
 module.exports = {
   entry: [
     'expose?$!expose?jQuery!jquery',
-    'bootstrap-webpack!./frontend/bootstrap.config.js',
-    'expose?main!./frontend/main.js'
+    'bootstrap-webpack!./src/bootstrap.config.js',
+    'expose?main!./src/main.js'
   ],
   output: {
     path: '/static/dist/',

@@ -9,11 +9,11 @@ waitfor() {
 }
 
 if [ $# -eq 1 -a "${1:-}" = start ]; then
-    # Wait for Postgres and Redis
-    waitfor postgres 5432
-    waitfor redis 6379
-
-    set -- uwsgi --ini /etc/uwsgi.ini
+    if [ "$USE_WEBPACK_DEV_SERVER" = true ]; then
+        set -- webpack-server.js
+    else
+        set -- node /node_modules/.bin/webpack --watch
+    fi
 fi
 
 if [ $# -eq 1 -a "${1:-}" = watcher ]; then

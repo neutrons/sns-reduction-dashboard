@@ -8,6 +8,11 @@ services:
       - redis
       - postgres
 
+  frontend:
+    extends:
+      file: docker-compose.common.yml
+      service: frontend
+
   redis:
     extends:
       file: docker-compose.common.yml
@@ -24,6 +29,7 @@ services:
       service: nginx
     links:
       - app
+      - frontend
 
 volumes:
   dbdata:

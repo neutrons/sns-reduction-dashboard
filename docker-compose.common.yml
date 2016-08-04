@@ -5,7 +5,6 @@ services:
     build: app
     expose:
       - 80
-      - 3000
     volumes:
       - staticdata:/static
       - ./app/npm/:/root/.npm/:rw
@@ -25,6 +24,16 @@ services:
       DB_PASS: $POSTGRES_PASS
       SERVER_NAME: $NGINX_SERVER_NAME
       QUIET_LOGS: $APP_QUIET_LOGS
+
+  frontend:
+    restart: on-failure:3
+    build: frontend
+    environment:
+      USE_WEBPACK_DEV_SERVER: $APP_USE_WEBPACK_DEV_SERVER
+    expose:
+      - 80
+    volumes:
+      - staticdata:/static
 
   nginx:
     restart: on-failure:3
