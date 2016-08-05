@@ -13,7 +13,7 @@ if [ $# -eq 1 -a "${1:-}" = start ]; then
     waitfor postgres 5432
     waitfor redis 6379
 
-    set -- uwsgi --ini /etc/uwsgi.ini
+    set -- uwsgi --ini uwsgi.ini
 fi
 
 if [ $# -eq 1 -a "${1:-}" = watcher ]; then

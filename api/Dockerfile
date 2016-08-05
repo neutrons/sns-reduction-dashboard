@@ -24,11 +24,13 @@ RUN true \
     && python3 -m pip install -r /requirements.txt \
     && apk del build-dependencies
 
-COPY root /
-
-WORKDIR /usr/src
-
-ENV PYTHONPATH=/usr/src
+ENV HOME /app
+ENV PYTHONPATH $HOME
+WORKDIR $HOME
+COPY uwsgi.ini ./uwsgi.ini
+COPY bin/ /usr/local/bin/
+COPY src ./src/
+RUN touch /reload
 
 ENTRYPOINT ["entrypoint.sh"]
 CMD ["watcher"]

@@ -1,9 +1,9 @@
 version: '2'
 services:
-  app:
+  api:
     extends:
       file: docker-compose.common.yml
-      service: app
+      service: api
     links:
       - redis
       - postgres
@@ -28,7 +28,7 @@ services:
       file: docker-compose.common.yml
       service: nginx
     links:
-      - app
+      - api
       - frontend
 
 volumes:

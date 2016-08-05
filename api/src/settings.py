@@ -36,9 +36,9 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    'app.index',
-    'app.catalog',
-    'app.reduction',
+    'src.index',
+    'src.catalog',
+    'src.reduction',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -58,7 +58,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'app.urls'
+ROOT_URLCONF = 'src.urls'
 
 TEMPLATES = [
     {

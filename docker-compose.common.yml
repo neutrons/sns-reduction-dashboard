@@ -1,35 +1,31 @@
 version: '2'
 services:
-  app:
+  api:
     restart: always
-    build: app
+    build: api
     expose:
       - 80
     volumes:
       - staticdata:/static
-      - ./app/npm/:/root/.npm/:rw
-      - ./app/root/etc/uwsgi.ini:/etc/uwsgi.ini:ro
-      - ./app/root/usr/local/bin/entr.sh:/usr/local/bin/entr.sh:ro
-      - ./app/root/usr/local/bin/entrypoint.sh:/usr/local/bin/entrypoint.sh:ro
-      - ./app/root/usr/src:/usr/src:rw
+      - ./api/src:/api/src:rw
     environment:
-      DEBUG: $APP_DEBUG
-      SECRET_KEY: $APP_SECRET_KEY
-      ADMIN_USER: $APP_ADMIN_USER
-      ADMIN_PASS: $APP_ADMIN_PASS
-      ADMIN_EMAIL: $APP_ADMIN_EMAIL
-      USE_WEBPACK_DEV_SERVER: $APP_USE_WEBPACK_DEV_SERVER
+      DEBUG: $API_DEBUG
+      SECRET_KEY: $API_SECRET_KEY
+      ADMIN_USER: $API_ADMIN_USER
+      ADMIN_PASS: $API_ADMIN_PASS
+      ADMIN_EMAIL: $API_ADMIN_EMAIL
+      USE_WEBPACK_DEV_SERVER: $USE_WEBPACK_DEV_SERVER
       DB_NAME: $POSTGRES_NAME
       DB_USER: $POSTGRES_USER
       DB_PASS: $POSTGRES_PASS
       SERVER_NAME: $NGINX_SERVER_NAME
-      QUIET_LOGS: $APP_QUIET_LOGS
+      QUIET_LOGS: $API_QUIET_LOGS
 
   frontend:
     restart: on-failure:3
     build: frontend
     environment:
-      USE_WEBPACK_DEV_SERVER: $APP_USE_WEBPACK_DEV_SERVER
+      USE_WEBPACK_DEV_SERVER: $USE_WEBPACK_DEV_SERVER
     expose:
       - 80
     volumes:
@@ -43,7 +39,7 @@ services:
     environment:
       PORT: $NGINX_PORT
       SERVER_NAME: $NGINX_SERVER_NAME
-      USE_WEBPACK_DEV_SERVER: $APP_USE_WEBPACK_DEV_SERVER
+      USE_WEBPACK_DEV_SERVER: $USE_WEBPACK_DEV_SERVER
       VERBOSE: $NGINX_VERBOSE
     ports:
       - $NGINX_PORT:$NGINX_PORT

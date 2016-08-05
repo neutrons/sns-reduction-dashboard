@@ -18,9 +18,9 @@ from django.contrib import admin
 from rest_framework.authtoken import views
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^catalog/', include('app.catalog.urls')),
-    url(r'^account/', include('django.contrib.auth.urls')),
-    url(r'^api-token-auth/', views.obtain_auth_token),
-    url(r'^', include('app.index.urls')),
+    url(r'^api/admin/', admin.site.urls),
+    url(r'^api/catalog/', include('src.catalog.urls')),
+    url(r'^api/account/', include('django.contrib.auth.urls')),
+    url(r'^api/api-token-auth/', views.obtain_auth_token),
+    url(r'^api/', include('src.index.urls')),
 ]
