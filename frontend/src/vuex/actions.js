@@ -20,7 +20,7 @@ export function login({ dispatch }, { username, password }) {
 }
 
 export function authenticate(store) {
-  resource.me.get({}, authorizationOptions(store.user.token))
+  resource.me.get({}, authorizationOptions(store.state.user.token))
     .then(response => {
       console.log('authenticate then', response);
     }).catch(error => {
