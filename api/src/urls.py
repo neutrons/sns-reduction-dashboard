@@ -15,12 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from rest_framework.authtoken import views
+from rest_framework.authtoken import views as authtoken_views
 
 urlpatterns = [
     url(r'^api/admin/', admin.site.urls),
-    url(r'^api/catalog/', include('src.catalog.urls')),
+    url(r'^api/catalog/', include('src.catalog.urls'), name='catalog'),
     url(r'^api/account/', include('django.contrib.auth.urls')),
-    url(r'^api/api-token-auth/', views.obtain_auth_token),
-    url(r'^api/', include('src.index.urls')),
+    url(r'^api/api-token-auth/', authtoken_views.obtain_auth_token),
 ]

@@ -126,7 +126,7 @@ clean:
 noop:
 
 ################
-# Application specific targets
+# Apilication specific targets
 
 .PHONY: build
 build:
@@ -139,13 +139,13 @@ up:
 	$(docker_compose_command) up -d
 
 .PHONY: watch
-watch: watch-app
+watch: watch-api
 
-.PHONY: watch-app
-watch-app:
+.PHONY: watch-api
+watch-api:
 	$(complain-if-not-configured)
-	{ find app/root/usr/src/app -type f; \
-	  find app/root/usr/src -maxdepth 1 -type f; } | \
+	{ find api/root/usr/src/api -type f; \
+	  find api/root/usr/src -maxdepth 1 -type f; } | \
 	entr -p make restart
 
 .PHONY: down
@@ -163,8 +163,8 @@ restart:
 	$(complain-if-not-configured)
 	$(docker_compose_command) restart
 
-.PHONY: restart-nginx restart-redis restart-app
-restart-nginx restart-redis restart-app: restart-%:
+.PHONY: restart-nginx restart-redis restart-api
+restart-nginx restart-redis restart-api: restart-%:
 	$(complain-if-not-configured)
 	$(docker_compose_command) restart $*
 

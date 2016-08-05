@@ -36,7 +36,6 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    'src.index',
     'src.catalog',
     'src.reduction',
 ]
