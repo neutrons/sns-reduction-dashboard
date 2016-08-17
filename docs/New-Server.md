@@ -520,3 +520,14 @@ sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
 
+## NGINX
+
+If already installed... There's a portt conflict.
+
+```
+sudo systemctl status nginx
+sudo systemctl disable nginx
+sudo systemctl stop  nginx
+sudo systemctl status nginx
+```
+
