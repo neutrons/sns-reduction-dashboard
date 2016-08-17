@@ -477,3 +477,46 @@ COPY repositories /etc/apk/repositories
 $ # Try again now...
 $ make build
 ```
+
+# Ubuntu 16.04:
+
+DNS Problems...
+
+See:
+- http://stackoverflow.com/questions/33784295/setting-dns-for-docker-daemon-on-os-with-systemd
+- https://docs.docker.com/engine/admin/systemd/#custom-docker-daemon-options
+
+Create `/etc/systemd/system/docker.service` :
+```
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network.target docker.socket
+Requires=docker.socket
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/docker daemon -H fd://
+LimitNOFILE=1048576
+LimitNPROC=1048576
+TasksMax=1048576
+
+[Install]
+Also=docker.socket
+```
+
+create `/etc/systemd/system/docker.service.d/dns.conf`:
+```
+[Service]
+ExecStart=
+ExecStart=/usr/bin/docker daemon --dns 160.91.126.23 --dns 160.91.126.28 -H fd://
+```
+
+Restart Docker:
+```
+sudo systemctl status docker.service
+# sudo systemctl restart docker
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
