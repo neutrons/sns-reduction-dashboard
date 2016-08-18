@@ -115,8 +115,7 @@ export DATE := $(date)
 # Standard targets
 
 .PHONY: all
-all: | up
-	$(MAKE) -j 2 logs watch
+all: build up logs
 
 .PHONY: check
 check:
