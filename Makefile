@@ -42,6 +42,10 @@ ifndef DOCKER_COMPOSE
 DOCKER_COMPOSE := $(shell which docker-compose 2>/dev/null)
 endif
 
+ifndef ENTR
+ENTR := $(shell which entr scripts/entr.bash 2>/dev/null)
+endif
+
 ################
 # Sanity checks and local variables
 
@@ -146,7 +150,7 @@ watch-api:
 	$(complain-if-not-configured)
 	{ find api/root/usr/src/api -type f; \
 	  find api/root/usr/src -maxdepth 1 -type f; } | \
-	entr -p make restart
+	$(ENTR) -p make restart
 
 .PHONY: down
 down:
