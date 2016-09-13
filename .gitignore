@@ -12,3 +12,4 @@ config/env/*.env
 .env
 pgdata
 BACKUPS
+.env.bak

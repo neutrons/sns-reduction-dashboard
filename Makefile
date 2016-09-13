@@ -8,106 +8,64 @@ SHELL := bash
 ################
 # Utilities
 
-# $(call make-lazy FOO) will turn FOO into a variable that, when accessed, will
-# evaluate its definition once and then remember that value for the rest of the
-# makefile. For example:
-#
-#   FOO = $(shell date +%s)
-#   $(call make-lazy FOO)
-#   t0 := $(FOO)
-#   $(shell sleep 3)
-#   t1 := $(FOO)
-#
-# Without the make-lazy call, $(t0) and $(t1) will have different values, but
-# with it, they will have the same values.
-#
-# $(1) = name of variable to make lazy
-make-lazy = $(eval $1 = $​$(eval $1 := $(value $(1)))$​$($1))
-
 # Used for backups
 date := $(shell date +%Y%m%d%H%M%S)
+
+# Used for debugging
+.PHONY: echo.%
+echo.%:
+	@echo $*=$($*)
 
 ################
 # Environment variables
 
-ifndef ENV
-ENV :=
+ifndef DOCKER_COMPOSE_BIN
+DOCKER_COMPOSE_BIN := $(shell which docker-compose 2>/dev/null)
 endif
 
-ifndef DOCKER
-DOCKER := $(shell which docker 2>/dev/null)
+ifndef ENTR_BIN
+ENTR_BIN := $(shell which entr scripts/entr.bash 2>/dev/null)
 endif
 
-ifndef DOCKER_COMPOSE
-DOCKER_COMPOSE := $(shell which docker-compose 2>/dev/null)
-endif
-
-ifndef ENTR
-ENTR := $(shell which entr scripts/entr.bash 2>/dev/null)
-endif
-
-################
-# Sanity checks and local variables
-
-ifeq ($(DOCKER),)
-$(error 'docker' executable not found)
-endif
-
-ifeq ($(DOCKER_COMPOSE),)
-$(error 'docker-compose' executable not found)
-endif
-
-valid_env := local dev stage prod backup
-ifeq ($(filter $(ENV),$(valid_env)),)
-$(error $$ENV ('$(ENV)') should be one of $(valid_env))
-endif
-
-env_file := .env
-$(shell test -e $(env_file) || cp $(env_file:=.base) $(env_file))
-ifeq ($(wildcard $(env_file)),)
-$(warn $(env_file) does not exist)
-endif
-
-docker_compose_file := docker-compose.$(ENV).yml
-ifeq ($(wildcard $(docker_compose_file)),)
-$(error $(docker_compose_file) does not exist)
-endif
-
-docker_compose_command := \
-	$(DOCKER_COMPOSE) -f $(docker_compose_file)
-
-complain-if-not-configured :=
-
-ifeq ($(CONFIGURED),false)
-complain-if-not-configured := @echo "Configure the .env file"; false
+ifndef ENV_FILE
+ENV_FILE := .env
 endif
 
 ################
 # .env variables
+
 define newline
 
 
 endef
 
-# Somewhat hacky code to load the variables from the current .env file into our
-# makefile so that we can use them
 $(eval \
   $(subst @@@,$(newline),\
-    $(shell \
-while true; do \
-  read line || break; \
-  [ "$${#line}" -eq 0 ] && continue; \
-  [ "$${line:0:1}" = "#" ] && continue; \
-  var=$${line%%=*}; \
-  value=$${line#*=}; \
-  echo "define $$var@@@$$value@@@endef@@@export $$var@@@"; \
-  done <$(env_file) \
-)))
+    $(shell ./scripts/env_vars_to_makefile.bash $(ENV_FILE))))
+
+################
+# Sanity checks and local variables
+
+ifeq ($(DOCKER_COMPOSE_BIN),)
+$(error 'docker-compose' executable not found)
+endif
+
+docker_compose_file := docker-compose.yml
+ifeq ($(wildcard $(docker_compose_file)),)
+$(error $(docker_compose_file) does not exist)
+endif
+
+docker_compose_command := \
+	$(DOCKER_COMPOSE_BIN) -f $(docker_compose_file)
+
+complain-if-not-configured :=
+ifeq ($(CONFIGURED),false)
+complain-if-not-configured := @echo "Configure the .env file"; false
+endif
 
 ################
 # Exported variables
 
-export ENV_FILE := $(env_file)
 export DOCKER_COMPOSE_FILE := $(docker_compose_file)
 export DATE := $(date)
 
@@ -118,15 +76,11 @@ export DATE := $(date)
 all: build up logs
 
 .PHONY: check
-check:
-	$(docker_compose_command) config -q
+check: check-docker check-env
 
 .PHONY: clean
 clean:
 	find . -name '*~' -exec rm -v -- {} \+
-
-.PHONY: noop
-noop:
 
 ################
 # Apilication specific targets
@@ -135,6 +89,14 @@ noop:
 build:
 	$(complain-if-not-configured)
 	$(docker_compose_command) build
+
+.PHONY: check-docker
+check-docker:
+	$(docker_compose_command) config -q
+
+.PHONY: check-env
+check-env:
+	./scripts/diff_env.bash
 
 .PHONY: up
 up:
@@ -149,7 +111,7 @@ watch-api:
 	$(complain-if-not-configured)
 	{ find api/root/usr/src/api -type f; \
 	  find api/root/usr/src -maxdepth 1 -type f; } | \
-	$(ENTR) -p make restart
+	$(ENTR_BIN) -p make restart
 
 .PHONY: down
 down:
@@ -173,3 +135,8 @@ restart-nginx restart-redis restart-api: restart-%:
 
 ################
 # Source transformations
+
+.env: .env.base
+	touch $@
+	cp $@ $@.bak
+	./scripts/merge_env.bash $@.bak $< > $@
