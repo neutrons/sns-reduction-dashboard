@@ -38,9 +38,12 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'src.catalog',
     'src.reduction',
+    'src.users',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+BASE_URL = 'api/'
 
 ALLOWED_HOSTS = [
     env('SERVER_NAME'),
@@ -97,8 +100,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-LOGIN_URL = 'login'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/

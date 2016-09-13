@@ -9,7 +9,7 @@ class InstrumentSerializer(serializers.HyperlinkedModelSerializer):
 class FacilitySerializer(serializers.HyperlinkedModelSerializer):
     instruments = serializers.HyperlinkedRelatedField(
         many=True,
-        view_name='instrument-detail',
+        view_name='catalog:instrument-detail',
         read_only=True,
     )
 
