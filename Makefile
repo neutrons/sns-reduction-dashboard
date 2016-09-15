@@ -20,11 +20,11 @@ echo.%:
 # Environment variables
 
 ifndef DOCKER_COMPOSE_BIN
-DOCKER_COMPOSE_BIN := $(shell which docker-compose 2>/dev/null)
+DOCKER_COMPOSE_BIN := $(firstword $(shell which docker-compose 2>/dev/null))
 endif
 
 ifndef ENTR_BIN
-ENTR_BIN := $(shell which entr scripts/entr.bash 2>/dev/null)
+ENTR_BIN := $(firstword $(shell which entr scripts/entr.bash 2>/dev/null))
 endif
 
 ifndef ENV_FILE
@@ -39,6 +39,7 @@ define newline
 
 endef
 
+ENV_VARIABLES :=
 $(eval \
   $(subst @@@,$(newline),\
     $(shell ./scripts/env_vars_to_makefile.bash $(ENV_FILE))))
