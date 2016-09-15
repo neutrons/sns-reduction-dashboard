@@ -16,12 +16,14 @@ date := $(shell date +%Y%m%d%H%M%S)
 echo.%:
 	@echo $*=$($*)
 
+# Used to make specific .env files
+make-env = envsubst '$(addprefix $$,$(ENV_VARIABLES))' < $< > $@
+
+# Used to load specific .env files
+load-env = set -o allexport && unset $(ENV_VARIABLES) && source $< && set +o allexport
+
 ################
 # Environment variables
-
-ifndef DOCKER_COMPOSE_BIN
-DOCKER_COMPOSE_BIN := $(firstword $(shell which docker-compose 2>/dev/null))
-endif
 
 ifndef ENTR_BIN
 ENTR_BIN := $(firstword $(shell which entr scripts/entr.bash 2>/dev/null))
@@ -47,37 +49,33 @@ $(eval \
 ################
 # Sanity checks and local variables
 
-ifeq ($(DOCKER_COMPOSE_BIN),)
-$(error 'docker-compose' executable not found)
-endif
-
-docker_compose_file := docker-compose.yml
-ifeq ($(wildcard $(docker_compose_file)),)
-$(error $(docker_compose_file) does not exist)
-endif
-
-docker_compose_command := \
-	$(DOCKER_COMPOSE_BIN) -f $(docker_compose_file)
-
-complain-if-not-configured :=
-ifeq ($(CONFIGURED),false)
-complain-if-not-configured := @echo "Configure the .env file"; false
-endif
-
 ################
 # Exported variables
 
-export DOCKER_COMPOSE_FILE := $(docker_compose_file)
 export DATE := $(date)
+
+################
+# Includes
+
+include api/Makefile
+include frontend/Makefile
 
 ################
 # Standard targets
 
 .PHONY: all
-all: build up logs
+all:
+
+.PHONY: run
+run:
+	+$(MAKE) -j 1 api/run
+
+.PHONY: depend
+depend: api/depend
 
 .PHONY: check
-check: check-docker check-env
+check:
+	./scripts/diff_env.bash
 
 .PHONY: clean
 clean:
@@ -85,60 +83,6 @@ clean:
 
 ################
 # Application specific targets
-
-.PHONY: build
-build:
-	$(complain-if-not-configured)
-	$(docker_compose_command) build
-
-.PHONY: check-docker
-check-docker:
-	$(docker_compose_command) config -q
-
-.PHONY: check-env
-check-env:
-	./scripts/diff_env.bash
-
-.PHONY: up
-up:
-	$(complain-if-not-configured)
-	$(docker_compose_command) up -d
-
-.PHONY: watch
-watch: watch-api
-
-.PHONY: watch-api
-watch-api:
-	$(complain-if-not-configured)
-	find api/ -type f | $(ENTR_BIN) -p $(MAKE) restart-api
-
-.PHONY: reload
-reload: reload-api
-
-.PHONY: reload-api
-reload-api:
-	$(complain-if-not-configured)
-	$(docker_compose_command) run api reload
-
-.PHONY: down
-down:
-	$(complain-if-not-configured)
-	$(docker_compose_command) down
-
-.PHONY: logs
-logs:
-	$(complain-if-not-configured)
-	$(docker_compose_command) logs --tail=10 -f
-
-.PHONY: restart
-restart:
-	$(complain-if-not-configured)
-	$(docker_compose_command) restart
-
-.PHONY: restart-nginx restart-redis restart-api
-restart-nginx restart-redis restart-api: restart-%:
-	$(complain-if-not-configured)
-	$(docker_compose_command) restart $*
 
 ################
 # Source transformations
