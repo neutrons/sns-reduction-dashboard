@@ -110,9 +110,15 @@ watch: watch-api
 .PHONY: watch-api
 watch-api:
 	$(complain-if-not-configured)
-	{ find api/root/usr/src/api -type f; \
-	  find api/root/usr/src -maxdepth 1 -type f; } | \
-	$(ENTR_BIN) -p make restart
+	find api/ -type f | $(ENTR_BIN) -p $(MAKE) restart-api
+
+.PHONY: reload
+reload: reload-api
+
+.PHONY: reload-api
+reload-api:
+	$(complain-if-not-configured)
+	$(docker_compose_command) run api reload
 
 .PHONY: down
 down:
