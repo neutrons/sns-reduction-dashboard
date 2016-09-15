@@ -13,13 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+
+from . import views
+from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework.authtoken import views as authtoken_views
 
+BASE_URL = settings.BASE_URL
+
 urlpatterns = [
-    url(r'^api/admin/', admin.site.urls),
-    url(r'^api/catalog/', include('src.catalog.urls'), name='catalog'),
-    url(r'^api/account/', include('django.contrib.auth.urls')),
-    url(r'^api/api-token-auth/', authtoken_views.obtain_auth_token),
+    url(r'^' + BASE_URL + 'admin/', admin.site.urls),
+    url(r'^' + BASE_URL + 'catalog/', include('src.catalog.urls', namespace='catalog')),
+    url(r'^' + BASE_URL + 'users/', include('src.users.urls', namespace='users')),
+    url(r'^' + BASE_URL, views.api_root),
 ]

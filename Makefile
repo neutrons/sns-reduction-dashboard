@@ -80,7 +80,7 @@ check: check-docker check-env
 
 .PHONY: clean
 clean:
-	find . -name '*~' -exec rm -v -- {} \+
+	find . -name '*~' -print -delete
 
 ################
 # Apilication specific targets

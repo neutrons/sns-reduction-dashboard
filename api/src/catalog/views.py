@@ -49,6 +49,7 @@ class FacilityViewSet(NestedModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.FacilitySerializer
     nested_serializer_class = serializers.NestedFacilitySerializer
 
-class InstrumentViewSet(viewsets.ReadOnlyModelViewSet):
+class InstrumentViewSet(NestedModelMixin, viewsets.ReadOnlyModelViewSet):
     queryset = models.Instrument.objects.all()
     serializer_class = serializers.InstrumentSerializer
+    nested_serializer_class = serializers.NestedInstrumentSerializer
