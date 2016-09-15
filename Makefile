@@ -83,7 +83,7 @@ clean:
 	find . -name '*~' -print -delete
 
 ################
-# Apilication specific targets
+# Application specific targets
 
 .PHONY: build
 build:
