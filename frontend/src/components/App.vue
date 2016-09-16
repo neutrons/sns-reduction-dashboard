@@ -4,11 +4,13 @@
     <div class="App__main-page">
       <main-page></main-page>
     </div>
+    <footer-bar></footer-bar>
   </div>
 </template>
 
 <script>
 import NavBar from './NavBar.vue';
+import FooterBar from './FooterBar.vue';
 import MainPage from './MainPage.vue';
 import store from '../vuex/store';
 import { authenticate } from '../vuex/actions';
@@ -18,6 +20,7 @@ export default {
   components: {
     NavBar,
     MainPage,
+    FooterBar
   },
   store,
   vuex: {
