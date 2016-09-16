@@ -13,7 +13,7 @@ if [ "${1:-}" = start -a $# -eq 1 ]; then
         LOG_LOC=/dev/stdout
     fi
 
-    vars='$HOST,$PORT,$COLONPORT,$LOG_LOC,$LOG_LEVEL'
+    vars='$HOST,$PORT,$COLONPORT,$LOG_LOC,$LOG_LEVEL,$SERVER_NAME'
     conf=/etc/nginx/conf.d/default.conf
 
     COLONPORT=$newport \

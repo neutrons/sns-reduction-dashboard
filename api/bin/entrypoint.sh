@@ -12,7 +12,7 @@ if [ $# -eq 1 -a "${1:-}" = start ]; then
     # Wait for Postgres and Redis
     waitfor postgres 5432
     waitfor redis 6379
-
+    python3 $(dirname $0)/manage.py collectstatic --no-input
     set -- uwsgi --ini uwsgi.ini
 fi
 
