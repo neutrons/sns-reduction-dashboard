@@ -47,11 +47,16 @@
 .navbar-brand {
   padding: 0px;
 }
+
 .navbar-brand>img {
   width: auto;
   display: inline-block;
   height: 50px;
   margin-top: -12px
+}
+
+.dropdown:hover .dropdown-menu {
+display: block;
 }
 
 </style>
