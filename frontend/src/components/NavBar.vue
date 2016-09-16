@@ -8,7 +8,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" v-link="{ name: 'default' }"><img src="../assets/logo.jpg" alt="Dispute Bills"></a>
+        <a class="navbar-brand" v-link="{ name: 'default' }"><img src="../assets/logo.png" alt="Dispute Bills"></a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
@@ -38,8 +38,8 @@
 .navbar-brand>img {
   width: auto;
   display: inline-block;
-  height: 52px;
-  margin-top: -15px
+  height: 50px;
+  margin-top: -12px
 }
 
 </style>
