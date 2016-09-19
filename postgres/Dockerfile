@@ -1,1 +1,1 @@
-FROM sameersbn/postgresql:9.4-23
+FROM sameersbn/postgresql:9.5-2

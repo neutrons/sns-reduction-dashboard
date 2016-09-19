@@ -4,8 +4,8 @@
 
 3 main targets:
 - all
-  - build 
-  - up 
+  - build
+  - up
   - logs
 - check
 - clean
@@ -49,3 +49,33 @@ psql -h <host> -p <port> -U <username> -W <password> <database>
 psql -h  172.19.0.4 -p 5432 -U sns_dashboard sns_dashboard
 ```
 
+OR:
+
+```
+docker exec -it snsreductiondashboard_postgres_1 sudo -u postgres psql
+##
+\list
+##
+\connect sns_dashboard
+##
+\dt
+
+```
+
+OR
+```
+docker exec -it snsreductiondashboard_postgres_1 bash
+psql -U sns_dashboard -W sns_dashboard
+```
+
+## API
+
+Let's find where is the manage.py:
+```
+docker exec -it snsreductiondashboard_api_1 find / -iname "manage.py"
+```
+
+Open interactive bash shell:
+```
+docker exec -it snsreductiondashboard_api_1 sh
+```
