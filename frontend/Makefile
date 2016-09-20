@@ -11,10 +11,14 @@
 # Standard targets
 
 .PHONY: frontend/run
-frontend/run: frontend/.env frontend/.depend.secondary
+frontend/run: frontend/.env frontend/.depend.secondary | frontend/dist
 ifeq ($(USE_WEBPACK_DEV_SERVER),true)
 	$(load-env) && \
-	frontend/bin/webpack-server.js
+	(cd frontend && \
+	./node_modules/.bin/webpack-dev-server \
+		--host $(FRONTEND_HOST) \
+		--port $(FRONTEND_PORT) \
+	)
 else
 	$(load-env) && \
 	node frontend/node_modules/.bin/webpack --watch
@@ -34,6 +38,9 @@ frontend/clean:
 
 ################
 # Source transformations
+
+frontend/dist:
+	mkdir -p $@
 
 .SECONDARY: frontend/.depend.secondary
 frontend/.depend.secondary: frontend/package.json

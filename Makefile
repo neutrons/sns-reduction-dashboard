@@ -43,6 +43,7 @@ export DATE := $(date)
 -include .env.makefile
 include api/Makefile
 include frontend/Makefile
+include nginx/Makefile
 
 ################
 # Standard targets
@@ -52,8 +53,10 @@ all:
 
 .PHONY: run
 run:
-	+$(MAKE) -j 1 \
-		api/run
+	+$(MAKE) -j 3 \
+		api/run \
+		nginx/run \
+		frontend/run
 
 .PHONY: depend
 depend: api/depend
