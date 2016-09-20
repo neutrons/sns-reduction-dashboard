@@ -32,6 +32,9 @@ module.exports = {
       {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'file',
+        include: [
+          path.resolve(__dirname, "/app/src/assets")
+        ],
         query: {
           name: '[name].[ext]?[hash]'
         }
