@@ -17,7 +17,7 @@ echo.%:
 	@echo $*=$($*)
 
 # Used to make specific .env files
-make-env = envsubst '$(addprefix $$,$(ENV_VARIABLES))' < $< > $@
+make-env = ./scripts/env.bash subst < $< > $@
 
 # Used to load specific .env files
 load-env = set -o allexport && unset $(ENV_VARIABLES) && source $< && set +o allexport
@@ -28,23 +28,6 @@ load-env = set -o allexport && unset $(ENV_VARIABLES) && source $< && set +o all
 ifndef ENTR_BIN
 ENTR_BIN := $(firstword $(shell which entr scripts/entr.bash 2>/dev/null))
 endif
-
-ifndef ENV_FILE
-ENV_FILE := .env
-endif
-
-################
-# .env variables
-
-define newline
-
-
-endef
-
-ENV_VARIABLES :=
-$(eval \
-  $(subst @@@,$(newline),\
-    $(shell ./scripts/env_vars_to_makefile.bash $(ENV_FILE))))
 
 ################
 # Sanity checks and local variables
@@ -57,6 +40,7 @@ export DATE := $(date)
 ################
 # Includes
 
+-include .env.makefile
 include api/Makefile
 include frontend/Makefile
 
@@ -76,7 +60,7 @@ depend: api/depend
 
 .PHONY: check
 check:
-	./scripts/diff_env.bash
+	./scripts/env.bash diff
 
 .PHONY: clean
 clean:
@@ -91,4 +75,7 @@ clean:
 .env: .env.base
 	touch $@
 	cp $@ $@.bak
-	./scripts/merge_env.bash $@.bak $< > $@
+	./scripts/env.bash merge $@.bak $< > $@
+
+.env.makefile: .env
+	./scripts/env.bash to-makefile > $@
