@@ -1,5 +1,6 @@
 from . import serializers
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from rest_framework import mixins
 from rest_framework import viewsets
@@ -11,7 +12,7 @@ from rest_framework.response import Response
 
 # Create your views here.
 class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
     serializer_class = serializers.UserProfileSerializer
 
 class UserLoginViewSet(viewsets.ViewSet):

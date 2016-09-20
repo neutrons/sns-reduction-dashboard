@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
-from .env import *
-from .ldap import *
+from .env import * #@UnusedWildImport
+from .ldap import * #@UnusedWildImport
 
 SITE_ROOT = root()
 
@@ -130,3 +130,9 @@ CACHES = {
         }
     }
 }
+
+# Custom user app
+# Select the correct user model
+# LOGIN_REDIRECT_URL = 'users:redirect'
+# LOGIN_URL = 'users:login'
+AUTH_USER_MODEL = 'users.User'
