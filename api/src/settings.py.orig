@@ -10,8 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
-from env import * #@UnusedWildImport
-from settings_ldap import * #@UnusedWildImport
+<<<<<<< HEAD
+from .env import * #@UnusedWildImport
+from .ldap import * #@UnusedWildImport
+=======
+from env import *
+from settings_ldap import *
+>>>>>>> origin
 
 SITE_ROOT = root()
 
@@ -87,7 +92,7 @@ DATABASES = {
         'PASSWORD': env('DB_PASS'),
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': env('DB_HOST'),
-        'PORT': '5432',
+        'PORT': env('DB_PORT'),
     },
 }
 
@@ -119,6 +124,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
 }
+<<<<<<< HEAD
 
 # django-redis
 CACHES = {
@@ -131,10 +137,10 @@ CACHES = {
     }
 }
 
-
+# Custom user app
 # Select the correct user model
 # LOGIN_REDIRECT_URL = 'users:redirect'
 # LOGIN_URL = 'users:login'
 AUTH_USER_MODEL = 'users.User'
-
-
+=======
+>>>>>>> origin

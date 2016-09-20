@@ -1,4 +1,4 @@
-from .env import *
+from env import *
 from django_auth_ldap.config import LDAPSearch, PosixGroupType
 import ldap
 

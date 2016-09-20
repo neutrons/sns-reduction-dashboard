@@ -11,8 +11,8 @@ module.exports = {
     'expose?main!./src/main.js'
   ],
   output: {
-    path: '/static/dist/',
-    publicPath: '/static/dist/',
+    path: 'dist/',
+    publicPath: '/frontend/dist/',
     filename: 'build.js'
   },
   resolveLoader: {
@@ -33,7 +33,7 @@ module.exports = {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'file',
         include: [
-          path.resolve(__dirname, "/app/src/assets")
+          path.resolve(__dirname, "./src/assets")
         ],
         query: {
           name: '[name].[ext]?[hash]'
@@ -78,13 +78,13 @@ module.exports = {
 if (process.env.USE_WEBPACK_DEV_SERVER === 'true') {
   module.exports.entry = Array.prototype.concat.apply(
     [
-      'webpack-dev-server/client?/webpack/sockjs-node',
+      'webpack-dev-server/client?/frontend/sockjs-node',
       'webpack/hot/only-dev-server',
     ],
     module.exports.entry
   );
 
-  module.exports.output.publicPath = '/webpack/dist/';
+  module.exports.output.publicPath = '/frontend/dist/';
 
   module.exports.plugins = Array.prototype.concat.apply(
     module.exports.plugins,
