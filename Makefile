@@ -59,7 +59,7 @@ run:
 		frontend/run
 
 .PHONY: depend
-depend: api/depend
+depend: api/depend frontend/depend nginx/depend
 
 .PHONY: check
 check:
