@@ -13,4 +13,4 @@ config/env/*.env
 pgdata
 BACKUPS
 .env.bak
-.depend.secondary
+.*.secondary
