@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
-from .env import *
-from .ldap import *
+from env import *
+from settings_ldap import *
 
 SITE_ROOT = root()
 
