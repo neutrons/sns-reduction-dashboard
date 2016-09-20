@@ -59,6 +59,7 @@ export DATE := $(date)
 
 include api/Makefile
 include frontend/Makefile
+include postgres/Makefile
 
 ################
 # Standard targets
@@ -68,7 +69,7 @@ all:
 
 .PHONY: run
 run:
-	+$(MAKE) -j 1 api/run
+	+$(MAKE) -j 2 api/run postgres/run
 
 .PHONY: depend
 depend: api/depend
