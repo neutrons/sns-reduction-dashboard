@@ -17,4 +17,5 @@ BACKUPS
 .env.makefile
 logs
 nginx/nginx.conf
+nginx/static
 *.pyc

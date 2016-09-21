@@ -15,16 +15,19 @@ events {
 
 
 http {
-client_body_temp_path /tmp/body-temp-path/;
+	# client_body_temp_path /tmp/body-temp-path/;
+    
     default_type  application/octet-stream;
+    # Otherwise CSS and images are served as octet stream
+	include       /etc/nginx/mime.types;
 
     log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
     '$status $body_bytes_sent "$http_referer" '
     '"$http_user_agent" "$http_x_forwarded_for"';
+    
     log_format upstreamlog '[$time_local] $remote_addr - $remote_user - '
     '$server_name  to: $upstream_addr: $request upstream_response_time '
     '$upstream_response_time msec $msec request_time $request_time';
-
 
     access_log /dev/stdout main;
 
@@ -49,6 +52,10 @@ client_body_temp_path /tmp/body-temp-path/;
             root $PWD/nginx/html;
             try_files /index.html =404;
         }
+        
+        location /static {
+        	alias $PWD/nginx/static;
+    	}
 
         location /api/ {
             proxy_pass_header Server;
