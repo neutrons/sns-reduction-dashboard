@@ -134,6 +134,7 @@ CACHES = {
     }
 }
 
+FIXTURE_DIRS = [root('fixtures')]
 
 # Select the correct user model
 # LOGIN_REDIRECT_URL = 'users:redirect'

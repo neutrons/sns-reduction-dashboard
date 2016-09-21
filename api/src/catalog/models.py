@@ -2,37 +2,12 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 # Create your models here.
 
-class AutoRepr(object):
-    def __repr__(self):
-        fields = (
-            "{}={!r}".format(field.name, getattr(self, field.name))
-            for field in self._meta.get_fields()
-        )
-
-        return "{}({})".format(
-            self.__class__.__name__,
-            ', '.join(fields),
-        )
-
-    def __str__(self):
-        primary_key = next(
-            field
-            for field in self._meta.get_fields()
-            if hasattr(field, 'primary_key') and field.primary_key
-        )
-
-        return "{}({}={!r})".format(
-            self.__class__.__name__,
-            primary_key.name,
-            getattr(self, primary_key.name),
-        )
-
-class Facility(AutoRepr, models.Model):
+class Facility(models.Model):
     name = models.CharField(
         'facility name',
         help_text='Facility name (e.g. "SNS" or "HFIR")',
         max_length=32,
-        primary_key=True,
+        #primary_key=True,
     )
 
     description = models.CharField(
@@ -50,19 +25,23 @@ class Facility(AutoRepr, models.Model):
     class Meta:
         verbose_name_plural = _("Facilities")
         ordering = ('name',)
+    
+    def __str__(self):
+        return "{}".format(self.name)
 
-class Instrument(AutoRepr, models.Model):
+
+class Instrument(models.Model):
     name = models.CharField(
         'instrument name',
         help_text='Instrument name (e.g. "EQSANS" or "BioSANS")',
         max_length=32,
-        primary_key=True,
+        #primary_key=True,
     )
 
     description = models.CharField(
         'instrument description',
         help_text='Instrument description (e.g. "Backscattering Spectrometer")',
-        max_length=1024,
+        max_length=256,
     )
 
     beamline = models.CharField(
@@ -74,7 +53,7 @@ class Instrument(AutoRepr, models.Model):
     type = models.CharField(
         'instrument type',
         help_text='Instrument type (e.g. "SANS")',
-        max_length=32,
+        max_length=256,
     )
 
     icat_name = models.CharField(
@@ -88,11 +67,17 @@ class Instrument(AutoRepr, models.Model):
         help_text='Name used for querying LDAP server',
         max_length=32,
     )
+    
+    icat_url = models.CharField(
+        'instrument icat url',
+        help_text='Name used for querying ICAT server (e.g. "https://icat.sns.gov:8081/")',
+        max_length=256,
+    )
 
-    drive_name = models.CharField(
-        'instrument drive name',
+    drive_path = models.CharField(
+        'instrument drive path',
         help_text='Name used for loading files from shared filesystem',
-        max_length=32,
+        max_length=256,
     )
 
     reduction_available = models.BooleanField(
@@ -117,3 +102,7 @@ class Instrument(AutoRepr, models.Model):
 
     class Meta:
         ordering = ('beamline',)
+    
+    def __str__(self):
+        return "{}".format(self.name)
+
