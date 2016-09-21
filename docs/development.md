@@ -2,13 +2,31 @@
 
 ## Makefile
 
-3 main targets:
+`make run` target launches in parallel this 3 targets:
 
 ```
 make api/run
 make frontend/run
 make nginx/run
 ```
+
+
+## Run Django without uWSGI
+
+For debugging, instead of `make api/run`, we can run Django without uWSGI!
+
+```
+cd api/
+source venv/bin/activate
+
+set -o allexport
+source .env
+
+PYTHONPATH=$(pwd) python src/manage.py runserver $PORT
+
+```
+
+
 
 ## Dump database for fixtures
 

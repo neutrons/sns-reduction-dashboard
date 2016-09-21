@@ -24,7 +24,7 @@ class FacilityAPITestCase(APITestCase):
             type='SANS',
             icat_name='EQSANS',
             ldap_name='eqsans',
-            drive_name='EQSANS',
+            drive_path='EQSANS',
             facility=self.sns,
             active=True,
         )
