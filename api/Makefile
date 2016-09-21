@@ -41,7 +41,7 @@ api/venv:
 api/.depend.secondary: api/.env api/requirements.txt | api/venv
 	$(load-env) && \
 	source api/venv/bin/activate && \
-	python -m pip install -r $(word 2,$^) && \
+	python3 -m pip install -r $(word 2,$^) && \
 	touch $@
 
 .SECONDARY: api/.migrate.secondary

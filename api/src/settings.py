@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 import os.path
-from env import * #@UnusedWildImport
-from settings_ldap import * #@UnusedWildImport
+from .env import * #@UnusedWildImport
+from .settings_ldap import * #@UnusedWildImport
+from .log import * #@UnusedWildImport
 
 SITE_ROOT = root()
 

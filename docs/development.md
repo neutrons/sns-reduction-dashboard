@@ -3,79 +3,103 @@
 ## Makefile
 
 3 main targets:
-- all
-  - build
-  - up
-  - logs
-- check
-- clean
 
-
-## Containers
-
-See running containers:
 ```
-$ docker ps
-CONTAINER ID        IMAGE                            COMMAND                  CREATED             STATUS              PORTS                         NAMES
-82074341dd27        snsreductiondashboard_nginx      "entrypoint.sh watche"   13 seconds ago      Up 11 seconds       0.0.0.0:80->80/tcp, 443/tcp   snsreductiondashboard_nginx_1
-73d91a775215        snsreductiondashboard_api        "entrypoint.sh watche"   13 seconds ago      Up 12 seconds       80/tcp                        snsreductiondashboard_api_1
-24df152592cb        snsreductiondashboard_postgres   "/sbin/entrypoint.sh"    14 seconds ago      Up 12 seconds       5432/tcp                      snsreductiondashboard_postgres_1
-96b2e50cc33b        snsreductiondashboard_redis      "entrypoint.sh watche"   14 seconds ago      Up 12 seconds       6379/tcp                      snsreductiondashboard_redis_1
-2993e5db4504        snsreductiondashboard_frontend   "entrypoint.sh watche"   14 seconds ago      Up 12 seconds       80/tcp                        snsreductiondashboard_frontend_1
-```
-
-stop / remove all of Docker containers:
-```
-docker stop $(docker ps -a -q)
-docker rm $(docker ps -a -q)
+make api/run
+make frontend/run
+make nginx/run
 ```
 
 ## Postges
 
-Connect to the database:
 
-Get the IP address:
+Edit the following file:
+
+```bash
+# Ubuntu:
+sudo vi /etc/postgresql/9.3/main/pg_hba.conf
+# Redhat:
+sudo vi /var/lib/pgsql/9.4/data/pg_hba.conf
 ```
-docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
+Replace all *peer* or *ident* at the end by *md5*:
+
+E.g.:
 ```
-Get the port:
+# "local" is for Unix domain socket connections only
+local   all             all                                     peer
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            ident
 ```
-docker ps -a
+by
+```
+# "local" is for Unix domain socket connections only
+local   all             all                                     ident
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            md5
+```
+
+Note:
+To access the database through the command line (i.e. `psql`) we need to use `ident`.
+From django we need `md5`. **Need to confirm this!**.
+
+Restart postgres:
 
 ```
-Connect:
-```
-psql -h <host> -p <port> -U <username> -W <password> <database>
-psql -h  172.19.0.4 -p 5432 -U sns_dashboard sns_dashboard
+# Ubuntu
+sudo service postgresql restart
+# Redhat
+sudo systemctl restart postgresql-9.4
 ```
 
-OR:
+#### Test:
 
 ```
-docker exec -it snsreductiondashboard_postgres_1 sudo -u postgres psql
-##
+sudo su - postgres
+psql
+
+```
+
+#### Create database
+
+Configure Postgres:  
+
+```bash
+# Enter as postgres user
+sudo su - postgres
+
+# Database and username/password is available in the ```.env``` file
+# that should have been provided separately.
+
+# Create user sns_dashboard
+#
+createuser -P -s -e sns_dashboard
+
+# Once postgres user, create a db
+createdb -O sns_dashboard -W sns_dashboard
+```
+
+#### Test
+
+Test the database. This should work:
+
+*Note*:
+
+To use user/pass the settings above must be in *md5*!
+
+```
+psql --username=sns_dashboard -W sns_dashboard
+# list all databases
 \list
-##
+# Connect to database:
 \connect sns_dashboard
-##
+# list all tables in the current database
 \dt
-
 ```
 
-OR
-```
-docker exec -it snsreductiondashboard_postgres_1 bash
-psql -U sns_dashboard -W sns_dashboard
-```
+#### Usefull
 
-## API
 
-Let's find where is the manage.py:
+Delete all tables owened by a user:
 ```
-docker exec -it snsreductiondashboard_api_1 find / -iname "manage.py"
-```
-
-Open interactive bash shell:
-```
-docker exec -it snsreductiondashboard_api_1 sh
+drop owned by reduction;
 ```
