@@ -45,9 +45,10 @@ set +o allexport
 
 Save this data in a json file in the fixtures folder.
 
-## Load Default models
+## Load fixtures
 
-Data to load must be
+Data to load must be in fixtures folder
+
 ```
 
 ./manage.py loaddata filename
