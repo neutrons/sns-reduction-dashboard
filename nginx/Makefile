@@ -5,6 +5,15 @@
 # Environment variables
 
 ################
+# Local variables
+
+
+nginx_command := nginx
+ifeq ($(NGINX_REQUIRES_SUDO),true)
+nginx_command := sudo $(nginx_command)
+endif
+
+################
 # Exported variables
 
 ################
@@ -13,7 +22,7 @@
 .PHONY: nginx/run
 nginx/run: nginx/.env nginx/nginx.conf | nginx/logs
 	$(load-env) && \
-	nginx -c $(notdir $(word 2,$^)) -g 'daemon off;' -p nginx
+	$(nginx_command) -c $(notdir $(word 2,$^)) -g 'daemon off;' -p nginx
 
 .PHONY: nginx/depend
 nginx/depend:

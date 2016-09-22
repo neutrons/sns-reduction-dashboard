@@ -40,6 +40,7 @@ AUTH_LDAP_USER_FLAGS_BY_GROUP = {
 AUTH_LDAP_USER_ATTR_MAP = {
     'email': 'description',
     'address': 'gecos',
+    'fullname': 'cn',
 }
 
 # Add to authentication backend

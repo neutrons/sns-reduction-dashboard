@@ -2,80 +2,55 @@
 
 ## Makefile
 
-3 main targets:
-- all
-  - build
-  - up
-  - logs
-- check
-- clean
-
-
-## Containers
-
-See running containers:
-```
-$ docker ps
-CONTAINER ID        IMAGE                            COMMAND                  CREATED             STATUS              PORTS                         NAMES
-82074341dd27        snsreductiondashboard_nginx      "entrypoint.sh watche"   13 seconds ago      Up 11 seconds       0.0.0.0:80->80/tcp, 443/tcp   snsreductiondashboard_nginx_1
-73d91a775215        snsreductiondashboard_api        "entrypoint.sh watche"   13 seconds ago      Up 12 seconds       80/tcp                        snsreductiondashboard_api_1
-24df152592cb        snsreductiondashboard_postgres   "/sbin/entrypoint.sh"    14 seconds ago      Up 12 seconds       5432/tcp                      snsreductiondashboard_postgres_1
-96b2e50cc33b        snsreductiondashboard_redis      "entrypoint.sh watche"   14 seconds ago      Up 12 seconds       6379/tcp                      snsreductiondashboard_redis_1
-2993e5db4504        snsreductiondashboard_frontend   "entrypoint.sh watche"   14 seconds ago      Up 12 seconds       80/tcp                        snsreductiondashboard_frontend_1
-```
-
-stop / remove all of Docker containers:
-```
-docker stop $(docker ps -a -q)
-docker rm $(docker ps -a -q)
-```
-
-## Postges
-
-Connect to the database:
-
-Get the IP address:
-```
-docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
-```
-Get the port:
-```
-docker ps -a
+`make run` target launches in parallel this 3 targets:
 
 ```
-Connect:
-```
-psql -h <host> -p <port> -U <username> -W <password> <database>
-psql -h  172.19.0.4 -p 5432 -U sns_dashboard sns_dashboard
+make api/run
+make frontend/run
+make nginx/run
 ```
 
-OR:
+
+## Run Django without uWSGI
+
+For debugging, instead of `make api/run`, we can run Django without uWSGI!
 
 ```
-docker exec -it snsreductiondashboard_postgres_1 sudo -u postgres psql
-##
-\list
-##
-\connect sns_dashboard
-##
-\dt
+cd api/
+source venv/bin/activate
+
+set -o allexport
+source .env
+
+PYTHONPATH=$(pwd) python src/manage.py runserver $PORT
 
 ```
 
-OR
+
+
+## Dump database for fixtures
+
 ```
-docker exec -it snsreductiondashboard_postgres_1 bash
-psql -U sns_dashboard -W sns_dashboard
+cd api/
+source venv/bin/activate
+
+set -o allexport
+source .env
+
+PYTHONPATH=$(pwd) python src/manage.py dumpdata <app_label[.ModelName]>
+
+set +o allexport
+
 ```
 
-## API
+Save this data in a json file in the fixtures folder.
 
-Let's find where is the manage.py:
-```
-docker exec -it snsreductiondashboard_api_1 find / -iname "manage.py"
+## Load fixtures
+
+Data to load must be in fixtures folder
+
 ```
 
-Open interactive bash shell:
-```
-docker exec -it snsreductiondashboard_api_1 sh
+./manage.py loaddata filename
+
 ```

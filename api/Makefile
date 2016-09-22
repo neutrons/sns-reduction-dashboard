@@ -38,9 +38,10 @@ api/venv:
 	python3 -m virtualenv $@
 
 .SECONDARY: api/.depend.secondary
-api/.depend.secondary: api/requirements.txt | api/venv
+api/.depend.secondary: api/.env api/requirements.txt | api/venv
+	$(load-env) && \
 	source api/venv/bin/activate && \
-	python3 -m pip install -r $< && \
+	python -m pip install -r $(word 2,$^) && \
 	touch $@
 
 .SECONDARY: api/.migrate.secondary
@@ -48,9 +49,12 @@ api/.migrate.secondary: api/.env api/.depend.secondary \
                         $(wildcard api/src/*/models.py) api/src/settings.py
 	$(load-env) && \
 	source api/venv/bin/activate && \
-	python3 api/src/manage.py makemigrations && \
-	python3 api/src/manage.py migrate && \
+	python api/src/manage.py makemigrations --no-input && \
+	python api/src/manage.py migrate --no-input && \
+	python api/src/manage.py collectstatic --no-input && \
 	touch $@
 
 api/.env: api/.env.template .env
 	$(make-env)
+
+

@@ -4,7 +4,7 @@ from . import models
 class InstrumentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Instrument
-        exclude = ['icat_name', 'ldap_name', 'drive_name']
+        exclude = ['icat_name', 'ldap_name', 'drive_path']
         extra_kwargs = {
             'url': {
                 'view_name': 'catalog:instrument-detail',

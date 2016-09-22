@@ -9,9 +9,10 @@ https://docs.djangoproject.com/en/1.9/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
-
-from env import *
-from settings_ldap import *
+import os.path
+from .env import * #@UnusedWildImport
+from .settings_ldap import * #@UnusedWildImport
+from .log import * #@UnusedWildImport
 
 SITE_ROOT = root()
 
@@ -105,7 +106,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/static/'
+STATIC_ROOT = os.path.join(SITE_ROOT, '../../nginx/static')
 
 USE_WEBPACK_DEV_SERVER = env.bool('USE_WEBPACK_DEV_SERVER')
 WEBPACK_URL = '/webpack/' if USE_WEBPACK_DEV_SERVER else STATIC_URL
@@ -119,3 +120,23 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
 }
+
+# django-redis
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379/0',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+FIXTURE_DIRS = [root('fixtures')]
+
+# Select the correct user model
+# LOGIN_REDIRECT_URL = 'users:redirect'
+# LOGIN_URL = 'users:login'
+AUTH_USER_MODEL = 'users.User'
+
+

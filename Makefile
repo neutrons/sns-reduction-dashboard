@@ -49,7 +49,7 @@ include nginx/Makefile
 # Standard targets
 
 .PHONY: all
-all:
+all: run
 
 .PHONY: run
 run:
