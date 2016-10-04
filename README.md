@@ -1,68 +1,22 @@
-# dashboard-config-demo
+# SNS Reduction Dashboard
 
-> Demo of how we could set up the database and models for editing configurations
-> genericly on the front end, using a combination of Django,
-> DjangoRestFramework, VueJS, and Webpack.
+An implementation of a web-based reduction controller for neutron scientists at
+the Spallation Neutron Source. The overall goal is to be able to manage jobs
+that are sent to a computing cluster that can reduce experimental data to a
+more manageable size.
 
-# Deployment Environment
+It uses the tools: Django, DjangoRestFramework, Nginx, and VueJS.
 
-All of the commands require a development environment to be set. The easiest way
-to do this is to just export the variable before running everything. So this is:
+# Usage
 
-```bash
-$ export ENV=local # or dev, stage, or prod
-```
+There's a few key steps to use this application:
 
-Alternatively, you can set it per `make` command, like so:
+1. Create an environment file to configure the application.
 
-```bash
-$ make ENV=local <target>
-```
+    To do this, we need to create a `.env` file, which is done with:
 
-# TL;DR
+    ```console
+    $ make .env
+    ```
 
-Run this to kill any existing version of the app, build a new one, start up the
-services, and then watch the logs:
-
-```console
-$ # Copy .env.base to .env
-$ make noop
-$ # Create some passwords that you can use
-$ ./scripts/create_pass.sh 128
-$ # Edit the rest of the environment
-$ vi .env
-$ # Kill existing + build + start + watch the logs of the services
-$ make down build up logs
-```
-
-# Installing
-
-Run:
-
-```bash
-$ make build
-```
-
-# Running
-
-Start the server(s) with:
-
-```bash
-$ make up
-```
-
-# Watching logs
-
-Run:
-
-```bash
-$ make logs
-```
-
-# Killing the application
-
-Run:
-
-```bash
-$ make down
-```
+TODO: Finish the rest of this...
