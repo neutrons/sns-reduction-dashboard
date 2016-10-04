@@ -77,8 +77,8 @@ clean:
 
 .env: .env.base
 	touch $@
-	cp $@ $@.bak
-	./scripts/env.bash merge $@.bak $< > $@
+	cp $@ $@.$(date)
+	./scripts/env.bash merge $@.$(date) $< > $@
 
 .env.makefile: .env
 	./scripts/env.bash to-makefile > $@
