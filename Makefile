@@ -49,24 +49,28 @@ include nginx/Makefile
 # Standard targets
 
 .PHONY: all
-all: run
+all: run  ## Run the servers
 
 .PHONY: run
-run:
+run:  ## Run the servers
 	+$(MAKE) -j 3 \
 		api/run \
 		nginx/run \
 		frontend/run
 
 .PHONY: depend
-depend: api/depend frontend/depend nginx/depend
+depend: api/depend frontend/depend nginx/depend  ## Install all dependencies
 
 .PHONY: check
-check:
+check:  ## Check all source files
 	./scripts/env.bash diff
 
+.PHONY: help
+help:  ## Print this help
+	@./scripts/print_help.bash $(MAKEFILE_LIST)
+
 .PHONY: clean
-clean:
+clean:  ## Clean up temporary files
 	find . -name '*~' -print -delete
 
 ################

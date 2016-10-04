@@ -11,6 +11,7 @@
 # Standard targets
 
 .PHONY: frontend/run
+frontend/run: ## Run the frontend server
 frontend/run: frontend/.env frontend/.depend.secondary | frontend/dist
 ifeq ($(USE_WEBPACK_DEV_SERVER),true)
 	$(load-env) && \
@@ -25,13 +26,14 @@ else
 endif
 
 .PHONY: frontend/depend
+frontend/depend: ## Install frontend dependencies if needed
 frontend/depend: frontend/.depend.secondary
 
 .PHONY: frontend/check
-frontend/check:
+frontend/check:  ## Check frontend styles
 
 .PHONY: frontend/clean
-frontend/clean:
+frontend/clean:  ## Clean up frontend temporary files
 
 ################
 # Application specific targets

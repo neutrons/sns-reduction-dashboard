@@ -20,18 +20,19 @@ endif
 # Standard targets
 
 .PHONY: nginx/run
+nginx/run: ## Run the nginx server
 nginx/run: nginx/.env nginx/nginx.conf | nginx/logs
 	$(load-env) && \
 	$(nginx_command) -c $(notdir $(word 2,$^)) -g 'daemon off;' -p nginx
 
 .PHONY: nginx/depend
-nginx/depend:
+nginx/depend:  ## Install nginx dependencies if needed
 
 .PHONY: nginx/check
-nginx/check:
+nginx/check:  ## Check nginx styles
 
 .PHONY: nginx/clean
-nginx/clean:
+nginx/clean:  ## Clean up nginx temporary files
 
 ################
 # Application specific targets

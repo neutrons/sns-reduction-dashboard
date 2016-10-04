@@ -11,25 +11,26 @@
 # Standard targets
 
 .PHONY: api/run
+api/run: ## Run the API server
 api/run: api/.env api/.depend.secondary api/.migrate.secondary
 	$(load-env) && \
 	source api/venv/bin/activate && \
 	api/venv/bin/uwsgi --ini api/uwsgi.ini
 
 .PHONY: api/depend
-api/depend: api/.depend.secondary
+api/depend: api/.depend.secondary  ## Install API dependencies if needed
 
 .PHONY: api/check
-api/check:
+api/check:  ## Check API styles
 
 .PHONY: api/clean
-api/clean:
+api/clean:  ## Clean up API temporary files
 
 ################
 # Application specific targets
 
 .PHONY: api/migrate
-api/migrate: api/.migrate.secondary
+api/migrate: api/.migrate.secondary  ## Migrate API databases if needed
 
 ################
 # Source transformations
