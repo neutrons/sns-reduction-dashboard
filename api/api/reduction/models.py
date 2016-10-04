@@ -44,8 +44,10 @@ class BaseConfiguration(AutoRepr, models.Model):
 
     parameters = pgfields.JSONField(
         'base configuration parameters',
-        help_text=('The parameters that every configuration for this instrument'
-                   'will start with'),
+        help_text=(
+            'The parameters that every configuration for this instrument'
+            'will start with'
+        ),
         default=dict,
     )
 

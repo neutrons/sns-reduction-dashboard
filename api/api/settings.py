@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os.path
 import environ
 
-from .settings_ldap import * # noqa: F401,F403
-from .log import * # noqa: F401,F403
+from .settings_ldap import *  # noqa: F401,F403
+from .log import *  # noqa: F401,F403
 
 root = environ.Path(__file__) - 1
 env = environ.Env()

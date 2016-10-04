@@ -15,8 +15,8 @@ class NestedModelMixin(object):
 
     def get_nested_serializer(self, *args, **kwargs):
         """
-        Return the nested serializer instance that should be used for validating and
-        deserializing input, and for serializing output.
+        Return the nested serializer instance that should be used for
+        validating and deserializing input, and for serializing output.
         """
         serializer_class = self.get_nested_serializer_class()
         kwargs['context'] = self.get_serializer_context()

@@ -26,7 +26,7 @@ LOGGING = {
                       '%(process)d %(thread)d %(message)s'
         },
         'standard': {
-            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",  # noqa: E501
             'datefmt': "%d/%b/%Y %H:%M:%S"
         },
     },

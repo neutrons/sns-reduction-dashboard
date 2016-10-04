@@ -17,7 +17,9 @@ class Facility(models.Model):
 
     active = models.BooleanField(
         'facility is active',
-        help_text='Whether the facility is active and working in the dashboard',
+        help_text=(
+            'Whether the facility is active and working in the dashboard'
+        ),
         default=False,
     )
 
@@ -38,7 +40,9 @@ class Instrument(models.Model):
 
     description = models.CharField(
         'instrument description',
-        help_text='Instrument description (e.g. "Backscattering Spectrometer")',
+        help_text=(
+            'Instrument description (e.g. "Backscattering Spectrometer")'
+        ),
         max_length=256,
     )
 
@@ -68,7 +72,10 @@ class Instrument(models.Model):
 
     icat_url = models.CharField(
         'instrument icat url',
-        help_text='Name used for querying ICAT server (e.g. "https://icat.sns.gov:8081/")',
+        help_text=(
+            'Name used for querying ICAT server '
+            '(e.g. "https://icat.sns.gov:8081/")'
+        ),
         max_length=256,
     )
 
@@ -86,7 +93,9 @@ class Instrument(models.Model):
 
     active = models.BooleanField(
         'instrument is active',
-        help_text='Whether the instrument is active and working in the dashboard',
+        help_text=(
+            'Whether the instrument is active and working in the dashboard'
+        ),
         default=False,
     )
 
