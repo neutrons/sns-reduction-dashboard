@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from . import models
 
+
 class InstrumentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Instrument
@@ -13,6 +14,7 @@ class InstrumentSerializer(serializers.HyperlinkedModelSerializer):
                 'view_name': 'catalog:facility-detail',
             },
         }
+
 
 class FacilitySerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
@@ -29,6 +31,7 @@ class FacilitySerializer(serializers.HyperlinkedModelSerializer):
         model = models.Facility
         fields = '__all__'
 
+
 class NestedInstrumentSerializer(InstrumentSerializer):
     facility = FacilitySerializer(
         read_only=True,
@@ -36,6 +39,7 @@ class NestedInstrumentSerializer(InstrumentSerializer):
 
     class Meta(InstrumentSerializer.Meta):
         pass
+
 
 class NestedFacilitySerializer(FacilitySerializer):
     instruments = InstrumentSerializer(many=True, read_only=True)

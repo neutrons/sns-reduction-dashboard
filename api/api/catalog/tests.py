@@ -1,13 +1,14 @@
-from django.test import TestCase
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.test import APITestCase
 from .models import Facility, Instrument
 
+
 def p(obj):
     import json
     print(json.dumps(obj, indent=2))
+
 
 # Create your tests here.
 class FacilityAPITestCase(APITestCase):

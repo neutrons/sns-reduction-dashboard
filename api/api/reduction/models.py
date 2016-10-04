@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.postgres import fields as pgfields
 from django.db import models
 
+
 class AutoRepr(object):
     def __repr__(self):
         fields = (
@@ -28,10 +29,10 @@ class AutoRepr(object):
             getattr(self, primary_key.name),
         )
 
+
 def get_sentinel_user():
     return get_user_model().objects.get_or_create(username='deleted')[0]
 
-# Create your models here.
 
 class BaseConfiguration(AutoRepr, models.Model):
     instrument = models.OneToOneField(
@@ -47,6 +48,7 @@ class BaseConfiguration(AutoRepr, models.Model):
                    'will start with'),
         default=dict,
     )
+
 
 class Configuration(AutoRepr, models.Model):
     description = models.CharField(

@@ -26,8 +26,8 @@ LOGGING = {
                       '%(process)d %(thread)d %(message)s'
         },
         'standard': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
         },
     },
     'handlers': {
@@ -55,8 +55,8 @@ LOGGING = {
         },
         # Mine:
         'django': {
-            'handlers':['console'],
-            'level':'INFO',
+            'handlers': ['console'],
+            'level': 'INFO',
             'propagate': True,
         },
         'django.db.backends': {

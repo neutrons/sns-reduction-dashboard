@@ -9,10 +9,15 @@ https://docs.djangoproject.com/en/1.9/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
+
 import os.path
-from .env import * #@UnusedWildImport
-from .settings_ldap import * #@UnusedWildImport
-from .log import * #@UnusedWildImport
+import environ
+
+from .settings_ldap import * # noqa: F401,F403
+from .log import * # noqa: F401,F403
+
+root = environ.Path(__file__) - 1
+env = environ.Env()
 
 SITE_ROOT = root()
 

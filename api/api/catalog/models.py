@@ -1,13 +1,12 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-# Create your models here.
+
 
 class Facility(models.Model):
     name = models.CharField(
         'facility name',
         help_text='Facility name (e.g. "SNS" or "HFIR")',
         max_length=32,
-        #primary_key=True,
     )
 
     description = models.CharField(
@@ -25,7 +24,7 @@ class Facility(models.Model):
     class Meta:
         verbose_name_plural = _("Facilities")
         ordering = ('name',)
-    
+
     def __str__(self):
         return "{}".format(self.name)
 
@@ -35,7 +34,6 @@ class Instrument(models.Model):
         'instrument name',
         help_text='Instrument name (e.g. "EQSANS" or "BioSANS")',
         max_length=32,
-        #primary_key=True,
     )
 
     description = models.CharField(
@@ -67,7 +65,7 @@ class Instrument(models.Model):
         help_text='Name used for querying LDAP server',
         max_length=32,
     )
-    
+
     icat_url = models.CharField(
         'instrument icat url',
         help_text='Name used for querying ICAT server (e.g. "https://icat.sns.gov:8081/")',
@@ -102,7 +100,6 @@ class Instrument(models.Model):
 
     class Meta:
         ordering = ('beamline',)
-    
+
     def __str__(self):
         return "{} : {}".format(self.facility.name, self.name)
-

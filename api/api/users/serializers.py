@@ -2,15 +2,16 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
+
 class UserProfileSerializer(serializers.ModelSerializer):
-    
-    # Serializer to display instrument rather than PK
-    instrument = serializers.StringRelatedField(many=False)
-    
+    instrument = serializers.StringRelatedField(
+        many=False,
+    )
+
     class Meta:
         model = get_user_model()
-        #fields = '__all__'
-        exclude = ['password','groups']
+        exclude = ['password', 'groups']
+
 
 class UserAuthTokenSerializer(serializers.Serializer):
     token = serializers.CharField(required=False, allow_null=True)

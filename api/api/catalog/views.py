@@ -1,9 +1,6 @@
 from . import models
 from . import serializers
-from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
-from rest_framework.decorators import detail_route
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 
@@ -44,10 +41,12 @@ class NestedModelMixin(object):
 
         return self.nested_serializer_class
 
+
 class FacilityViewSet(NestedModelMixin, viewsets.ReadOnlyModelViewSet):
     queryset = models.Facility.objects.all()
     serializer_class = serializers.FacilitySerializer
     nested_serializer_class = serializers.NestedFacilitySerializer
+
 
 class InstrumentViewSet(NestedModelMixin, viewsets.ReadOnlyModelViewSet):
     queryset = models.Instrument.objects.all()
