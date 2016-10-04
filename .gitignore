@@ -1,6 +1,6 @@
 /api/venv
-/api/src/**/__pycache__
-/api/src/**/migrations
+/api/api/**/__pycache__
+/api/api/**/migrations
 /frontend/node_modules
 /frontend/dist
 /frontend/tmp

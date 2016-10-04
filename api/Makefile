@@ -46,15 +46,13 @@ api/.depend.secondary: api/.env api/requirements.txt | api/venv
 
 .SECONDARY: api/.migrate.secondary
 api/.migrate.secondary: api/.env api/.depend.secondary \
-                        $(wildcard api/src/*/models.py) api/src/settings.py
+                        $(wildcard api/api/*/models.py) api/api/settings.py
 	$(load-env) && \
 	source api/venv/bin/activate && \
-	python api/src/manage.py makemigrations --no-input && \
-	python api/src/manage.py migrate --no-input && \
-	python api/src/manage.py collectstatic --no-input && \
+	python api/api/manage.py makemigrations --no-input && \
+	python api/api/manage.py migrate --no-input && \
+	python api/api/manage.py collectstatic --no-input && \
 	touch $@
 
 api/.env: api/.env.template .env
 	$(make-env)
-
-

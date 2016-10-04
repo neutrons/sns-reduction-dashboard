@@ -24,7 +24,7 @@ BASE_URL = settings.BASE_URL
 
 urlpatterns = [
     url(r'^' + BASE_URL + 'admin/', admin.site.urls),
-    url(r'^' + BASE_URL + 'catalog/', include('src.catalog.urls', namespace='catalog')),
-    url(r'^' + BASE_URL + 'users/', include('src.users.urls', namespace='users')),
+    url(r'^' + BASE_URL + 'catalog/', include('api.catalog.urls', namespace='catalog')),
+    url(r'^' + BASE_URL + 'users/', include('api.users.urls', namespace='users')),
     url(r'^' + BASE_URL, views.api_root),
 ]
