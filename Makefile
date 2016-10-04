@@ -20,7 +20,7 @@ echo.%:
 make-env = ./scripts/env.bash subst < $< > $@
 
 # Used to load specific .env files
-load-env = set -o allexport && unset $(ENV_VARIABLES) && source $< && set +o allexport
+load-env = set -o allexport && unset $$(./scripts/env.bash variables) && source $< && set +o allexport
 
 ################
 # Environment variables
