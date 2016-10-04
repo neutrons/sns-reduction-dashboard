@@ -39,7 +39,6 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'src.catalog',
     'src.reduction',
-    'src.users',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -137,6 +136,3 @@ FIXTURE_DIRS = [root('fixtures')]
 # Select the correct user model
 # LOGIN_REDIRECT_URL = 'users:redirect'
 # LOGIN_URL = 'users:login'
-AUTH_USER_MODEL = 'users.User'
-
-
