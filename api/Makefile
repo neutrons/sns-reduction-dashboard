@@ -21,7 +21,10 @@ api/run: api/.env api/.depend.secondary api/.migrate.secondary
 api/depend: api/.depend.secondary  ## Install API dependencies if needed
 
 .PHONY: api/check
-api/check:  ## Check API styles
+api/check: api/.depend-dev.secondary ## Check API styles
+	$(load-env) && \
+	source api/venv/bin/activate && \
+	api/venv/bin/flake8 --config=api/flake8.config api/api
 
 .PHONY: api/clean
 api/clean:  ## Clean up API temporary files
@@ -40,6 +43,14 @@ api/venv:
 
 .SECONDARY: api/.depend.secondary
 api/.depend.secondary: api/.env api/requirements.txt | api/venv
+	$(load-env) && \
+	source api/venv/bin/activate && \
+	python -m pip install -r $(word 2,$^) && \
+	touch $@
+
+.SECONDARY: api/.depend-dev.secondary
+api/.depend-dev.secondary: api/.env api/dev-requirements.txt \
+                           api/.depend.secondary | api/venv
 	$(load-env) && \
 	source api/venv/bin/activate && \
 	python -m pip install -r $(word 2,$^) && \

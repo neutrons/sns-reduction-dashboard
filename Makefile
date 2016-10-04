@@ -62,7 +62,7 @@ run:  ## Run the servers
 depend: api/depend frontend/depend nginx/depend  ## Install all dependencies
 
 .PHONY: check
-check:  ## Check all source files
+check: api/check ## Check all source files
 	./scripts/env.bash diff
 
 .PHONY: help
