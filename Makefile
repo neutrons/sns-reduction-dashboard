@@ -76,6 +76,10 @@ clean:  ## Clean up temporary files
 ################
 # Application specific targets
 
+.PHONY: print-url
+print-url: .env
+	@echo http://$(NGINX_HOST):$(NGINX_PORT)
+
 ################
 # Source transformations
 
