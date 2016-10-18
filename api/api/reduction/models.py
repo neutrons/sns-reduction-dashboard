@@ -34,24 +34,6 @@ def get_sentinel_user():
     return get_user_model().objects.get_or_create(username='deleted')[0]
 
 
-class BaseConfiguration(AutoRepr, models.Model):
-    instrument = models.OneToOneField(
-        'catalog.Instrument',
-        verbose_name='base configuration for instrument',
-        help_text='The instrument this configuration is for',
-        on_delete=models.CASCADE,
-    )
-
-    parameters = pgfields.JSONField(
-        'base configuration parameters',
-        help_text=(
-            'The parameters that every configuration for this instrument'
-            'will start with'
-        ),
-        default=dict,
-    )
-
-
 class Configuration(AutoRepr, models.Model):
     description = models.CharField(
         'configuration description/title',
@@ -92,8 +74,3 @@ class Configuration(AutoRepr, models.Model):
         on_delete=models.SET(get_sentinel_user),
         related_name='configurations',
     )
-
-    def save(self, *args, **kwargs):
-        base = self.instrument.baseconfiguration
-        self.parameters = base.parameters
-        super().save(*args, **kwargs)
