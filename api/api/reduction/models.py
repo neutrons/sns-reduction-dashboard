@@ -4,37 +4,11 @@ from django.contrib.postgres import fields as pgfields
 from django.db import models
 
 
-class AutoRepr(object):
-    def __repr__(self):
-        fields = (
-            "{}={!r}".format(field.name, getattr(self, field.name))
-            for field in self._meta.get_fields()
-        )
-
-        return "{}({})".format(
-            self.__class__.__name__,
-            ', '.join(fields),
-        )
-
-    def __str__(self):
-        primary_key = next(
-            field
-            for field in self._meta.get_fields()
-            if hasattr(field, 'primary_key') and field.primary_key
-        )
-
-        return "{}({}={!r})".format(
-            self.__class__.__name__,
-            primary_key.name,
-            getattr(self, primary_key.name),
-        )
-
-
 def get_sentinel_user():
     return get_user_model().objects.get_or_create(username='deleted')[0]
 
 
-class Configuration(AutoRepr, models.Model):
+class Configuration(models.Model):
     description = models.CharField(
         'configuration description/title',
         help_text='The description/title of the configuration',
