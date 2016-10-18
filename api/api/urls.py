@@ -27,5 +27,7 @@ urlpatterns = [
                                               namespace='catalog')),
     url(r'^' + BASE_URL + 'users/', include('api.users.urls',
                                             namespace='users')),
+    url(r'^' + BASE_URL + 'reduction/', include('api.reduction.urls',
+                                                namespace='reduction')),
     url(r'^' + BASE_URL, views.api_root),
 ]

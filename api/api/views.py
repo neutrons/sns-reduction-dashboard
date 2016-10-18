@@ -8,4 +8,6 @@ def api_root(request, format=None):
     return Response({
         'catalog': reverse('catalog:api-root', request=request, format=format),
         'users': reverse('users:api-root', request=request, format=format),
+        'reduction': reverse('reduction:api-root', request=request,
+                             format=format),
     })

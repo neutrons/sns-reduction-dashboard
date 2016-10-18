@@ -21,3 +21,6 @@ psycopg2>=2.5.4
 
 # uWSGI to hook into nginx
 uwsgi
+
+# Create VueFormGenerator schema from Django Form
+django-vueformgenerator
