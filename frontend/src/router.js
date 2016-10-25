@@ -7,6 +7,10 @@ import LoginRoute from './components/LoginRoute.vue';
 import ProfileRoute from './components/ProfileRoute.vue';
 import ReductionRoute from './components/ReductionRoute.vue';
 import ReductionTabRoute from './components/ReductionTabRoute.vue';
+import LogoutRoute from './components/LogoutRoute.vue';
+
+import store from './vuex/store';
+import { loggedIn } from './vuex/getters';
 
 Vue.use(VueRouter);
 
@@ -14,25 +18,48 @@ const router = new VueRouter();
 
 router.map({
   '/': {
-    name: 'default',
+    name: 'index',
     component: DefaultRoute,
   },
+
   '/catalog': {
     name: 'catalog',
     component: CatalogRoute,
   },
+
   '/login': {
     name: 'login',
     component: LoginRoute,
   },
+
+  '/logout': {
+    name: 'logout',
+    component: LogoutRoute,
+  },
+
   '/profile': {
     name: 'profile',
     component: ProfileRoute,
+    auth: true,
   },
+
   '/reduction': {
     name: 'reduction',
     component: ReductionRoute,
   },
+
+});
+
+router.beforeEach(function({ to, next, abort }) {
+  if (to.auth) {
+    if (loggedIn(store.state)) {
+      next();
+    } else {
+      router.go({ name: 'login', query: { next: to.path }});
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;

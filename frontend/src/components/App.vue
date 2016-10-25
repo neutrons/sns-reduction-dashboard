@@ -13,7 +13,6 @@ import NavBar from './NavBar.vue';
 import FooterBar from './FooterBar.vue';
 import MainPage from './MainPage.vue';
 import store from '../vuex/store';
-import { authenticate } from '../vuex/actions';
 
 export default {
   name: 'App',
@@ -23,14 +22,6 @@ export default {
     FooterBar
   },
   store,
-  vuex: {
-    actions: {
-      authenticate,
-    },
-  },
-  ready() {
-    this.authenticate();
-  },
 };
 </script>
 

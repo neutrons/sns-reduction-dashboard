@@ -8,7 +8,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" v-link="{ name: 'default' }"><img src="../assets/logo.png" alt="Dispute Bills"></a>
+        <a class="navbar-brand" v-link="{ name: 'index' }"><img src="../assets/logo.png" alt="Dispute Bills"></a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
@@ -34,6 +34,7 @@
             <ul class="dropdown-menu" >
               <nav-item name="login">Login</nav-item>
               <nav-item name="profile">Profile</nav-item>
+              <nav-item name="logout">Logout</nav-item>
             </ul>
           </li>
         </ul>

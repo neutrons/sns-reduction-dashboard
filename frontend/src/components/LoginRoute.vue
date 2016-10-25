@@ -1,30 +1,57 @@
 <template>
-    <div class="col-xs-6 col-xs-offset-3">
-        <panel>
-            <span slot="title">Login</span>
-            <form>
-                <div class="form-group" >
-                    <label for="loginUsername" >Username</label>
-                    <input type="text" class="form-control" id="loginUsername"  placeholder="Username">
-                </div>
-                <div class="form-group" >
-                    <label for="loginPassword" >Password</label>
-                    <input type="password" class="form-control" id="loginPassword"  placeholder="Password">
-                </div>
-                <button type="submit" class="btn btn-default" @click.stop.prevent="">Submit</button>
-
-            </form>
-        </panel>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <pre v-if="error">{{ error | json }}</pre>
+      <form>
+        <div class="form-group">
+          <label for="UserLoginRoute-username">Username</label>
+          <input class="form-control" type="text" id="UserLoginRoute-username" v-model="username"/>
+        </div>
+        <div class="form-group">
+          <label for="UserLoginRoute-password">Password</label>
+          <input class="form-control" type="password" id="UserLoginRoute-password" v-model="password"/>
+        </div>
+        <button class="btn btn-default" type="submit" @keydown.enter.prevent="submit" @click.prevent="submit">Submit</button>
+      </form>
     </div>
+  </div>
 </template>
 
 <script>
-import Panel from './Panel.vue';
-
+import { authToken } from '../vuex/getters';
+import { authLogin } from '../vuex/actions';
 export default {
-    name: 'LoginRoute',
-    components: {
-        Panel,
+  name: 'UserLoginRoute',
+  data() {
+    return {
+      username: '',
+      password: '',
+      error: null,
+    };
+  },
+  vuex: {
+    getters: {
+      authToken,
     },
-};
+    actions: {
+      authLogin,
+    },
+  },
+  methods: {
+    submit() {
+      console.log('UserLoginRoute.submit');
+      this.authLogin({
+        next: (data) => {
+          this.$router.go(this.$route.query.next || {'name': 'index'});
+        },
+        abort: (data) => {
+          this.error = data;
+        },
+      }, {
+        username: this.username,
+        password: this.password,
+      });
+    },
+  },
+}
 </script>

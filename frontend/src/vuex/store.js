@@ -1,30 +1,34 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import {authCheck} from './actions';
 
 Vue.use(Vuex);
 
 const state = {
-  user: {
-    authenticated: false,
-    token: localStorage.getItem('token'),
+  auth: {
+    token: window.localStorage.getItem('token'),
   },
 };
 
 const mutations = {
-  'USER_LOGIN' ({ user }, { token }) {
-    user.authenticated = true;
-    user.token = token;
-    localStorage.setItem('token', token);
-  },
+  'SET_AUTH_TOKEN' (state, token) {
+    state.auth.token = token;
 
-  'USER_LOGOUT' ({ user }) {
-    user.authenticated = false;
-    user.token = null;
-    localStorage.removeItem('token');
+    if (token === null) {
+      window.localStorage.removeItem('token');
+      delete Vue.http.options.headers['Authorization'];
+    } else {
+      window.localStorage.setItem('token', token);
+      Vue.http.options.headers['Authorization'] = 'Token ' + token;
+    }
   },
 };
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state,
   mutations,
 });
+
+authCheck(store);
+
+export default store;
