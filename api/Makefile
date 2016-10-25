@@ -71,6 +71,7 @@ api/.migrate.secondary: api/.env api/.depend.secondary \
 	source api/venv/bin/activate && \
 	python api/api/manage.py makemigrations --no-input && \
 	python api/api/manage.py migrate --no-input && \
+	python api/api/manage.py make_my_superuser && \
 	python api/api/manage.py collectstatic --no-input && \
 	touch $@
 
