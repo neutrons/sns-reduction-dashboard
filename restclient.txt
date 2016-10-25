@@ -1,0 +1,47 @@
+# -*- restclient -*-
+#
+
+# List users
+GET http://localhost:8081/api/users/profile/
+
+# Log in
+:username = admin
+:password = 4e9b40380820ef0fcd004e61915471759d5a45c709486cb7f9d3dcf39a7e36a6dba3e75eeb4200be778dd6e7a12f59a7bf60355fd8aaaab6df782c00ad63ba6c
+
+POST http://localhost:8081/api/users/login/
+Content-Type: application/json
+
+{
+  "username": ":username",
+  "password": ":password"
+}
+
+# Check auth (without authentication)
+:token = 08043307337de78f31421edc4e43764968fe33e0
+
+POST http://localhost:8081/api/users/authCheck/
+Content-Type: application/json
+
+# Check auth (with null token)
+POST http://localhost:8081/api/users/authCheck/
+Content-Type: application/json
+
+{
+  "token": null
+}
+
+# Check auth (with invalid token)
+POST http://localhost:8081/api/users/authCheck/
+Content-Type: application/json
+
+{
+  "token": "foobar"
+}
+
+# Check auth (with valid token)
+POST http://localhost:8081/api/users/authCheck/
+Content-Type: application/json
+
+{
+  "token": ":token"
+}

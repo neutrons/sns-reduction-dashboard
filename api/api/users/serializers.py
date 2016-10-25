@@ -4,10 +4,6 @@ from rest_framework.authtoken.models import Token
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    instrument = serializers.StringRelatedField(
-        many=False,
-    )
-
     class Meta:
         model = get_user_model()
         exclude = ['password', 'groups']
