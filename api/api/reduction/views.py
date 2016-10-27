@@ -1,5 +1,5 @@
 from .models import Configuration
-from .forms import ConfigurationCreateForm
+from .forms import ConfigurationParametersForm
 from .serializers import ConfigurationSerializer
 from rest_framework import viewsets
 from django_vueformgenerator.schema import Schema
@@ -13,4 +13,4 @@ class ConfigurationViewSet(viewsets.ReadOnlyModelViewSet):
 
     @list_route()
     def schema(self, request):
-        return Response(Schema().render(ConfigurationCreateForm))
+        return Response(Schema().render(ConfigurationParametersForm()))
