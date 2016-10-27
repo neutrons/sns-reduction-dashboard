@@ -21,4 +21,9 @@ export default {
     login: Vue.resource('/api/users/login/'),
     authCheck: Vue.resource('/api/users/authCheck/'),
   },
+  reduction: {
+    configuration: {
+      schema: Vue.resource('/api/reduction/configuration/schema/'),
+    },
+  },
 }

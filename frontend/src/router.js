@@ -8,6 +8,7 @@ import ProfileRoute from './components/ProfileRoute.vue';
 import ReductionRoute from './components/ReductionRoute.vue';
 import ReductionTabRoute from './components/ReductionTabRoute.vue';
 import LogoutRoute from './components/LogoutRoute.vue';
+import ConfigurationNewRoute from './components/ConfigurationNewRoute.vue';
 
 import store from './vuex/store';
 import { loggedIn } from './vuex/getters';
@@ -17,6 +18,7 @@ Vue.use(VueRouter);
 const router = new VueRouter();
 
 router.map({
+
   '/': {
     name: 'index',
     component: DefaultRoute,
@@ -46,6 +48,11 @@ router.map({
   '/reduction': {
     name: 'reduction',
     component: ReductionRoute,
+  },
+
+  '/configuration/new': {
+    name: 'configuration-new',
+    component: ConfigurationNewRoute,
   },
 
 });

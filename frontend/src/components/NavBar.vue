@@ -16,7 +16,7 @@
           <li class="dropdown dropdown-hover" >
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"  role="button" ><span class="glyphicon glyphicon-th-list"></span> &nbsp;Configuration <span class="caret"></span></a>
             <ul class="dropdown-menu" >
-              <nav-item name="">New</nav-item>
+              <nav-item name="configuration-new">New</nav-item>
               <nav-item name="">List</nav-item>
             </ul>
           </li>
