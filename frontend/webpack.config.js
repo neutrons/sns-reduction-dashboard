@@ -70,9 +70,6 @@ module.exports = {
     noInfo: true
   },
   devtool: '#source-map',
-  watchOptions: {
-    poll: true,
-  },
 }
 
 if (process.env.USE_WEBPACK_DEV_SERVER === 'true') {
