@@ -4,9 +4,19 @@
       <div class="col-xs-6 col-xs-offset-3">
         <panel>
           <form>
-            <vue-form-generator :schema="schema" :model="model">
+            <vue-form-generator :schema="title.schema" :model="model" :options="{}">
             </vue-form-generator>
+            <vue-form-generator :schema="schema"
+                                :model="model"
+                                :options="{}">
+            </vue-form-generator>
+            <button type="submit"
+                    class="btn btn-default"
+                    @click.prevent.stop="submit">
+              Submit
+            </button>
           </form>
+          <pre v-html="model|json"></pre>
         </panel>
       </div>
     </div>
@@ -39,8 +49,30 @@ export default {
   data() {
     return {
       schema: null,
-      model: null,
+      model: {
+        title: 'Foo',
+      },
+      title: {
+        schema: {
+          fields: [
+            {
+              type: 'text',
+              required: true,
+              hint: 'The title for your configuration',
+              label: 'Configuration Title',
+              model: 'title',
+            },
+          ],
+        },
+        value: '',
+      },
     };
+  },
+
+  methods: {
+    submit() {
+      console.log(JSON.stringify(this.model, true, 2));
+    },
   },
 };
 </script>
