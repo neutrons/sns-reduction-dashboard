@@ -53,6 +53,7 @@ router.map({
   '/configuration/new': {
     name: 'configuration-new',
     component: ConfigurationNewRoute,
+    auth: true,
   },
 
 });

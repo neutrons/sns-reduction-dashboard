@@ -4,8 +4,6 @@
       <div class="col-xs-6 col-xs-offset-3">
         <panel>
           <form>
-            <vue-form-generator :schema="title.schema" :model="model" :options="{}">
-            </vue-form-generator>
             <vue-form-generator :schema="schema"
                                 :model="model"
                                 :options="{}">
@@ -49,28 +47,17 @@ export default {
   data() {
     return {
       schema: null,
-      model: {
-        title: 'Foo',
-      },
-      title: {
-        schema: {
-          fields: [
-            {
-              type: 'text',
-              required: true,
-              hint: 'The title for your configuration',
-              label: 'Configuration Title',
-              model: 'title',
-            },
-          ],
-        },
-        value: '',
-      },
+      model: null,
     };
   },
 
   methods: {
     submit() {
+      resource.reduction.configuration.create.save(this.model).then((response) => {
+        console.log(response);
+      }).catch((response) => {
+        console.error(response);
+      });
       console.log(JSON.stringify(this.model, true, 2));
     },
   },

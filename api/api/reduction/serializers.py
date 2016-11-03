@@ -3,6 +3,10 @@ from .models import Configuration
 
 
 class ConfigurationSerializer(serializers.ModelSerializer):
+    owner = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+    )
+
     class Meta:
         model = Configuration
-        fields = ('description', 'instrument', 'parameters')
+        fields = ('title', 'description', 'instrument', 'parameters', 'owner')

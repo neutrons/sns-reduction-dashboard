@@ -24,6 +24,7 @@ export default {
   reduction: {
     configuration: {
       schema: Vue.resource('/api/reduction/configuration/schema/'),
+      create: Vue.resource('/api/reduction/configuration/'),
     },
   },
 }

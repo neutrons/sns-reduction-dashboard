@@ -5,11 +5,12 @@ from rest_framework import viewsets
 from django_vueformgenerator.schema import Schema
 from rest_framework.response import Response
 from rest_framework.decorators import list_route
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-
-class ConfigurationViewSet(viewsets.ReadOnlyModelViewSet):
+class ConfigurationViewSet(viewsets.ModelViewSet):
     queryset = Configuration.objects.all()
     serializer_class = ConfigurationSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     @list_route()
     def schema(self, request):

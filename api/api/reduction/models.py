@@ -9,8 +9,14 @@ def get_sentinel_user():
 
 
 class Configuration(models.Model):
-    description = models.CharField(
-        'configuration description/title',
+    title = models.CharField(
+        'configuration title',
+        help_text='The title of the configuration',
+        max_length=128,
+    )
+
+    description = models.TextField(
+        'configuration description',
         help_text='The description/title of the configuration',
         max_length=1024,
     )
@@ -41,9 +47,9 @@ class Configuration(models.Model):
         related_name='configurations',
     )
 
-    user = models.ForeignKey(
+    owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        verbose_name='configuration\'s creator',
+        verbose_name='configuration\'s owner',
         help_text='The user who created this configuration',
         on_delete=models.SET(get_sentinel_user),
         related_name='configurations',
