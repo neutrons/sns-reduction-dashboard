@@ -22,6 +22,12 @@ make-env = ./scripts/env.bash subst < $< > $@
 # Used to load specific .env files
 load-env = set -o allexport && unset $$(./scripts/env.bash variables) && source $< && set +o allexport
 
+# Used to filter based on specific substrings. e.g.
+#   $(call containing foo,bing bingfoobaz dingfoo foobang)
+#     == bingfoobaz dingfoo foobang
+containing = $(filter %,$(foreach v,$2,$(if $(findstring $1,$v),$v)))
+not-containing = $(filter %,$(foreach v,$2,$(if $(findstring $1,$v),,$v)))
+
 ################
 # Environment variables
 

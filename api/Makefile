@@ -39,9 +39,11 @@ api/migrate: api/.migrate.secondary  ## Migrate API databases if needed
 api/migrate-zero: api/.env  ## Remove databases
 	$(load-env) && \
 	source api/venv/bin/activate && \
+	python api/api/manage.py makemigrations && \
 	python api/api/manage.py migrate catalog zero && \
 	python api/api/manage.py migrate reduction zero && \
-	python api/api/manage.py migrate users zero
+	python api/api/manage.py migrate users zero && \
+	rm -f api/.migrate.secondary
 
 ################
 # Source transformations
@@ -66,12 +68,14 @@ api/.depend-dev.secondary: api/.env api/dev-requirements.txt \
 
 .SECONDARY: api/.migrate.secondary
 api/.migrate.secondary: api/.env api/.depend.secondary \
-                        $(wildcard api/api/*/models.py) api/api/settings.py
+                        $(wildcard api/api/*/models.py) api/api/settings.py \
+                        $(wildcard api/api/fixtures/*.json)
 	$(load-env) && \
 	source api/venv/bin/activate && \
 	python api/api/manage.py makemigrations --no-input && \
 	python api/api/manage.py migrate --no-input && \
 	python api/api/manage.py make_my_superuser && \
+	python api/api/manage.py loaddata $(call containing,/fixtures/,$^) && \
 	python api/api/manage.py collectstatic --no-input && \
 	touch $@
 
