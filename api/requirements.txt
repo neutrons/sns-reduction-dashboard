@@ -1,26 +1,26 @@
 # Core django framework
-Django
+Django==1.10.3
 
 # Authenticate users with LDAP
-django_auth_ldap
+django_auth_ldap==1.2.8
 
 # Load Django variables from environment
-django-environ
+django-environ==0.4.0
 
 # Rest framework add on to Django
-djangorestframework
+djangorestframework==3.5.2
 
 # Use Redis as a caching backend
-django-redis
+django-redis==4.5.0
 
 # Provide a machine readable API output for DjangoRestFramework
-coreapi
+coreapi==2.0.9
 
 # PostgreSQL Bindings
-psycopg2>=2.5.4
+psycopg2==2.6.2
 
 # uWSGI to hook into nginx
-uwsgi
+uwsgi==2.0.14
 
 # Create VueFormGenerator schema from Django Form
-django-vueformgenerator
+django-vueformgenerator==0.2.2

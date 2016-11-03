@@ -1,2 +1,2 @@
 # Check code for style problems
-flake8
+flake8==3.0.4
