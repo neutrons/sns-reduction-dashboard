@@ -23,4 +23,4 @@ psycopg2==2.6.2
 uwsgi==2.0.14
 
 # Create VueFormGenerator schema from Django Form
-django-vueformgenerator==0.2.2
+django-vueformgenerator==0.2.3
