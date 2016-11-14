@@ -26,6 +26,49 @@
 
 # Django + REST Framework
 
+
+
+## Class based models
+
+```python
+
+# Model
+class Post(models.Model):
+    title = models.CharField(max_length=225)
+    content = models.TextField(max_length=10000)
+    published = models.BooleanField(default=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
+
+# View
+class PostList(ListView):
+    model = Post
+    # optional. Default: <myapp>/<model>_list.html
+    template_name = 'blog/post_list.html'
+    # optional. Default: Post.objects.all()
+    queryset = Post.objects.order_by('-modified_date')
+```
+
+## Serializers
+
+```python
+
+# Serializer
+class PostSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Post
+		fields = ('title', 'content', 'category', 'modified_date', 'url')
+		# fields = '__all__'
+
+
+# View
+class PostViewSet(viewsets.ModelViewSet):
+	queryset = Post.objects.all()
+	serializer_class = PostSerializer
+  
+```
+
+
 ## A single-page application (SPA)
 
 ```html
