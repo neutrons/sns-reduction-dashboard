@@ -23,10 +23,11 @@
 
 ![](https://i.stack.imgur.com/NLlwq.png)
 
+Picture here
 
 # Django + REST Framework
 
-
+Picture here
 
 ## Class based models
 
@@ -87,17 +88,67 @@ See "I am a fast webpage, kneel before my greatness": https://varvy.com/pagespee
 
 Easy integration with Electron: 
 
-## WebPack
+## Bundler: WebPack
+
+![webpack](https://webpack.github.io/assets/what-is-webpack.png)
+
+
+## Javascript Framework: VueJs
+
+See Example:
+https://jsfiddle.net/ricleal/ptg5s4hv/2/
+
+
+## Postgres >= 9.4 jsonb (Django >= 1.9 JSONField):
+
+- Allows storing form content in JSON format
+- NoSQL Functionality
+
+```python
+
+class Configuration(models.Model):
+
+    title = models.CharField(
+        'configuration title',
+        help_text='The title of the configuration',
+        max_length=128,
+    )
+
+    created_date = models.DateTimeField(
+        'configuration creation date',
+        help_text='The date this configuration was created',
+        auto_now_add=True,
+    )
+
+    modified_date = models.DateTimeField(
+        'configuration modification date',
+        help_text='The date this configuration was last modified',
+        auto_now=True,
+    )
+
+    parameters = pgfields.JSONField(
+        'configuration parameters',
+        help_text='The parameters for the configuration',
+        default=dict,
+    )
+```
+
+Query example:
+
+```python
+foo = Configuration.objects.filter(params__transmission >= 0.5)
+```
 
 
 
-JavaScript Framework:
-Vue.js
-Webpack, node.js & friends…
 REST API
 Django + REST Framework
 Postgres >= 9.4 jsonb (Django >= 1.9 JSONField):
 Allows storing form content in JSON format
 NoSQL Functionality
 Docker containers
+
+## Table reduction
+
+Excel table...
 
