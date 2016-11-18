@@ -195,4 +195,5 @@ foo = Configuration.objects.filter(params__transmission >= 0.5)
 See:
 https://github.com/ricleal/PythonCode/blob/master/SANS/TableReduction/SANS%20Lysozyme.ipynb
 
+![](https://s14.postimg.org/drbrur98x/image003.jpg)
 
